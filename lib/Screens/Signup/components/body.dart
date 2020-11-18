@@ -8,8 +8,19 @@ import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/components/rounded_input_field.dart';
 import 'package:flutter_auth/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+
+  const Body({
+    Key key,
+  }) : super(key: key);
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<Body> {
+  int _value = 1;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -28,12 +39,51 @@ class Body extends StatelessWidget {
               height: size.height * 0.35,
             ),
             RoundedInputField(
+              hintText: "Full Name",
+              onChanged: (value) {},
+            ),
+            RoundedInputField(
+              hintText: "Mobile(+91)",
+              onChanged: (value) {},
+            ),
+            RoundedInputField(
               hintText: "Your Email",
               onChanged: (value) {},
             ),
             RoundedPasswordField(
               onChanged: (value) {},
             ),
+            DropdownButton(
+                value: _value,
+                iconSize: 50.0,
+
+                items: [
+                  DropdownMenuItem(
+                    child: Text("Select Institute"),
+                    value: 1,
+                  ),
+                  DropdownMenuItem(
+                    child: Text("Scholars Academy, Mundakkayam"),
+                    value: 2,
+                  ),
+                  DropdownMenuItem(
+                    child: Text("Brillaince Accademy, Pala"),
+                    value: 3,
+                  ),
+                  DropdownMenuItem(
+                      child: Text("PC Thomas Insititute, Thrissur"),
+                      value: 4
+                  ),
+                  DropdownMenuItem(
+                      child: Text("Study Internationals, Kollam"),
+                      value: 5
+                  )
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _value = value;
+                  });
+                }),
             RoundedButton(
               text: "SIGNUP",
               press: () {},
