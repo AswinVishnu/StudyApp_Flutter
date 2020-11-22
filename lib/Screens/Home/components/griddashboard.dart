@@ -29,22 +29,30 @@ class GridDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Items> myList = [item1, item2, item3, item4];
     var color = 0xff453658;
-    return Flexible(
+    return Expanded(
       child: GridView.count(
-          childAspectRatio: 1.0,
-          padding: EdgeInsets.only(left: 16, right: 16),
-          crossAxisCount: 2,
-          crossAxisSpacing: 18,
-          mainAxisSpacing: 18,
+        padding: EdgeInsets.only(left: 16, right: 16),
+        primary: false,
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+
           children: myList.map((data) {
-            return Container(
-              decoration: BoxDecoration(
-                  color: Colors.black12, borderRadius: BorderRadius.circular(15)),
+
+            return Card(
+              elevation: 4,
+              color: Colors.white,
+              shadowColor: Colors.deepPurpleAccent,
+              shape: RoundedRectangleBorder(
+
+                borderRadius: BorderRadius.circular(8)
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+
                   IconButton(
-                    iconSize: 180.0,
+                    iconSize: 160.0,
                     padding: const EdgeInsets.all(1.0),
                     icon: Image.asset(
                       data.img,
@@ -52,16 +60,16 @@ class GridDashboard extends StatelessWidget {
                     ),
                     onPressed: () {
                       if(data.img =="assets/images/CurrentAffairs.png")
-                        {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return CurrentAffairsScreen();
-                              },
-                            ),
-                          );
-                        }
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return CurrentAffairsScreen();
+                            },
+                          ),
+                        );
+                      }
                       else if(data.img =="assets/images/studymaterials.jpg")
                       {
                         Navigator.push(
@@ -113,8 +121,10 @@ class GridDashboard extends StatelessWidget {
                 ],
               ),
             );
-          }).toList()),
+
+      }).toList())
     );
+
   }
 }
 
