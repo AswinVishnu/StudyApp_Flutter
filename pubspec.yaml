@@ -1,0 +1,25 @@
+name: flutter_auth
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  google_fonts: ^0.2.0
+  flutter:
+    sdk: flutter
+  shared_preferences: any
+  cupertino_icons: ^0.1.2
+  flutter_svg: ^0.19.0
+  http: any
+  youtube_player_flutter: ^6.0.3+2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+   uses-material-design: true
+
+   assets:
+    - assets/images/
+    - assets/icons/
