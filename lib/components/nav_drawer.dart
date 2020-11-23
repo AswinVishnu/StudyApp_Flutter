@@ -23,7 +23,11 @@ class NavDrawer extends StatelessWidget {
             backgroundColor: Colors.brown, child: new Text("FL")),
       ),
       new ListTile(
-        title: new Text('Current Affairs'),
+        title: new Text('Home'),
+        leading: Icon(
+          Icons.home,
+          color: Color(0xFF6F35A5),
+        ),
         onTap: () {
           Navigator.push(
             context,
@@ -32,6 +36,23 @@ class NavDrawer extends StatelessWidget {
         },
       ),
       new ListTile(
+        title: new Text('Current Affairs'),
+        leading: Icon(
+          Icons.pages,
+          color: Color(0xFF6F35A5),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CurrentAffairsScreen()),
+          );
+        },
+      ),
+      new ListTile(
+        leading: Icon(
+          Icons.book,
+          color: Color(0xFF6F35A5),
+        ),
         title: new Text('Study Materials'),
         onTap: () {
           Navigator.push(
@@ -42,6 +63,10 @@ class NavDrawer extends StatelessWidget {
       ),
       new ListTile(
         title: new Text('Practice Tests'),
+        leading: Icon(
+          Icons.accessibility_new,
+          color: Color(0xFF6F35A5),
+        ),
         onTap: () {
           Navigator.push(
             context,
@@ -51,6 +76,23 @@ class NavDrawer extends StatelessWidget {
       ),
       new ListTile(
         title: new Text('Question Bank'),
+        leading: Icon(
+          Icons.flag,
+          color: Color(0xFF6F35A5),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QuestionBankScreen()),
+          );
+        },
+      ),
+      new ListTile(
+        title: new Text('Perfomance'),
+        leading: Icon(
+          Icons.backpack,
+          color: Color(0xFF6F35A5),
+        ),
         onTap: () {
           Navigator.push(
             context,
@@ -60,7 +102,11 @@ class NavDrawer extends StatelessWidget {
       ),
       new Divider(),
       new ListTile(
-        title: new Text('About'),
+        title: new Text('SignOut'),
+        leading: Icon(
+          Icons.logout,
+          color: Color(0xFF6F35A5),
+        ),
         onTap: () {},
       ),
     ]));
