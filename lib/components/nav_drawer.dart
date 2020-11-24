@@ -7,6 +7,8 @@ import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
 import 'package:flutter_auth/Screens/Profile/edit_profile.dart';
 import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/Screens/Perfomance/perfomance.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class NavDrawer extends StatefulWidget {
   final List userList;
@@ -126,12 +128,27 @@ class _NavDrawerState extends State<NavDrawer> {
           Icons.accessibility,
           color: Color(0xFF6F35A5),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EditProfileScreen(userList: userList)),
-          );
+        onTap: () async {
+          var jsonResponse;
+          var response = await http.get(
+              "https://oxystech-study-app-nodejs.herokuapp.com/user/account/" +
+                  userList[0]);
+          if (response.statusCode == 200) {
+            jsonResponse = json.decode(response.body);
+            List newList = [];
+            newList.add(jsonResponse['result']['_id']);
+            newList.add(jsonResponse['result']['fullname']);
+            newList.add(jsonResponse['result']['mobile'].toString());
+            newList.add(jsonResponse['result']['email']);
+            newList.add(jsonResponse['result']['password']);
+            if (jsonResponse != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditProfileScreen(userList: newList)),
+              );
+            }
+          }
         },
       ),
       new Divider(),

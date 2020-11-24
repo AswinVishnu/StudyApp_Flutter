@@ -6,11 +6,8 @@ import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/components/rounded_input_field.dart';
 import 'package:flutter_auth/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/Screens/Home/home.dart';
 
 class Body extends StatefulWidget {
@@ -34,7 +31,7 @@ class _LoginPageState extends State<Body> {
       // SharedPreferences sharedPreferences =
       //     await SharedPreferences.getInstance();
       Map data = {'email': email, 'password': pass, 'role': 'student'};
-      var jsonResponse = null;
+      var jsonResponse;
       var response = await http.post(
           "https://oxystech-study-app-nodejs.herokuapp.com/user/login",
           body: data);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/Screens/Home/home.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class EditProfileScreen extends StatefulWidget {
   final List userList;
@@ -11,6 +13,10 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfileScreen> {
   List userList;
+  String emailId;
+  String fullName;
+  String password;
+  String mobile;
   _EditProfileState(this.userList);
 
   @override
@@ -131,6 +137,9 @@ class _EditProfileState extends State<EditProfileScreen> {
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
+                                      onChanged: (value) {
+                                        fullName = value;
+                                      },
                                       decoration: InputDecoration(
                                         hintText: userList[1],
                                       ),
@@ -168,9 +177,12 @@ class _EditProfileState extends State<EditProfileScreen> {
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
+                                      onChanged: (value) {
+                                        emailId = value;
+                                      },
                                       decoration: InputDecoration(
                                           hintText: userList[3]),
-                                      //     enabled: !_status,
+                                      enabled: false,
                                     ),
                                   ),
                                 ],
@@ -203,6 +215,9 @@ class _EditProfileState extends State<EditProfileScreen> {
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
+                                      onChanged: (value) {
+                                        password = value;
+                                      },
                                       decoration: InputDecoration(
                                           hintText: userList[4]),
                                       obscureText: true,
@@ -240,9 +255,12 @@ class _EditProfileState extends State<EditProfileScreen> {
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
+                                      onChanged: (value) {
+                                        mobile = value;
+                                      },
                                       decoration: InputDecoration(
                                           hintText: userList[2]),
-                                      //   enabled: !_status,
+                                      enabled: false,
                                     ),
                                   ),
                                 ],
@@ -262,13 +280,38 @@ class _EditProfileState extends State<EditProfileScreen> {
                                       child: new Text("Save"),
                                       textColor: Colors.white,
                                       color: Colors.green,
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => HomeScreen(
-                                                  userList: userList)),
-                                        );
+                                      onPressed: () async {
+                                        var jsonResponse;
+                                        if (password == null) {
+                                          password = userList[4];
+                                        }
+                                        if (fullName == null) {
+                                          fullName = userList[1];
+                                        }
+                                        Map data = {
+                                          'fullname': fullName,
+                                          'password': password,
+                                          'role': 'student'
+                                        };
+
+                                        print(data);
+                                        var response = await http.put(
+                                            "https://oxystech-study-app-nodejs.herokuapp.com/user/account/" +
+                                                userList[0],
+                                            body: data);
+                                        if (response.statusCode == 200) {
+                                          jsonResponse =
+                                              json.decode(response.body);
+                                          if (jsonResponse != null) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      HomeScreen(
+                                                          userList: userList)),
+                                            );
+                                          }
+                                        }
                                       },
                                       shape: new RoundedRectangleBorder(
                                           borderRadius:
