@@ -44,7 +44,7 @@ class GridDashboard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     IconButton(
-                      iconSize: 130.0,
+                      iconSize: 115.0,
                       padding: const EdgeInsets.all(1.0),
                       icon: Image.asset(
                         data.img,

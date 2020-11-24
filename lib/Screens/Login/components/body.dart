@@ -14,13 +14,13 @@ import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/Screens/Home/home.dart';
 
 class Body extends StatefulWidget {
-
   const Body({
     Key key,
   }) : super(key: key);
   @override
   _LoginPageState createState() => _LoginPageState();
 }
+
 class _LoginPageState extends State<Body> {
   String email;
   String password;
@@ -28,88 +28,87 @@ class _LoginPageState extends State<Body> {
   bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
+
     signIn(String email, pass) async {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      Map data = {
-        'email': email,
-        'password': pass,
-        'role': 'student'
-      };
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      Map data = {'email': email, 'password': pass, 'role': 'student'};
       var jsonResponse = null;
-      var response = await http.post("https://oxystech-study-app-nodejs.herokuapp.com/user/login", body: data);
-      if(response.statusCode == 200) {
+      var response = await http.post(
+          "https://oxystech-study-app-nodejs.herokuapp.com/user/login",
+          body: data);
+      if (response.statusCode == 200) {
         jsonResponse = json.decode(response.body);
-        if(jsonResponse != null) {
+        if (jsonResponse != null) {
           setState(() {
             _isLoading = false;
           });
           sharedPreferences.setString("token", jsonResponse['token']);
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeScreen()), (Route<dynamic> route) => false);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (BuildContext context) => HomeScreen()),
+              (Route<dynamic> route) => false);
           print("Logged in Successfully");
         }
-      }
-      else {
+      } else {
         setState(() {
           _isLoading = false;
         });
         print(response.body);
-
       }
     }
+
     return Background(
-      child: _isLoading ? Center(child: CircularProgressIndicator()) : SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "LOGIN",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/login.svg",
-              height: size.height * 0.35,
-            ),
-            SizedBox(height: size.height * 0.03),
-            RoundedInputField(
-
-              hintText: "Your Email",
-              onChanged: (value) {
-
-                email = value;
-              },
-            ),
-            RoundedPasswordField(
-
-              onChanged: (value) {
-
-                password = value;
-              },
-            ),
-            RoundedButton(
-              text: "LOGIN",
-              press: () {
-                signIn(email, password);
-              },
-            ),
-            SizedBox(height: size.height * 0.03),
-            AlreadyHaveAnAccountCheck(
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return SignUpScreen();
+      child: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "LOGIN",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  SvgPicture.asset(
+                    "assets/icons/login.svg",
+                    height: size.height * 0.35,
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  RoundedInputField(
+                    hintText: "Your Email",
+                    onChanged: (value) {
+                      email = value;
                     },
                   ),
-                );
-              },
+                  RoundedPasswordField(
+                    onChanged: (value) {
+                      password = value;
+                    },
+                  ),
+                  RoundedButton(
+                    text: "LOGIN",
+                    press: () {
+                      signIn(email, password);
+                    },
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  AlreadyHaveAnAccountCheck(
+                    press: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return SignUpScreen();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }

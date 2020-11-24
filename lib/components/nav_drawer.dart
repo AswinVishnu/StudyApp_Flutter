@@ -3,6 +3,8 @@ import 'package:flutter_auth/Screens/Study_Materials/study_materials.dart';
 import 'package:flutter_auth/Screens/Question_Bank/question_bank.dart';
 import 'package:flutter_auth/Screens/Current_Affairs/current_affairs.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
+import 'package:flutter_auth/Screens/Profile/edit_profile.dart';
+import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -100,6 +102,19 @@ class NavDrawer extends StatelessWidget {
           );
         },
       ),
+      new ListTile(
+        title: new Text('Edit Profile'),
+        leading: Icon(
+          Icons.accessibility,
+          color: Color(0xFF6F35A5),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EditProfileScreen()),
+          );
+        },
+      ),
       new Divider(),
       new ListTile(
         title: new Text('SignOut'),
@@ -107,7 +122,12 @@ class NavDrawer extends StatelessWidget {
           Icons.logout,
           color: Color(0xFF6F35A5),
         ),
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+          );
+        },
       ),
     ]));
   }
