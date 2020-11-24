@@ -2,14 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/Screens/Home/home.dart';
 
-class EditProfileScreen extends StatelessWidget {
+class EditProfileScreen extends StatefulWidget {
+  final List userList;
+  EditProfileScreen({Key key, @required this.userList}) : super(key: key);
+  @override
+  _EditProfileState createState() => _EditProfileState(userList);
+}
+
+class _EditProfileState extends State<EditProfileScreen> {
+  List userList;
+  _EditProfileState(this.userList);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
           title: new Text('Edit Profile'),
         ),
-        drawer: NavDrawer(),
+        drawer: NavDrawer(userList: userList),
         body: new Container(
           color: Colors.white,
           child: new ListView(
@@ -121,11 +131,11 @@ class EditProfileScreen extends StatelessWidget {
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
-                                      decoration: const InputDecoration(
-                                        hintText: "Enter Your Full Name",
+                                      decoration: InputDecoration(
+                                        hintText: userList[1],
                                       ),
                                       //       enabled: !_status,
-                                      //        autofocus: !_status,
+                                      //        a`utofocus: !_status,
                                     ),
                                   ),
                                 ],
@@ -158,8 +168,8 @@ class EditProfileScreen extends StatelessWidget {
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Enter Email ID"),
+                                      decoration: InputDecoration(
+                                          hintText: userList[3]),
                                       //     enabled: !_status,
                                     ),
                                   ),
@@ -193,8 +203,8 @@ class EditProfileScreen extends StatelessWidget {
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Enter your password"),
+                                      decoration: InputDecoration(
+                                          hintText: userList[4]),
                                       obscureText: true,
 
                                       //     enabled: !_status,
@@ -230,8 +240,8 @@ class EditProfileScreen extends StatelessWidget {
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Enter Mobile Number"),
+                                      decoration: InputDecoration(
+                                          hintText: userList[2]),
                                       //   enabled: !_status,
                                     ),
                                   ),
@@ -256,8 +266,8 @@ class EditProfileScreen extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  HomeScreen()),
+                                              builder: (context) => HomeScreen(
+                                                  userList: userList)),
                                         );
                                       },
                                       shape: new RoundedRectangleBorder(
@@ -279,8 +289,8 @@ class EditProfileScreen extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  HomeScreen()),
+                                              builder: (context) => HomeScreen(
+                                                  userList: userList)),
                                         );
                                       },
                                       shape: new RoundedRectangleBorder(

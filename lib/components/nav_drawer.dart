@@ -8,19 +8,29 @@ import 'package:flutter_auth/Screens/Profile/edit_profile.dart';
 import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/Screens/Perfomance/perfomance.dart';
 
-class NavDrawer extends StatelessWidget {
+class NavDrawer extends StatefulWidget {
+  final List userList;
+  NavDrawer({Key key, @required this.userList}) : super(key: key);
+  @override
+  _NavDrawerState createState() => _NavDrawerState(userList);
+}
+
+class _NavDrawerState extends State<NavDrawer> {
+  List userList;
+  _NavDrawerState(this.userList);
+  //call list element like userList[0]
   @override
   Widget build(BuildContext context) {
     return Drawer(
         child: new Column(children: <Widget>[
       new UserAccountsDrawerHeader(
-        accountName: new Text("Firstname Lastname",
+        accountName: new Text(userList[1],
             style: new TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 15.0)),
         accountEmail: new Text(
-          "firstname@lastname.com",
+          userList[3],
           style: new TextStyle(color: Colors.blueGrey[50]),
         ),
         currentAccountPicture: new CircleAvatar(
@@ -35,7 +45,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(userList: userList)),
           );
         },
       ),
@@ -48,7 +59,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CurrentAffairsScreen()),
+            MaterialPageRoute(
+                builder: (context) => CurrentAffairsScreen(userList: userList)),
           );
         },
       ),
@@ -61,7 +73,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => StudyMaterialsScreen()),
+            MaterialPageRoute(
+                builder: (context) => StudyMaterialsScreen(userList: userList)),
           );
         },
       ),
@@ -74,7 +87,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PracticeTestsScreen()),
+            MaterialPageRoute(
+                builder: (context) => PracticeTestsScreen(userList: userList)),
           );
         },
       ),
@@ -87,7 +101,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => QuestionBankScreen()),
+            MaterialPageRoute(
+                builder: (context) => QuestionBankScreen(userList: userList)),
           );
         },
       ),
@@ -100,7 +115,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PerfomanceScreen()),
+            MaterialPageRoute(
+                builder: (context) => PerfomanceScreen(userList: userList)),
           );
         },
       ),
@@ -113,7 +129,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EditProfileScreen()),
+            MaterialPageRoute(
+                builder: (context) => EditProfileScreen(userList: userList)),
           );
         },
       ),

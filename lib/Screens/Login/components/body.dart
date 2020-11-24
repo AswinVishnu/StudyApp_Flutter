@@ -31,8 +31,8 @@ class _LoginPageState extends State<Body> {
     Size size = MediaQuery.of(context).size;
 
     signIn(String email, pass) async {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
+      // SharedPreferences sharedPreferences =
+      //     await SharedPreferences.getInstance();
       Map data = {'email': email, 'password': pass, 'role': 'student'};
       var jsonResponse = null;
       var response = await http.post(
@@ -44,10 +44,19 @@ class _LoginPageState extends State<Body> {
           setState(() {
             _isLoading = false;
           });
-          sharedPreferences.setString("token", jsonResponse['token']);
+          // sharedPreferences.setString("token", jsonResponse['token']);
+          List<String> userList = [];
+
+          userList.add(jsonResponse['_id']);
+          userList.add(jsonResponse['fullname']);
+          userList.add(jsonResponse['mobile']);
+          userList.add(jsonResponse['email']);
+          userList.add(jsonResponse['password']);
+
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                  builder: (BuildContext context) => HomeScreen()),
+                  builder: (BuildContext context) =>
+                      HomeScreen(userList: userList)),
               (Route<dynamic> route) => false);
           print("Logged in Successfully");
         }

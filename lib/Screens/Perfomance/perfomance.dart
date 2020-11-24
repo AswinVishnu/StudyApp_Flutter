@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
 
-class PerfomanceScreen extends StatelessWidget {
+class PerfomanceScreen extends StatefulWidget {
+  List userList;
+  PerfomanceScreen({
+    Key key,
+    @required this.userList,
+  }) : super(key: key);
+  @override
+  _PerfomanceState createState() => _PerfomanceState(userList);
+}
+
+class _PerfomanceState extends State<PerfomanceScreen> {
+  List userList;
+
+  _PerfomanceState(this.userList);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
           title: new Text('Perfomance Page'),
         ),
-        drawer: NavDrawer(),
+        drawer: NavDrawer(userList: userList),
         body: ListView(children: <Widget>[
           DataTable(
             columns: [
