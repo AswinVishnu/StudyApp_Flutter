@@ -3,6 +3,7 @@ import 'package:flutter_auth/Screens/Study_Materials/study_materials.dart';
 import 'package:flutter_auth/Screens/Question_Bank/question_bank.dart';
 import 'package:flutter_auth/Screens/Current_Affairs/current_affairs.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
+import 'package:flutter_auth/Screens/Home/home.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -31,7 +32,7 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CurrentAffairsScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         },
       ),

@@ -27,39 +27,7 @@ class _HomePageState extends State<Body> {
     return Background(
       child: Column(
         children: <Widget>[
-          // Padding(
-          //   padding: EdgeInsets.only(left: 16, right: 16),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: <Widget>[
-          //       // Column(
-          //       //   crossAxisAlignment: CrossAxisAlignment.start,
-          //       //   children: <Widget>[
-          //       //     Text(
-          //       //       "Welcome to Home",
-          //       //       style: GoogleFonts.openSans(
-          //       //           textStyle: TextStyle(
-          //       //               color: Colors.black,
-          //       //               fontSize: 18,
-          //       //               fontWeight: FontWeight.bold)),
-          //       //     ),
-          //       //     SizedBox(
-          //       //       height: 4,
-          //       //     ),
-          //       //   ],
-          //       // ),
 
-          //       // IconButton(
-          //       //   alignment: Alignment.topCenter,
-          //       //   icon: Image.asset(
-          //       //     "assets/images/notification.png",
-          //       //     width: 24,
-          //       //   ),
-          //       //   onPressed: () {},
-          //       // )
-          //     ],
-          //   ),
-          // ),
           SizedBox(
             height: 40,
           ),
