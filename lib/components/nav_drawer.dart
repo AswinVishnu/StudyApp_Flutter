@@ -1,23 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Study_Materials/study_materials.dart';
+import 'package:flutter_auth/Screens/Home/home.dart';
 import 'package:flutter_auth/Screens/Question_Bank/question_bank.dart';
 import 'package:flutter_auth/Screens/Current_Affairs/current_affairs.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
-import 'package:flutter_auth/Screens/Home/home.dart';
 
-class NavDrawer extends StatelessWidget {
+import 'package:flutter_auth/Screens/Profile/edit_profile.dart';
+import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
+import 'package:flutter_auth/Screens/Perfomance/perfomance.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
+class NavDrawer extends StatefulWidget {
+  final List userList;
+  NavDrawer({Key key, @required this.userList}) : super(key: key);
+  @override
+  _NavDrawerState createState() => _NavDrawerState(userList);
+}
+
+class _NavDrawerState extends State<NavDrawer> {
+  List userList;
+  _NavDrawerState(this.userList);
+  //call list element like userList[0]
   @override
   Widget build(BuildContext context) {
     return Drawer(
         child: new Column(children: <Widget>[
       new UserAccountsDrawerHeader(
-        accountName: new Text("Firstname Lastname",
+        accountName: new Text(userList[1],
             style: new TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 15.0)),
         accountEmail: new Text(
-          "firstname@lastname.com",
+          userList[3],
           style: new TextStyle(color: Colors.blueGrey[50]),
         ),
         currentAccountPicture: new CircleAvatar(
@@ -32,7 +49,10 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(userList: userList)),
+
           );
         },
       ),
@@ -45,7 +65,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CurrentAffairsScreen()),
+            MaterialPageRoute(
+                builder: (context) => CurrentAffairsScreen(userList: userList)),
           );
         },
       ),
@@ -58,7 +79,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => StudyMaterialsScreen()),
+            MaterialPageRoute(
+                builder: (context) => StudyMaterialsScreen(userList: userList)),
           );
         },
       ),
@@ -71,7 +93,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PracticeTestsScreen()),
+            MaterialPageRoute(
+                builder: (context) => PracticeTestsScreen(userList: userList)),
           );
         },
       ),
@@ -84,7 +107,8 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => QuestionBankScreen()),
+            MaterialPageRoute(
+                builder: (context) => QuestionBankScreen(userList: userList)),
           );
         },
       ),
@@ -97,8 +121,38 @@ class NavDrawer extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => QuestionBankScreen()),
+            MaterialPageRoute(
+                builder: (context) => PerfomanceScreen(userList: userList)),
           );
+        },
+      ),
+      new ListTile(
+        title: new Text('Edit Profile'),
+        leading: Icon(
+          Icons.accessibility,
+          color: Color(0xFF6F35A5),
+        ),
+        onTap: () async {
+          var jsonResponse;
+          var response = await http.get(
+              "https://oxystech-study-app-nodejs.herokuapp.com/user/account/" +
+                  userList[0]);
+          if (response.statusCode == 200) {
+            jsonResponse = json.decode(response.body);
+            List newList = [];
+            newList.add(jsonResponse['result']['_id']);
+            newList.add(jsonResponse['result']['fullname']);
+            newList.add(jsonResponse['result']['mobile'].toString());
+            newList.add(jsonResponse['result']['email']);
+            newList.add(jsonResponse['result']['password']);
+            if (jsonResponse != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EditProfileScreen(userList: newList)),
+              );
+            }
+          }
         },
       ),
       new Divider(),
@@ -108,7 +162,12 @@ class NavDrawer extends StatelessWidget {
           Icons.logout,
           color: Color(0xFF6F35A5),
         ),
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+          );
+        },
       ),
     ]));
   }
