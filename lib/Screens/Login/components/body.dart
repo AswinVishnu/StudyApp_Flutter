@@ -22,15 +22,15 @@ class Body extends StatefulWidget {
 }
 
 class _LoginPageState extends State<Body> {
-  String email;
-  String password;
+  var email;
+  var password;
 
   bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    signIn(String email, pass) async {
+    signIn(var email, pass) async {
       // SharedPreferences sharedPreferences =
       //     await SharedPreferences.getInstance();
       Map data = {'email': email, 'password': pass, 'role': 'student'};
@@ -49,7 +49,7 @@ class _LoginPageState extends State<Body> {
 
           userList.add(jsonResponse['_id']);
           userList.add(jsonResponse['fullname']);
-          userList.add(jsonResponse['mobile']);
+          userList.add(jsonResponse['mobile'].toString());
           userList.add(jsonResponse['email']);
           userList.add(jsonResponse['password']);
 
