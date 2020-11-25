@@ -10,7 +10,7 @@ import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/Screens/Perfomance/perfomance.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_auth/components/question.dart';
 
 class NavDrawer extends StatefulWidget {
   final List userList;
@@ -20,6 +20,9 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
+  List<Question> list = List();
+  var isLoading = false;
+
   List userList;
   _NavDrawerState(this.userList);
   //call list element like userList[0]
@@ -49,10 +52,8 @@ class _NavDrawerState extends State<NavDrawer> {
         onTap: () {
           Navigator.push(
             context,
-
             MaterialPageRoute(
                 builder: (context) => HomeScreen(userList: userList)),
-
           );
         },
       ),
@@ -104,12 +105,30 @@ class _NavDrawerState extends State<NavDrawer> {
           Icons.flag,
           color: Color(0xFF6F35A5),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => QuestionBankScreen(userList: userList)),
-          );
+        onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
+          final response = await http.get(
+              "https://oxystech-study-app-nodejs.herokuapp.com/admin/question");
+          if (response.statusCode == 200) {
+            list = (json.decode(response.body) as List)
+                .map((data) => new Question.fromJson(data))
+                .toList();
+            setState(() {
+              isLoading = false;
+            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => QuestionBankScreen(
+                      userList: userList,
+                      questionList: list,
+                      isLoading: isLoading)),
+            );
+          } else {
+            throw Exception('Failed to load photos');
+          }
         },
       ),
       new ListTile(
