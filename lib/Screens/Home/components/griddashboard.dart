@@ -5,6 +5,7 @@ import 'package:flutter_auth/Screens/Question_Bank/question_bank.dart';
 import 'package:flutter_auth/Screens/Current_Affairs/current_affairs.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
 import 'package:flutter_auth/Screens/Video/video_screen.dart';
+import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,7 +63,7 @@ class GridDashboard extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return VideoScreen();
+                                return CurrentAffairsScreen();
                               },
                             ),
                           );
@@ -121,6 +122,7 @@ class GridDashboard extends StatelessWidget {
                     SizedBox(
                       height: 8,
                     ),
+
                   ],
                 ),
               );

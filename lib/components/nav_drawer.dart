@@ -10,6 +10,8 @@ import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/Screens/Perfomance/perfomance.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_auth/Screens/Video/video_screen.dart';
+import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
 
 
 class NavDrawer extends StatefulWidget {
@@ -169,6 +171,35 @@ class _NavDrawerState extends State<NavDrawer> {
           );
         },
       ),
+          new ListTile(
+            title: new Text('Videos'),
+            leading: Icon(
+              Icons.backpack,
+              color: Color(0xFF6F35A5),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => VideoScreen()),
+              );
+            },
+          ),
+          new ListTile(
+            title: new Text('Audios'),
+            leading: Icon(
+              Icons.backpack,
+              color: Color(0xFF6F35A5),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AudioScreen(userList: userList)),
+              );
+            },
+          ),
+
     ]));
   }
 }
