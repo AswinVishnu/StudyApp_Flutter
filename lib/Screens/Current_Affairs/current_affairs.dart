@@ -33,6 +33,7 @@ class _CurrentAffairsState extends State<CurrentAffairsScreen> {
           physics: const BouncingScrollPhysics(),
           children: <Widget>[
             Card1(),
+            Card1()
             //Card2(),
             // Card3(),
           ],
