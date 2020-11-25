@@ -3,22 +3,32 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_auth/Screens/Study_Materials/subjects.dart';
 
-class Expansiontile extends StatelessWidget {
-  var jsonResponse = null;
-  var listItems = [
-    Subject(category: "General Knowledge", subcategories: [SubCategory(subcategory: "Current Affairs"),
-      SubCategory(subcategory: "History")]
-    ),
-    Subject(category: "English", subcategories: [SubCategory(subcategory: "Tenses"),
-      SubCategory(subcategory: "Nouns")]
-    ),
-    Subject(category: "Analytical reasoning", subcategories: [SubCategory(subcategory: "Puzzles"),
-      SubCategory(subcategory: "Seating Arrangement")]
-    )
-  ];
+ class Expansiontile extends StatelessWidget {
+
+
+
+    var listItems = [
+   Subject(category: 'General Knowledge',
+   subcategories: [SubCategory(subcategory: "Current Affairs"),
+   SubCategory(subcategory: "History")]
+   ),
+   Subject(category: "English",
+   subcategories: [SubCategory(subcategory: "Tenses"),
+   SubCategory(subcategory: "Nouns")]
+   ),
+   Subject(category: "Analytical reasoning",
+   subcategories: [SubCategory(subcategory: "Puzzles"),
+   SubCategory(subcategory: "Seating Arrangement")]
+   )
+   ];
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
+    getAPI();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -37,6 +47,9 @@ class Expansiontile extends StatelessWidget {
                       return InkWell(
                           onTap: () {
                             print("$index");
+                            print("--------------------------");
+
+                            print("--------------------------");
                           },
                           child: ListItem(listItems[index]));
                     }),
@@ -88,14 +101,15 @@ class Expansiontile extends StatelessWidget {
   }
   
   
-  getAPI() async {
-    var response = await http
-        .get("https://oxystech-study-app-nodejs.herokuapp.com/admin/category");
-    if (response.statusCode == 200) {
-      jsonResponse = json.decode(response.body);
-      print(jsonResponse);
 
-      print(jsonResponse['result']);
-    }
+}
+getAPI() async {
+  var response = await http
+      .get("https://oxystech-study-app-nodejs.herokuapp.com/admin/category");
+  if (response.statusCode == 200) {
+    Map jsonResponse = json.decode(response.body);
+    int count= jsonResponse['result'].length;
+    print(count);
+
   }
 }

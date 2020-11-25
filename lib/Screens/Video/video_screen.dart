@@ -13,24 +13,33 @@ class VideoScreen extends StatefulWidget {
 class VideoScreenState extends State<VideoScreen> {
     String videoURL1 = "https://www.youtube.com/watch?v=n8X9_MgEdCg";
     String videoURL2 = "https://www.youtube.com/watch?v=CSa6Ocyog4U";
-    YoutubePlayerController _controller;
+    YoutubePlayerController _controller1;
     YoutubePlayerController _controller2;
-    @override
-    void initState() {
+    VideoItems item1 = new VideoItems(
+        title: "Flutter tutorial", url: "https://www.youtube.com/watch?v=BE9ATY2Ygas");
 
-      _controller = YoutubePlayerController(
-          initialVideoId: YoutubePlayer.convertUrlToId(videoURL1)
-      );
-      _controller2 = YoutubePlayerController(
-          initialVideoId: YoutubePlayer.convertUrlToId(videoURL2)
-      );
-
-      super.initState();
-    }
+    VideoItems item2 = new VideoItems(
+      title: "Apps from scratch travel UI tutorial",
+      url: "https://www.youtube.com/watch?v=CSa6Ocyog4U",
+    );
 
 
     @override
     Widget build(BuildContext context) {
+      List<VideoItems> myList = [item1, item2];
+
+      _controller1 = YoutubePlayerController(
+          initialVideoId: YoutubePlayer.convertUrlToId(item1.url), // id youtube video
+          flags: YoutubePlayerFlags(
+            autoPlay: false,
+            mute: false,
+          ));
+      _controller2 = YoutubePlayerController(
+          initialVideoId: YoutubePlayer.convertUrlToId(item2.url), // id youtube video
+          flags: YoutubePlayerFlags(
+            autoPlay: false,
+            mute: false,
+          ));
       return Scaffold(
         appBar: AppBar(
           title: Text("Video"),
@@ -39,12 +48,41 @@ class VideoScreenState extends State<VideoScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Text("First Video"),
+
+                SizedBox(
+                  height: 40,
+                ),
+                Text(
+                  item1.title,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.openSans(
+                      textStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700)),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
                 YoutubePlayer(
-                  controller: _controller,
+                  controller: _controller1,
                   showVideoProgressIndicator: true,
                 ),
-                Text("Second Video"),
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  item2.title,
+                    textAlign: TextAlign.center,
+                  style: GoogleFonts.openSans(
+                      textStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700)),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
                 YoutubePlayer(
                   controller: _controller2,
                   showVideoProgressIndicator: true,
@@ -56,4 +94,10 @@ class VideoScreenState extends State<VideoScreen> {
         ),
       );
     }
+}
+
+class VideoItems {
+  String title;
+  String url;
+  VideoItems({this.title, this.url});
 }
