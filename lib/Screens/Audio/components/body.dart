@@ -1,142 +1,155 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+
+//import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/svg.dart';
 
 class Body extends StatefulWidget {
-  Body();
+  final List audioList;
+  int index;
+  Body({
+    Key key,
+    @required this.audioList,
+    @required this.index
+  }) : super(key: key);
 
   @override
-  AudioScreenState createState() => AudioScreenState();
+  AudioScreenState createState() => AudioScreenState(audioList,index);
 }
 
 class AudioScreenState extends State<Body> {
 
-  AudioPlayer audioplayer1=new AudioPlayer();
-  AudioPlayer audioplayer2=new AudioPlayer();
-  Duration duration = new Duration();
-  Duration position = new Duration();
-  bool playing =false;
+
+  List audioList;
+  int index;
+  AudioScreenState(this.audioList,this.index);
+
+  Duration _duration = new Duration();
+  Duration _position = new Duration();
+  AudioPlayer advancedPlayer;
+  AudioCache audioCache;
+  bool ispresed = false;
+
+
+
   @override
-  Widget build(BuildContext context) {
-    return Background(
-      child: Container(
-        padding: EdgeInsets.all(20),
-        color: Colors.white,
-        child: SingleChildScrollView(
+  void initState() {
+    super.initState();
+    initPlayer();
+  }
+
+  void initPlayer() {
+    advancedPlayer = new AudioPlayer();
+    audioCache = new AudioCache(fixedPlayer: advancedPlayer);
+
+    advancedPlayer.durationHandler = (d) => setState(() {
+      _duration = d;
+    });
+
+    advancedPlayer.positionHandler = (p) => setState(() {
+      _position = p;
+    });
+
+  }
+  @override
+  void dispose() {
+    advancedPlayer.stop();
+    super.dispose();
+    advancedPlayer.dispose();
+  }
+  String localFilePath;
+
+  Widget _tab(List<Widget> children) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(16.0),
           child: Column(
+            children: children
+                .map((w) => Container(child: w, padding: EdgeInsets.all(6.0)))
+                .toList(),
+          ),
+        ),
+      ],
+    );
+  }
 
-            children: <Widget>[
+  Widget _btn(String txt, VoidCallback onPressed) {
+    return ButtonTheme(
+      minWidth: 48.0,
+      child: Container(
+        width: 150,
+        height: 45,
+        child: RaisedButton(
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            child: Text(txt),
+            color: Colors.pink[900],
+            textColor: Colors.white,
+            onPressed: onPressed),
+      ),
+    );
+  }
 
-              Text(
-                "First Audio",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.openSans(
-                    textStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w700)),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              slider(audioplayer1),
+  Widget slider() {
+    return Slider(
+        activeColor: Colors.black,
+        inactiveColor: Colors.pink,
+        value: _position.inSeconds.toDouble(),
+        min: 0.0,
+        max: _duration.inSeconds.toDouble(),
+        onChanged: (double value) {
+          setState(() {
+            seekToSecond(value.toInt());
+            value = value;
+          });
+        });
+  }
 
-              InkWell(
-                onTap: () {
-                  getAudio("https://assets.mixkit.co/music/preview/mixkit-trip-hop-vibes-149.mp3",audioplayer1);
-                },
-                child: Icon(
-                    playing==false
-                        ? Icons.play_circle_outline
-                        : Icons.pause_circle_outline,
-                    size:80,
-                    color: Colors.blue
-                ),
-              ),
+  Widget LocalAudio() {
+    return _tab([
+      Image.asset(
+        audioList[index].img,
+        width: 100,
+      ),
 
+      SizedBox(height: 20),
+      _btn('Play', () => audioCache.play(audioList[index].path)),
+      _btn('Pause', () => advancedPlayer.pause()),
+      _btn('Stop', () => advancedPlayer.stop()),
+      slider()
+    ]);
+  }
 
-              Text(
-                "Second Audio",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.openSans(
-                    textStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w700)),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              slider(audioplayer2),
+  void seekToSecond(int second) {
+    Duration newDuration = Duration(seconds: second);
 
-              InkWell(
-                onTap: () {
-                  getAudio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",audioplayer2);
-                },
-                child: Icon(
-                    playing==false
-                        ? Icons.play_circle_outline
-                        : Icons.pause_circle_outline,
-                    size:80,
-                    color: Colors.blue
-                ),
-              )
-            ],
+    advancedPlayer.seek(newDuration);
+  }
 
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      body: Background(
+        child: Container(
+          padding: EdgeInsets.all(20),
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
+
+                children: [LocalAudio()]
+
+            ),
           ),
         ),
       ),
     );
   }
 
-
-
-  Widget slider(AudioPlayer audioPlayer)
-  {
-    return Slider.adaptive(
-        min: 0.0,
-        value: position.inSeconds.toDouble(),
-        max: duration.inSeconds.toDouble(),
-        onChanged: (double value) {
-          setState(() {
-            audioPlayer.seek(new Duration(seconds: value.toInt()));
-          });
-        }
-    );
-  }
-  void getAudio(var audiourl,AudioPlayer audioPlayer) async{
-    var url= audiourl;
-    if(playing)
-    {
-      var res= await audioPlayer.pause();
-      if(res==1)
-      {
-        setState(() {
-          playing = false;
-        });
-      }
-    }
-    else{
-      var res= await audioPlayer.play(url,isLocal: true);
-      if(res==1)
-      {
-        setState(() {
-          playing = true;
-        });
-      }
-
-    }
-    audioPlayer.onDurationChanged.listen((Duration dd) {
-      setState(() {
-        duration = dd;
-      });
-    });
-    audioPlayer.onAudioPositionChanged.listen((Duration dd) {
-      setState(() {
-        position = dd;
-      });
-    });
-  }
 }
