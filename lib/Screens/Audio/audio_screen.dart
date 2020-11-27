@@ -4,7 +4,6 @@ import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/components/audio.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
 
-
 class AudioScreen extends StatefulWidget {
   final List userList;
   final List audiosList;
@@ -17,21 +16,17 @@ class AudioScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AudioState createState() =>
-      _AudioState(userList, audiosList, isLoading);
-}
+  _AudioState createState() => _AudioState(userList, audiosList, isLoading);
 }
 
 class _AudioState extends State<AudioScreen> {
-   List userList;
+  List userList;
   List audiosList;
   var isLoading;
 
   _AudioState(this.userList, this.audiosList, this.isLoading);
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: new AppBar(
         title: new Text('Audio'),
@@ -46,15 +41,11 @@ class _AudioState extends State<AudioScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Body(
-
-                              audioList: audiosList,
-                              index: index)),
+                          builder: (context) =>
+                              Body(audioList: audiosList, index: index)),
                     );
-
                   },
-                  child: ListItem(audiosList[index])
-              );
+                  child: ListItem(audiosList[index]));
             }),
       ),
     );
@@ -62,18 +53,15 @@ class _AudioState extends State<AudioScreen> {
 
   Widget ListItem(Audio listItem) {
     return Container(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 40.0),
-         Text(
-          listItem.title,
-          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-        ),
-
-      ],
-        ),
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 40.0),
+          Text(
+            listItem.title,
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
     );
   }
-
-
 }

@@ -12,30 +12,23 @@ import 'package:flutter_svg/svg.dart';
 class Body extends StatefulWidget {
   final List audioList;
   int index;
-  Body({
-    Key key,
-    @required this.audioList,
-    @required this.index
-  }) : super(key: key);
+  Body({Key key, @required this.audioList, @required this.index})
+      : super(key: key);
 
   @override
-  AudioScreenState createState() => AudioScreenState(audioList,index);
+  AudioScreenState createState() => AudioScreenState(audioList, index);
 }
 
 class AudioScreenState extends State<Body> {
-
-
   List audioList;
   int index;
-  AudioScreenState(this.audioList,this.index);
+  AudioScreenState(this.audioList, this.index);
 
   Duration _duration = new Duration();
   Duration _position = new Duration();
   AudioPlayer advancedPlayer;
   AudioCache audioCache;
   bool ispresed = false;
-
-
 
   @override
   void initState() {
@@ -48,20 +41,21 @@ class AudioScreenState extends State<Body> {
     audioCache = new AudioCache(fixedPlayer: advancedPlayer);
 
     advancedPlayer.durationHandler = (d) => setState(() {
-      _duration = d;
-    });
+          _duration = d;
+        });
 
     advancedPlayer.positionHandler = (p) => setState(() {
-      _position = p;
-    });
-
+          _position = p;
+        });
   }
+
   @override
   void dispose() {
     advancedPlayer.stop();
     super.dispose();
     advancedPlayer.dispose();
   }
+
   String localFilePath;
 
   Widget _tab(List<Widget> children) {
@@ -88,7 +82,7 @@ class AudioScreenState extends State<Body> {
         height: 45,
         child: RaisedButton(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             child: Text(txt),
             color: Colors.pink[900],
             textColor: Colors.white,
@@ -115,12 +109,11 @@ class AudioScreenState extends State<Body> {
   Widget LocalAudio() {
     return _tab([
       Image.asset(
-        audioList[index].img,
+        audioList[index].image,
         width: 100,
       ),
-
       SizedBox(height: 20),
-      _btn('Play', () => audioCache.play(audioList[index].path)),
+      _btn('Play', () => audioCache.play(audioList[index].url)),
       _btn('Pause', () => advancedPlayer.pause()),
       _btn('Stop', () => advancedPlayer.stop()),
       slider()
@@ -134,22 +127,16 @@ class AudioScreenState extends State<Body> {
   }
 
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Background(
         child: Container(
           padding: EdgeInsets.all(20),
           color: Colors.white,
           child: SingleChildScrollView(
-            child: Column(
-
-                children: [LocalAudio()]
-
-            ),
+            child: Column(children: [LocalAudio()]),
           ),
         ),
       ),
     );
   }
-
 }
