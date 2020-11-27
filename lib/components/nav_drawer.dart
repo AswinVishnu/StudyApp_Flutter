@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Study_Materials/study_materials.dart';
 import 'package:flutter_auth/Screens/Home/home.dart';
@@ -13,8 +14,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_auth/Screens/Video/video_screen.dart';
 import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
 import 'package:flutter_auth/components/question.dart';
+import 'package:flutter_auth/components/currentaffairs.dart';
 import 'package:flutter_auth/components/audio.dart';
-
+import 'package:flutter_auth/components/video.dart';
 
 class NavDrawer extends StatefulWidget {
   final List userList;
@@ -24,12 +26,15 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-  List<Question> list = List();
+  List<Question> questionsList = List();
+  List<CurrentAffairs> currentAffairsList = List();
+  List<Video> videosList = List();
+  List<Audio> audiosList = List();
   var isLoading = false;
-
   List userList;
+
   _NavDrawerState(this.userList);
-  //call list element like userList[0]
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -67,12 +72,30 @@ class _NavDrawerState extends State<NavDrawer> {
           Icons.pages,
           color: Color(0xFF6F35A5),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CurrentAffairsScreen(userList: userList)),
-          );
+        onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
+          final response = await http.get(
+              "https://oxystech-study-app-nodejs.herokuapp.com/admin/current_affairs");
+          if (response.statusCode == 200) {
+            currentAffairsList = (json.decode(response.body) as List)
+                .map((data) => new CurrentAffairs.fromJson(data))
+                .toList();
+            setState(() {
+              isLoading = false;
+            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CurrentAffairsScreen(
+                      userList: userList,
+                      currentAffairsList: currentAffairsList,
+                      isLoading: isLoading)),
+            );
+          } else {
+            throw Exception('Failed to load quetions');
+          }
         },
       ),
       new ListTile(
@@ -116,7 +139,7 @@ class _NavDrawerState extends State<NavDrawer> {
           final response = await http.get(
               "https://oxystech-study-app-nodejs.herokuapp.com/admin/question");
           if (response.statusCode == 200) {
-            list = (json.decode(response.body) as List)
+            questionsList = (json.decode(response.body) as List)
                 .map((data) => new Question.fromJson(data))
                 .toList();
             setState(() {
@@ -127,11 +150,11 @@ class _NavDrawerState extends State<NavDrawer> {
               MaterialPageRoute(
                   builder: (context) => QuestionBankScreen(
                       userList: userList,
-                      questionList: list,
+                      questionList: questionsList,
                       isLoading: isLoading)),
             );
           } else {
-            throw Exception('Failed to load photos');
+            throw Exception('Failed to load quetions');
           }
         },
       ),
@@ -178,6 +201,78 @@ class _NavDrawerState extends State<NavDrawer> {
           }
         },
       ),
+      new ListTile(
+        title: new Text('Videos'),
+        leading: Icon(
+          Icons.backpack,
+          color: Color(0xFF6F35A5),
+        ),
+        onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
+
+          Map data = {"type": "video"};
+
+          final response = await http.post(
+              "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
+              body: data);
+          if (response.statusCode == 200) {
+            videosList = (json.decode(response.body) as List)
+                .map((data1) => new Video.fromJson(data1))
+                .toList();
+            setState(() {
+              isLoading = false;
+            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => VideoScreen(
+                      userList: userList,
+                      videosList: videosList,
+                      isLoading: isLoading)),
+            );
+          } else {
+            throw Exception('Failed to load videos');
+          }
+        },
+      ),
+      new ListTile(
+        title: new Text('Audios'),
+        leading: Icon(
+          Icons.backpack,
+          color: Color(0xFF6F35A5),
+        ),
+        onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
+
+          Map data = {"type": "audio"};
+
+          final response = await http.post(
+              "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
+              body: data);
+          if (response.statusCode == 200) {
+            audiosList = (json.decode(response.body) as List)
+                .map((data1) => new Audio.fromJson(data1))
+                .toList();
+            setState(() {
+              isLoading = false;
+            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AudioScreen(
+                      userList: userList,
+                      audiosList: audiosList,
+                      isLoading: isLoading)),
+            );
+          } else {
+            throw Exception('Failed to load audios');
+          }
+        },
+      ),
       new Divider(),
       new ListTile(
         title: new Text('SignOut'),
@@ -192,37 +287,6 @@ class _NavDrawerState extends State<NavDrawer> {
           );
         },
       ),
-          new ListTile(
-            title: new Text('Videos'),
-            leading: Icon(
-              Icons.backpack,
-              color: Color(0xFF6F35A5),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => VideoScreen()),
-              );
-            },
-          ),
-          new ListTile(
-            title: new Text('Audios'),
-            leading: Icon(
-              Icons.backpack,
-              color: Color(0xFF6F35A5),
-            ),
-            onTap: () {
-
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AudioScreen(userList: userList)),
-              );
-            },
-          ),
-
     ]));
   }
 }

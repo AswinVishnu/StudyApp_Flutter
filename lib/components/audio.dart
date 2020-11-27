@@ -1,13 +1,16 @@
 class Audio {
-  final String img;
+  final String image;
   final String title;
-  final String path;
+  final String url;
   final String type;
 
-  Audio({this.img, this.title, this.path, this.type});
+  Audio({this.image, this.title, this.url, this.type});
 
   factory Audio.fromJson(Map<String, dynamic> json) {
     return Audio(
-        img: json['img'], title: json['title'], path: json['path'], type: json['type']);
+        image: json['image'],
+        title: json['title'],
+        url: json['url'],
+        type: json['type']);
   }
 }

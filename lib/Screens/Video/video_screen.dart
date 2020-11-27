@@ -5,72 +5,62 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_auth/components/video.dart';
 
 class VideoScreen extends StatefulWidget {
-  VideoScreen();
+  final List userList;
+  final List videosList;
+  var isLoading;
+
+  VideoScreen({
+    Key key,
+    @required this.userList,
+    @required this.videosList,
+    @required this.isLoading,
+  }) : super(key: key);
 
   @override
-  VideoScreenState createState() => VideoScreenState();
+  VideoScreenState createState() =>
+      VideoScreenState(userList, videosList, isLoading);
 }
 
 class VideoScreenState extends State<VideoScreen> {
-  var list = [
-    Video(img: 'assets/images/exams.png',
-        title: 'Flutter tutorial',
-        url: 'https://www.youtube.com/watch?v=BE9ATY2Ygas',
-        type: 'Video'
-    ),
-    Video(img: 'assets/images/studymaterials.jpg',
-        title: 'Apps from scratch travel UI tutorial',
-        url: 'https://www.youtube.com/watch?v=CSa6Ocyog4U',
-        type: 'Video'
-    )
+  List userList;
+  List videosList;
+  var isLoading;
 
-  ];
-    String videoURL1 = "https://www.youtube.com/watch?v=n8X9_MgEdCg";
-    String videoURL2 = "https://www.youtube.com/watch?v=CSa6Ocyog4U";
-    YoutubePlayerController _controller1;
-    YoutubePlayerController _controller2;
+  YoutubePlayerController _controller1;
+  YoutubePlayerController _controller2;
 
+  VideoScreenState(this.userList, this.videosList, this.isLoading);
 
-
-    @override
-    Widget build(BuildContext context) {
-
-
-
-
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("Video"),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    child: ListView.builder(
-                        itemCount: list.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return InkWell(
-                              onTap: () {
-
-
-                              },
-                              child: ListItem(list[index])
-                          );
-                        }),
-                  ),
-                ),
-              ],
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Video"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                child: ListView.builder(
+                    itemCount: videosList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                          onTap: () {}, child: ListItem(videosList[index]));
+                    }),
+              ),
             ),
-
+          ],
         ),
-      );
-    }
+      ),
+    );
+  }
 
   Widget ListItem(Video listItem) {
     _controller1 = YoutubePlayerController(
-        initialVideoId: YoutubePlayer.convertUrlToId(listItem.url), // id youtube video
+        initialVideoId:
+            YoutubePlayer.convertUrlToId(listItem.url), // id youtube video
         flags: YoutubePlayerFlags(
           autoPlay: false,
           mute: false,
@@ -97,10 +87,8 @@ class VideoScreenState extends State<VideoScreen> {
             controller: _controller1,
             showVideoProgressIndicator: true,
           ),
-
         ],
       ),
     );
   }
 }
-

@@ -1,13 +1,16 @@
 class CurrentAffairs {
-  final String img;
+  final String image;
   final String title;
   final String description;
   final String date;
 
-  CurrentAffairs({this.img, this.title, this.description, this.date});
+  CurrentAffairs({this.image, this.title, this.description, this.date});
 
   factory CurrentAffairs.fromJson(Map<String, dynamic> json) {
     return CurrentAffairs(
-        img: json['img'], title: json['title'], description: json['description'], date: json['date']);
+        image: json['image'],
+        title: json['title'],
+        description: json['description'],
+        date: json['date']);
   }
 }
