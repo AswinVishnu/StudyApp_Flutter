@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_auth/components/video.dart';
+//import 'package:flutter_auth/components/video.dart';
+import 'package:flutter_auth/models/contents.dart';
 
 class VideoScreen extends StatefulWidget {
   final List userList;
@@ -57,7 +58,7 @@ class VideoScreenState extends State<VideoScreen> {
     );
   }
 
-  Widget ListItem(Video listItem) {
+  Widget ListItem(Contents listItem) {
     _controller1 = YoutubePlayerController(
         initialVideoId:
             YoutubePlayer.convertUrlToId(listItem.url), // id youtube video

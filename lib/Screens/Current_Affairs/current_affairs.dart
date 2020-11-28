@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/components/expandable.dart';
-import 'package:flutter_auth/components/currentaffairs.dart';
+//import 'package:flutter_auth/components/currentaffairs.dart';
+import 'package:flutter_auth/models/contents.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
 
 class CurrentAffairsScreen extends StatefulWidget {
@@ -64,7 +65,7 @@ class _CurrentAffairsState extends State<CurrentAffairsScreen> {
   }
 }
 
-Widget ListItem(CurrentAffairs currentAffairsList, BuildContext context) {
+Widget ListItem(Contents currentAffairsList, BuildContext context) {
   return ExpandableNotifier(
       child: Padding(
     padding: const EdgeInsets.all(10),
@@ -104,7 +105,7 @@ Widget ListItem(CurrentAffairs currentAffairsList, BuildContext context) {
               expanded: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  for (var _ in Iterable.generate(5))
+
                     Padding(
                         padding: EdgeInsets.only(bottom: 10),
                         child: Text(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Audio/components/body.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
-import 'package:flutter_auth/components/audio.dart';
+//import 'package:flutter_auth/components/audio.dart';
+import 'package:flutter_auth/models/contents.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
 
 class AudioScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _AudioState extends State<AudioScreen> {
     );
   }
 
-  Widget ListItem(Audio listItem) {
+  Widget ListItem(Contents listItem) {
     return Container(
       child: Column(
         children: <Widget>[

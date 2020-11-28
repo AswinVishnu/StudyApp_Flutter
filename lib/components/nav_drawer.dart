@@ -14,9 +14,11 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_auth/Screens/Video/video_screen.dart';
 import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
 import 'package:flutter_auth/components/question.dart';
-import 'package:flutter_auth/components/currentaffairs.dart';
-import 'package:flutter_auth/components/audio.dart';
-import 'package:flutter_auth/components/video.dart';
+//import 'package:flutter_auth/components/currentaffairs.dart';
+//import 'package:flutter_auth/components/audio.dart';
+//import 'package:flutter_auth/components/video.dart';
+import 'package:flutter_auth/Screens/Notes/notes_screen.dart';
+import 'package:flutter_auth/models/contents.dart';
 
 class NavDrawer extends StatefulWidget {
   final List userList;
@@ -27,9 +29,9 @@ class NavDrawer extends StatefulWidget {
 
 class _NavDrawerState extends State<NavDrawer> {
   List<Question> questionsList = List();
-  List<CurrentAffairs> currentAffairsList = List();
-  List<Video> videosList = List();
-  List<Audio> audiosList = List();
+  List<Contents> currentAffairsList = List();
+  List<Contents> videosList = List();
+  List<Contents> audiosList = List();
   var isLoading = false;
   List userList;
 
@@ -80,7 +82,7 @@ class _NavDrawerState extends State<NavDrawer> {
               "https://oxystech-study-app-nodejs.herokuapp.com/admin/current_affairs");
           if (response.statusCode == 200) {
             currentAffairsList = (json.decode(response.body) as List)
-                .map((data) => new CurrentAffairs.fromJson(data))
+                .map((data) => new Contents.fromJson(data))
                 .toList();
             setState(() {
               isLoading = false;
@@ -219,7 +221,7 @@ class _NavDrawerState extends State<NavDrawer> {
               body: data);
           if (response.statusCode == 200) {
             videosList = (json.decode(response.body) as List)
-                .map((data1) => new Video.fromJson(data1))
+                .map((data1) => new Contents.fromJson(data1))
                 .toList();
             setState(() {
               isLoading = false;
@@ -255,7 +257,7 @@ class _NavDrawerState extends State<NavDrawer> {
               body: data);
           if (response.statusCode == 200) {
             audiosList = (json.decode(response.body) as List)
-                .map((data1) => new Audio.fromJson(data1))
+                .map((data1) => new Contents.fromJson(data1))
                 .toList();
             setState(() {
               isLoading = false;
@@ -273,6 +275,39 @@ class _NavDrawerState extends State<NavDrawer> {
           }
         },
       ),
+          new ListTile(
+            title: new Text('Notes'),
+            leading: Icon(
+              Icons.backpack,
+              color: Color(0xFF6F35A5),
+            ),
+            onTap: () {
+              // setState(() {
+              //   isLoading = true;
+              // });
+
+              //Map data = {"type": "audio"};
+
+              // final response = await http.post(
+              //     "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
+              //     body: data);
+              // if (response.statusCode == 200) {
+              //   audiosList = (json.decode(response.body) as List)
+              //       .map((data1) => new Audio.fromJson(data1))
+              //       .toList();
+                setState(() {
+                  isLoading = false;
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NotesScreen(
+                          userList: userList,
+                          isLoading: isLoading)),
+                );
+
+            },
+          ),
       new Divider(),
       new ListTile(
         title: new Text('SignOut'),

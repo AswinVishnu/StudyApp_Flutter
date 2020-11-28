@@ -8,16 +8,28 @@ import 'package:flutter_auth/Screens/Video/video_screen.dart';
 import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_auth/components/question.dart';
+//import 'package:flutter_auth/components/currentaffairs.dart';
 import 'dart:convert';
-import 'package:flutter_auth/components/audio.dart';
+//import 'package:flutter_auth/components/audio.dart';
+import 'package:flutter_auth/models/contents.dart';
 
 class GridDashboard extends StatefulWidget {
+  final List userList;
+  const GridDashboard({
+    Key key,
+    @required this.userList
+  }) : super(key: key);
   @override
-  _GridDashboardState createState() => _GridDashboardState();
+  _GridDashboardState createState() => _GridDashboardState(userList);
 }
 
 class _GridDashboardState extends State<GridDashboard> {
-  _GridDashboardState();
+
+  List userList;
+  _GridDashboardState(this.userList);
+  var isLoading = false;
+  List<Question> list = List();
+  List<Contents> currentAffairsList = List();
   Items item1 = new Items(
       title: "Current Affairs", img: "assets/images/CurrentAffairs.png");
 
@@ -36,9 +48,7 @@ class _GridDashboardState extends State<GridDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    List userList;
-    var isLoading = false;
-    List<Question> list = List();
+
     List<Items> myList = [item1, item2, item3, item4];
     var color = 0xff453658;
     return Expanded(
@@ -67,17 +77,31 @@ class _GridDashboardState extends State<GridDashboard> {
                       ),
                       onPressed: () async {
                         if (data.img == "assets/images/CurrentAffairs.png") {
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return CurrentAffairsScreen(userList: userList);
-                              },
-                            ),
-                          );
-                        } else if (data.img ==
-                            "assets/images/studymaterials.jpg") {
+                              setState(() {
+                              isLoading = true;
+                              });
+                              final response = await http.get(
+                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/current_affairs");
+                              if (response.statusCode == 200) {
+                              currentAffairsList = (json.decode(response.body) as List)
+                                  .map((data) => new Contents.fromJson(data))
+                                  .toList();
+                              setState(() {
+                              isLoading = false;
+                              });
+                              print(userList);
+                              Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                              builder: (context) => CurrentAffairsScreen(
+                              userList: userList,
+                              currentAffairsList: currentAffairsList,
+                              isLoading: isLoading)),
+                              );
+                              } else {
+                                throw Exception('Failed to load quetions');
+                              }
+                    } else if (data.img =="assets/images/studymaterials.jpg") {
                           var response = await http.get(
                               "https://oxystech-study-app-nodejs.herokuapp.com/admin/category");
                           if (response.statusCode == 200) {

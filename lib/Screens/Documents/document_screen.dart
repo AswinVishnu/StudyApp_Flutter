@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_auth/components/video.dart';
+import 'package:flutter_auth/models/contents.dart';
 
 class DocumentScreen extends StatefulWidget {
   DocumentScreen();
@@ -13,12 +13,12 @@ class DocumentScreen extends StatefulWidget {
 
 class DocumentScreenState extends State<DocumentScreen> {
   var list = [
-    Video(
+    Contents(
         image: 'assets/images/exams.png',
         title: 'Flutter tutorial',
         url: 'https://www.youtube.com/watch?v=BE9ATY2Ygas',
         type: 'Video'),
-    Video(
+    Contents(
         image: 'assets/images/studymaterials.jpg',
         title: 'Apps from scratch travel UI tutorial',
         url: 'https://www.youtube.com/watch?v=CSa6Ocyog4U',
@@ -55,7 +55,7 @@ class DocumentScreenState extends State<DocumentScreen> {
     );
   }
 
-  Widget ListItem(Video listItem) {
+  Widget ListItem(Contents listItem) {
     _controller1 = YoutubePlayerController(
         initialVideoId:
             YoutubePlayer.convertUrlToId(listItem.url), // id youtube video

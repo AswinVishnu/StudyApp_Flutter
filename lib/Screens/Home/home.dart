@@ -20,7 +20,7 @@ class _HomeState extends State<HomeScreen> {
         title: new Text('Home Page'),
       ),
       drawer: NavDrawer(userList: userList),
-      body: Body(),
+      body: Body(userList: userList),
     );
   }
 }
