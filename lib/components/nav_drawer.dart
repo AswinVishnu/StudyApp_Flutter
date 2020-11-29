@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Models/exam.dart';
 import 'package:flutter_auth/Screens/Study_Materials/study_materials.dart';
 import 'package:flutter_auth/Screens/Home/home.dart';
 import 'package:flutter_auth/Screens/Question_Bank/question_bank.dart';
@@ -14,7 +15,6 @@ import 'package:flutter_auth/Screens/Video/video_screen.dart';
 import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
 import 'package:flutter_auth/components/question.dart';
 
-
 class NavDrawer extends StatefulWidget {
   final List userList;
   NavDrawer({Key key, @required this.userList}) : super(key: key);
@@ -24,6 +24,7 @@ class NavDrawer extends StatefulWidget {
 
 class _NavDrawerState extends State<NavDrawer> {
   List<Question> list = List();
+  List<Exam> examResponse = List();
   var isLoading = false;
 
   List userList;
@@ -94,12 +95,31 @@ class _NavDrawerState extends State<NavDrawer> {
           Icons.accessibility_new,
           color: Color(0xFF6F35A5),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PracticeTestsScreen(userList: userList)),
-          );
+        onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
+          final response = await http.get(
+              "https://oxystech-study-app-nodejs.herokuapp.com/admin/exam");
+          if (response.statusCode == 200) {
+            Map<String, dynamic> map = json.decode(response.body);
+            examResponse = (map["result"] as List)
+                .map((data) => new Exam.fromJson(data))
+                .toList();
+            setState(() {
+              isLoading = false;
+            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PracticeTestsScreen(
+                      userList: userList,
+                      examList: examResponse,
+                      isLoading: isLoading)),
+            );
+          } else {
+            throw Exception('Failed to load photos');
+          }
         },
       ),
       new ListTile(
@@ -191,35 +211,33 @@ class _NavDrawerState extends State<NavDrawer> {
           );
         },
       ),
-          new ListTile(
-            title: new Text('Videos'),
-            leading: Icon(
-              Icons.backpack,
-              color: Color(0xFF6F35A5),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => VideoScreen()),
-              );
-            },
-          ),
-          new ListTile(
-            title: new Text('Audios'),
-            leading: Icon(
-              Icons.backpack,
-              color: Color(0xFF6F35A5),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AudioScreen(userList: userList)),
-              );
-            },
-          ),
-
+      new ListTile(
+        title: new Text('Videos'),
+        leading: Icon(
+          Icons.backpack,
+          color: Color(0xFF6F35A5),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => VideoScreen()),
+          );
+        },
+      ),
+      new ListTile(
+        title: new Text('Audios'),
+        leading: Icon(
+          Icons.backpack,
+          color: Color(0xFF6F35A5),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AudioScreen(userList: userList)),
+          );
+        },
+      ),
     ]));
   }
 }

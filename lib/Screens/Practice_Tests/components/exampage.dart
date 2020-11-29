@@ -1,0 +1,309 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_auth/Models/exam.dart';
+import 'package:flutter_auth/Models/option.dart';
+import 'package:flutter_auth/Models/question.dart';
+import 'package:flutter_auth/Models/_question.dart';
+import 'package:flutter_auth/Screens/Practice_Tests/components/resultpage.dart';
+
+class ExamSetup extends StatelessWidget {
+  // accept the langname as a parameter
+  final List userList;
+  bool isLoading;
+  String examName;
+  Exam exam;
+  List<Exam> examList;
+  ExamSetup(
+      this.examName, this.exam, this.examList, this.isLoading, this.userList);
+
+  @override
+  Widget build(BuildContext context) {
+    List<Questions> questions = [];
+
+    // and now we return the FutureBuilder to load and decode JSON
+    return FutureBuilder(
+      builder: (context, snapshot) {
+        if (exam == null) {
+          return Scaffold(
+            body: Center(
+              child: Text(
+                "Loading",
+              ),
+            ),
+          );
+        } else {
+          exam.questions.shuffle();
+          exam.questions.forEach((var element) {
+            Questions q = Questions();
+            List<Option> options = [];
+            Option optA = Option();
+            Option optB = Option();
+            Option optC = Option();
+            Option optD = Option();
+            q.question = element.question;
+            q.answer = element.answer;
+            optA.answer = element.optionA;
+            optA.correct = (optA.answer == q.answer) ? true : false;
+            options.add(optA);
+            optB.answer = element.optionB;
+            optB.correct = (optB.answer == q.answer) ? true : false;
+            options.add(optB);
+            optC.answer = element.optionC;
+            optC.correct = (optC.answer == q.answer) ? true : false;
+            options.add(optC);
+            optD.answer = element.optionD;
+            optD.correct = (optD.answer == q.answer) ? true : false;
+            options.add(optD);
+            q.options = options;
+            questions.add(q);
+          });
+          print(questions);
+
+          return quizpage(
+              examName: examName, data: questions, examList: examList);
+        }
+      },
+    );
+  }
+}
+
+class quizpage extends StatefulWidget {
+  final String examName;
+  final List<Questions> data;
+  final List<Exam> examList;
+  final List userList;
+  bool isLoading;
+
+  quizpage(
+      {Key key,
+      @required this.examName,
+      @required this.data,
+      @required this.examList,
+      @required this.isLoading,
+      @required this.userList})
+      : super(key: key);
+  @override
+  _quizpageState createState() =>
+      _quizpageState(examName, data, examList, isLoading, userList);
+}
+
+class _quizpageState extends State<quizpage> {
+  final String examName;
+  final List<Questions> data;
+  final List<Exam> examList;
+  final List userList;
+  bool isLoading;
+  _quizpageState(
+      this.examName, this.data, this.examList, this.isLoading, this.userList);
+
+  Color colortoshow = Colors.indigoAccent;
+  Color answered = Colors.deepPurpleAccent;
+  int marks = 0;
+  int i = 0;
+  bool disableAnswer = false;
+  int j = 0;
+  int timer = 30;
+  String showtimer = "30";
+  var random_array;
+
+  Map<String, Color> btncolor = {
+    "0": Colors.indigoAccent,
+    "1": Colors.indigoAccent,
+    "2": Colors.indigoAccent,
+    "3": Colors.indigoAccent,
+  };
+
+  bool canceltimer = false;
+
+  @override
+  void initState() {
+    starttimer();
+    super.initState();
+  }
+
+  // overriding the setstate function to be called only if mounted
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  void starttimer() async {
+    const onesec = Duration(seconds: 1);
+    Timer.periodic(onesec, (Timer t) {
+      setState(() {
+        if (timer < 1) {
+          t.cancel();
+          //nextquestion();
+        } else if (canceltimer == true) {
+          t.cancel();
+        } else {
+          timer = timer - 1;
+        }
+        showtimer = timer.toString();
+      });
+    });
+  }
+
+  void nextquestion() {
+    canceltimer = false;
+    timer = 30;
+    setState(() {
+      if (i < (data.length - 1)) {
+        i = i + 1;
+        print('incremented i=' + i.toString());
+      } else {
+        print('marks: ' + marks.toString());
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => resultpage(
+              marks: marks,
+              totalMarks: data.length,
+              examName: examName,
+              examList: examList,
+              isLoading: isLoading,
+              userList: userList),
+        ));
+      }
+      btncolor["0"] = Colors.indigoAccent;
+      btncolor["1"] = Colors.indigoAccent;
+      btncolor["2"] = Colors.indigoAccent;
+      btncolor["3"] = Colors.indigoAccent;
+      disableAnswer = false;
+    });
+    starttimer();
+  }
+
+  void checkanswer(String k) {
+    print('checking answer');
+    print(data[i].answer);
+    print(data[i].options[(int.parse(k))].answer);
+    if (data[i].answer == data[i].options[(int.parse(k))].answer) {
+      marks = marks + 1;
+      print('marks added: ' + marks.toString());
+      colortoshow = answered;
+    } else {
+      colortoshow = answered;
+    }
+    setState(() {
+      btncolor[k] = colortoshow;
+      canceltimer = true;
+      disableAnswer = true;
+    });
+    // nextquestion();
+    // changed timer duration to 1 second
+    Timer(Duration(seconds: 2), nextquestion);
+  }
+
+  Widget choicebutton(String k) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: 10.0,
+        horizontal: 20.0,
+      ),
+      child: MaterialButton(
+        onPressed: () => checkanswer(k),
+        child: Text(
+          data[i].options[(int.parse(k))].answer,
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Alike",
+            fontSize: 16.0,
+          ),
+          maxLines: 1,
+        ),
+        color: btncolor[k],
+        splashColor: Colors.indigo[700],
+        highlightColor: Colors.indigo[700],
+        minWidth: 200.0,
+        height: 45.0,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+    return WillPopScope(
+      onWillPop: () {
+        return showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text(
+                    "Quizstart",
+                  ),
+                  content: Text("You Can't Go Back At This Stage."),
+                  actions: <Widget>[
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Ok',
+                      ),
+                    )
+                  ],
+                ));
+      },
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Container(
+                padding: EdgeInsets.all(15.0),
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  data[i].question,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontFamily: "Quando",
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 6,
+              child: AbsorbPointer(
+                absorbing: disableAnswer,
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      choicebutton('0'),
+                      choicebutton('1'),
+                      choicebutton('2'),
+                      choicebutton('3'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                alignment: Alignment.topCenter,
+                child: Center(
+                  child: Text(
+                    showtimer,
+                    style: TextStyle(
+                      fontSize: 35.0,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Times New Roman',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
