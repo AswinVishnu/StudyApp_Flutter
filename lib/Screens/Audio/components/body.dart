@@ -36,9 +36,12 @@ class AudioScreenState extends State<Body> {
   @override
   void dispose() {
     // TODO: implement dispose
+    if(audioPlayer!=null) {
+
+      audioPlayer.stop();
+      audioPlayer.dispose();
+    }
     super.dispose();
-    audioPlayer.stop();
-    audioPlayer.dispose();
   }
   @override
   Widget build(BuildContext context) {

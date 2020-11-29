@@ -12,6 +12,7 @@ import 'package:flutter_auth/components/question.dart';
 import 'dart:convert';
 //import 'package:flutter_auth/components/audio.dart';
 import 'package:flutter_auth/models/contents.dart';
+import 'package:flutter_auth/models/category.dart';
 
 class GridDashboard extends StatefulWidget {
   final List userList;
@@ -107,12 +108,12 @@ class _GridDashboardState extends State<GridDashboard> {
                               "https://oxystech-study-app-nodejs.herokuapp.com/admin/category");
                           if (response.statusCode == 200) {
                             categoryList = (json.decode(response.body) as List)
-                                .map((data) => new Contents.fromJson(data))
+                                .map((data) => new Category.fromJson(data))
                                 .toList();
                             setState(() {
                               isLoading = false;
                             });
-                            print(userList);
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(

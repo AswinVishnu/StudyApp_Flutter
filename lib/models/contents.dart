@@ -6,6 +6,7 @@ class Contents {
   final String type;
   final String category;
 
+
   Contents({this.image, this.title, this.url,this.description, this.type, this.category});
 
   factory Contents.fromJson(Map<String, dynamic> json) {
@@ -16,5 +17,6 @@ class Contents {
         description: json['description'],
         type: json['type'],
         category: json['category']);
+
   }
 }

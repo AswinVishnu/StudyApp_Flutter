@@ -226,78 +226,8 @@ class _NavDrawerState extends State<NavDrawer> {
           }
         },
       ),
-      new ListTile(
-        title: new Text('Videos'),
-        leading: Icon(
-          Icons.backpack,
-          color: Color(0xFF6F35A5),
-        ),
-        onTap: () async {
-          setState(() {
-            isLoading = true;
-          });
 
-          Map data = {"type": "video"};
 
-          final response = await http.post(
-              "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
-              body: data);
-          if (response.statusCode == 200) {
-            videosList = (json.decode(response.body) as List)
-                .map((data1) => new Contents.fromJson(data1))
-                .toList();
-            setState(() {
-              isLoading = false;
-            });
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => VideoScreen(
-                      userList: userList,
-                      videosList: videosList,
-                      isLoading: isLoading)),
-            );
-          } else {
-            throw Exception('Failed to load videos');
-          }
-        },
-      ),
-      new ListTile(
-        title: new Text('Audios'),
-        leading: Icon(
-          Icons.backpack,
-          color: Color(0xFF6F35A5),
-        ),
-        onTap: () async {
-          setState(() {
-            isLoading = true;
-          });
-
-          Map data = {"type": "audio"};
-
-          final response = await http.post(
-              "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
-              body: data);
-          if (response.statusCode == 200) {
-            audiosList = (json.decode(response.body) as List)
-                .map((data1) => new Contents.fromJson(data1))
-                .toList();
-            setState(() {
-              isLoading = false;
-            });
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AudioScreen(
-                      userList: userList,
-                      audiosList: audiosList,
-                      isLoading: isLoading)),
-            );
-          } else {
-            throw Exception('Failed to load audios');
-          }
-        },
-      ),
       new ListTile(
         title: new Text('Notes'),
         leading: Icon(
@@ -348,33 +278,8 @@ class _NavDrawerState extends State<NavDrawer> {
           );
         },
       ),
-      new ListTile(
-        title: new Text('Videos'),
-        leading: Icon(
-          Icons.backpack,
-          color: Color(0xFF6F35A5),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => VideoScreen()),
-          );
-        },
-      ),
-      new ListTile(
-        title: new Text('Audios'),
-        leading: Icon(
-          Icons.backpack,
-          color: Color(0xFF6F35A5),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AudioScreen(userList: userList)),
-          );
-        },
-      ),
+
+
     ]));
   }
 }
