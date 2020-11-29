@@ -32,6 +32,7 @@ class _NavDrawerState extends State<NavDrawer> {
   List<Contents> currentAffairsList = List();
   List<Contents> videosList = List();
   List<Contents> audiosList = List();
+  List<Contents> notesList = List();
   var isLoading = false;
   List userList;
 
@@ -275,39 +276,42 @@ class _NavDrawerState extends State<NavDrawer> {
           }
         },
       ),
-          new ListTile(
-            title: new Text('Notes'),
-            leading: Icon(
-              Icons.backpack,
-              color: Color(0xFF6F35A5),
-            ),
-            onTap: () {
-              // setState(() {
-              //   isLoading = true;
-              // });
+      new ListTile(
+        title: new Text('Notes'),
+        leading: Icon(
+          Icons.backpack,
+          color: Color(0xFF6F35A5),
+        ),
+        onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
 
-              //Map data = {"type": "audio"};
+          Map data = {"type": "note"};
 
-              // final response = await http.post(
-              //     "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
-              //     body: data);
-              // if (response.statusCode == 200) {
-              //   audiosList = (json.decode(response.body) as List)
-              //       .map((data1) => new Audio.fromJson(data1))
-              //       .toList();
-                setState(() {
-                  isLoading = false;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NotesScreen(
-                          userList: userList,
-                          isLoading: isLoading)),
-                );
-
-            },
-          ),
+          final response = await http.post(
+              "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
+              body: data);
+          if (response.statusCode == 200) {
+            notesList = (json.decode(response.body) as List)
+                .map((data1) => new Contents.fromJson(data1))
+                .toList();
+            setState(() {
+              isLoading = false;
+            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NotesScreen(
+                      userList: userList,
+                      notesList: notesList,
+                      isLoading: isLoading)),
+            );
+          } else {
+            throw Exception('Failed to load Notes');
+          }
+        },
+      ),
       new Divider(),
       new ListTile(
         title: new Text('SignOut'),

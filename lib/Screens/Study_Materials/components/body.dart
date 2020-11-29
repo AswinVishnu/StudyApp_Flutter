@@ -10,57 +10,63 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_auth/Screens/Home/components/expansiontile.dart';
 import 'package:flutter_auth/models/contents.dart';
-class Body extends StatelessWidget {
-  var list = [
-    Contents(
-        category: 'General Knowledge',
-        ),
-    Contents(
-      category: 'Analytical Reasoning',
-    ),
-    Contents(
-      category: 'English',
-    ),
-    Contents(
-      category: 'Mathematics',
-    ),
-  ];
+
+class Body extends StatefulWidget {
+  List userList;
+  List categoryList;
+  var isLoading;
+
+  Body({
+    Key key,
+    @required this.userList,
+    @required this.categoryList,
+    @required this.isLoading,
+  }) : super(key: key);
+  @override
+  _BodyState createState() => _BodyState(userList, categoryList, isLoading);
+}
+
+class _BodyState extends State<Body> {
+  List userList;
+  List categoryList;
+  var isLoading;
+
+  _BodyState(this.userList, this.categoryList, this.isLoading);
+  // var list = [
+  //   Contents(
+  //     category: 'General Knowledge',
+  //   ),
+  //   Contents(
+  //     category: 'Analytical Reasoning',
+  //   ),
+  //   Contents(
+  //     category: 'English',
+  //   ),
+  //   Contents(
+  //     category: 'Mathematics',
+  //   ),
+  // ];
   @override
   Widget build(BuildContext context) {
     return Background(
-
-
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal:30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-
-
-
-                        Expanded(
-                          child: Container(
-                            child: ListView.builder(
-                                itemCount: list.length,
-                                itemBuilder: (BuildContext ctxt, int index) {
-                                  return InkWell(
-                                      onTap: () {
-
-                                      },
-                                      child: ListItem(list[index]));
-                                }),
-                          ),
-                        )
-
-
-
-                ],
-
-
-
-          ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                child: ListView.builder(
+                    itemCount: categoryList.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return InkWell(
+                          onTap: () {}, child: ListItem(categoryList[index]));
+                    }),
+              ),
+            )
+          ],
         ),
-
+      ),
     );
   }
 
@@ -70,33 +76,23 @@ class Body extends StatelessWidget {
           listItem.category,
           style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
-        children: getContents()
-
-
-    );
+        children: getContents());
   }
 
-  List<Widget> getContents()
-  {
+  List<Widget> getContents() {
     return <Widget>[
-    ListTile(
-      title: Text('Videos'),
-
-    ),
-    ListTile(
-    title: Text('Audio'),
-
-    ),
+      ListTile(
+        title: Text('Videos'),
+      ),
+      ListTile(
+        title: Text('Audio'),
+      ),
       ListTile(
         title: Text('Notes'),
-
       ),
       ListTile(
         title: Text('Documents'),
-
       )
     ];
-
   }
 }
-
