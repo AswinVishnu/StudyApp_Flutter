@@ -1,49 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/components/expandable.dart';
-//import 'package:flutter_auth/components/currentaffairs.dart';
-import 'package:flutter_auth/models/contents.dart';
+//import 'package:flutter_auth/components/Notes.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
+import 'package:flutter_auth/models/contents.dart';
 
-class CurrentAffairsScreen extends StatefulWidget {
+class NotesScreen extends StatefulWidget {
   final List userList;
-  final List currentAffairsList;
+  final List notesList;
   var isLoading;
-  CurrentAffairsScreen({
+
+  NotesScreen({
     Key key,
     @required this.userList,
-    @required this.currentAffairsList,
+    @required this.notesList,
     @required this.isLoading,
   }) : super(key: key);
   @override
-  _CurrentAffairsState createState() =>
-      _CurrentAffairsState(userList, currentAffairsList, isLoading);
+  _NotesState createState() => _NotesState(userList, notesList, isLoading);
 }
 
-class _CurrentAffairsState extends State<CurrentAffairsScreen> {
+class _NotesState extends State<NotesScreen> {
   List userList;
-  List currentAffairsList;
   var isLoading;
-  // var list = [
-  //   CurrentAffairs(
-  //       img: 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png',
-  //       title: 'Flutter tutorial',
-  //       description:
-  //           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  //       date: '25/02/2020'),
-  //   CurrentAffairs(
-  //       img: 'https://homepages.cae.wisc.edu/~ece533/images/boat.png',
-  //       title: 'Parliment News',
-  //       description:
-  //           'consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  //       date: '29/02/2020'),
-  // ];
-  _CurrentAffairsState(this.userList, this.currentAffairsList, this.isLoading);
+  List notesList;
+
+  _NotesState(this.userList, this.notesList, this.isLoading);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: new Text('Current Affairs'),
+        title: new Text('Notes'),
       ),
       drawer: NavDrawer(userList: userList),
       body: Background(
@@ -53,11 +40,10 @@ class _CurrentAffairsState extends State<CurrentAffairsScreen> {
             useInkWell: true,
           ),
           child: ListView.builder(
-              itemCount: currentAffairsList.length,
+              itemCount: notesList.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
-                    onTap: () {},
-                    child: ListItem(currentAffairsList[index], context));
+                    onTap: () {}, child: ListItem(notesList[index], context));
               }),
         ),
       ),
@@ -65,7 +51,7 @@ class _CurrentAffairsState extends State<CurrentAffairsScreen> {
   }
 }
 
-Widget ListItem(Contents currentAffairsList, BuildContext context) {
+Widget ListItem(Contents list, BuildContext context) {
   return ExpandableNotifier(
       child: Padding(
     padding: const EdgeInsets.all(10),
@@ -78,8 +64,7 @@ Widget ListItem(Contents currentAffairsList, BuildContext context) {
             child: Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(currentAffairsList.image),
-                      fit: BoxFit.cover)),
+                      image: NetworkImage(list.image), fit: BoxFit.cover)),
             ),
           ),
           ScrollOnExpand(
@@ -97,7 +82,7 @@ Widget ListItem(Contents currentAffairsList, BuildContext context) {
                     style: Theme.of(context).textTheme.body2,
                   )),
               collapsed: Text(
-                currentAffairsList.description,
+                list.description,
                 softWrap: true,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -105,14 +90,13 @@ Widget ListItem(Contents currentAffairsList, BuildContext context) {
               expanded: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-
-                    Padding(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: Text(
-                          currentAffairsList.description,
-                          softWrap: true,
-                          overflow: TextOverflow.fade,
-                        )),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        list.description,
+                        softWrap: true,
+                        overflow: TextOverflow.fade,
+                      )),
                 ],
               ),
               builder: (_, collapsed, expanded) {

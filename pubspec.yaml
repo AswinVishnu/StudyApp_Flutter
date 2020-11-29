@@ -15,6 +15,7 @@ dependencies:
   http: any
   youtube_player_flutter: ^7.0.0+7
   audioplayers: ^0.15.0
+  assets_audio_player: ^1.4.7+4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -24,3 +25,4 @@ flutter:
    assets:
     - assets/images/
     - assets/icons/
+    - assets/audio/

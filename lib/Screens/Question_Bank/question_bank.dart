@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Screens/Login/components/background.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
+import 'package:flutter_auth/Screens/Login/components/background.dart';
 
 class QuestionBankScreen extends StatefulWidget {
   final List userList;
@@ -33,14 +35,16 @@ class _QuestionBankState extends State<QuestionBankScreen> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView.builder(
-                itemCount: questionList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    contentPadding: EdgeInsets.all(10.0),
-                    title: Text("Q. " + questionList[index].question),
-                    subtitle: Text("Ans. " + questionList[index].answer),
-                  );
-                }));
+            : Background(
+              child: ListView.builder(
+                  itemCount: questionList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      contentPadding: EdgeInsets.all(10.0),
+                      title: Text("Q. " + questionList[index].question),
+                      subtitle: Text("Ans. " + questionList[index].answer),
+                    );
+                  }),
+            ));
   }
 }

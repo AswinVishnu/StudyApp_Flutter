@@ -2,35 +2,32 @@ import 'package:flutter/material.dart';
 
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-//import 'package:flutter_auth/components/video.dart';
 import 'package:flutter_auth/models/contents.dart';
 
-class VideoScreen extends StatefulWidget {
-  final List userList;
-  final List videosList;
-  var isLoading;
-
-  VideoScreen({
-    Key key,
-    @required this.userList,
-    @required this.videosList,
-    @required this.isLoading,
-  }) : super(key: key);
+class DocumentScreen extends StatefulWidget {
+  DocumentScreen();
 
   @override
-  VideoScreenState createState() =>
-      VideoScreenState(userList, videosList, isLoading);
+  DocumentScreenState createState() => DocumentScreenState();
 }
 
-class VideoScreenState extends State<VideoScreen> {
-  List userList;
-  List videosList;
-  var isLoading;
-
+class DocumentScreenState extends State<DocumentScreen> {
+  var list = [
+    Contents(
+        image: 'assets/images/exams.png',
+        title: 'Flutter tutorial',
+        url: 'https://www.youtube.com/watch?v=BE9ATY2Ygas',
+        type: 'Video'),
+    Contents(
+        image: 'assets/images/studymaterials.jpg',
+        title: 'Apps from scratch travel UI tutorial',
+        url: 'https://www.youtube.com/watch?v=CSa6Ocyog4U',
+        type: 'Video')
+  ];
+  String videoURL1 = "https://www.youtube.com/watch?v=n8X9_MgEdCg";
+  String videoURL2 = "https://www.youtube.com/watch?v=CSa6Ocyog4U";
   YoutubePlayerController _controller1;
   YoutubePlayerController _controller2;
-
-  VideoScreenState(this.userList, this.videosList, this.isLoading);
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +42,10 @@ class VideoScreenState extends State<VideoScreen> {
             Expanded(
               child: Container(
                 child: ListView.builder(
-                    itemCount: videosList.length,
+                    itemCount: list.length,
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
-                          onTap: () {}, child: ListItem(videosList[index]));
+                          onTap: () {}, child: ListItem(list[index]));
                     }),
               ),
             ),
