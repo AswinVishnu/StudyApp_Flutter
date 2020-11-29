@@ -4,6 +4,7 @@ import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_auth/Screens/Login/components/background.dart';
 
 class resultpage extends StatefulWidget {
   int marks;
@@ -58,7 +59,6 @@ class _resultpageState extends State<resultpage> {
       message =
           "You Can Do Better..\n" + "You Scored $marks out of $totalMarks";
     } else {
-      print("well");
       image = images[0];
       message =
           "You Did Very Well..\n" + "You Scored $marks out of $totalMarks";
@@ -89,82 +89,89 @@ class _resultpageState extends State<resultpage> {
   Widget build(BuildContext context) {
     sendResult();
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Result",
+        appBar: AppBar(
+          title: Text(
+            "Result",
+          ),
         ),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 8,
-            child: Material(
-              elevation: 10.0,
-              child: Container(
+        body: (isLoading == true)
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Background(
                 child: Column(
                   children: <Widget>[
-                    Material(
-                      child: Container(
-                        width: 300.0,
-                        height: 300.0,
-                        child: ClipRect(
-                          child: Image(
-                            image: AssetImage(
-                              image,
-                            ),
+                    Expanded(
+                      flex: 8,
+                      child: Material(
+                        elevation: 10.0,
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              Material(
+                                child: Container(
+                                  width: 300.0,
+                                  height: 300.0,
+                                  child: ClipRect(
+                                    child: Image(
+                                      image: AssetImage(
+                                        image,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 5.0,
+                                    horizontal: 15.0,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      message,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontFamily: "Quando",
+                                      ),
+                                    ),
+                                  )),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 5.0,
-                          horizontal: 15.0,
-                        ),
-                        child: Center(
-                          child: Text(
-                            message,
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontFamily: "Quando",
+                    Expanded(
+                      flex: 4,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          OutlineButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                builder: (context) =>
+                                    PracticeTestsScreen(examList: examList),
+                              ));
+                            },
+                            child: Text(
+                              "Continue",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              ),
                             ),
-                          ),
-                        )),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10.0,
+                              horizontal: 25.0,
+                            ),
+                            borderSide:
+                                BorderSide(width: 3.0, color: Colors.indigo),
+                            splashColor: Colors.indigoAccent,
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 4,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                OutlineButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) =>
-                          PracticeTestsScreen(examList: examList),
-                    ));
-                  },
-                  child: Text(
-                    "Continue",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 25.0,
-                  ),
-                  borderSide: BorderSide(width: 3.0, color: Colors.indigo),
-                  splashColor: Colors.indigoAccent,
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+              ));
   }
 }
