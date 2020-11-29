@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_auth/models/contents.dart';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:flutter_auth/Screens/Documents/components/body.dart';
 
 class DocumentScreen extends StatefulWidget {
   DocumentScreen();
@@ -17,23 +19,33 @@ class DocumentScreenState extends State<DocumentScreen> {
         image: 'assets/images/exams.png',
         title: 'Flutter tutorial',
         url: 'https://www.youtube.com/watch?v=BE9ATY2Ygas',
-        type: 'Video'),
+        type: 'pdf'),
     Contents(
         image: 'assets/images/studymaterials.jpg',
         title: 'Apps from scratch travel UI tutorial',
         url: 'https://www.youtube.com/watch?v=CSa6Ocyog4U',
-        type: 'Video')
+        type: 'pdf')
   ];
-  String videoURL1 = "https://www.youtube.com/watch?v=n8X9_MgEdCg";
-  String videoURL2 = "https://www.youtube.com/watch?v=CSa6Ocyog4U";
-  YoutubePlayerController _controller1;
-  YoutubePlayerController _controller2;
+
+  bool _isLoading = true;
+  PDFDocument doc;
+  Contents documentList;
+  void _loadFromUrl() async {
+    setState(() {
+      _isLoading = true;
+    });
+    doc = await PDFDocument.fromURL(
+        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Video"),
+        title: Text("Documents"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -42,10 +54,22 @@ class DocumentScreenState extends State<DocumentScreen> {
             Expanded(
               child: Container(
                 child: ListView.builder(
-                    itemCount: list.length,
+                    itemCount: 2,
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
-                          onTap: () {}, child: ListItem(list[index]));
+                          splashColor: Colors.blue,
+
+                          highlightColor: Colors.blue.withOpacity(0.9),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Body(documentList: list, index: index)),
+                            );
+                          },
+                          child: ListItem(list[index]));
+
                     }),
               ),
             ),
@@ -56,34 +80,14 @@ class DocumentScreenState extends State<DocumentScreen> {
   }
 
   Widget ListItem(Contents listItem) {
-    _controller1 = YoutubePlayerController(
-        initialVideoId:
-            YoutubePlayer.convertUrlToId(listItem.url), // id youtube video
-        flags: YoutubePlayerFlags(
-          autoPlay: false,
-          mute: false,
-        ));
+
     return Container(
       child: Column(
         children: <Widget>[
-          SizedBox(
-            height: 40,
-          ),
+          SizedBox(height: 40.0),
           Text(
             listItem.title,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.openSans(
-                textStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700)),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          YoutubePlayer(
-            controller: _controller1,
-            showVideoProgressIndicator: true,
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
           ),
         ],
       ),

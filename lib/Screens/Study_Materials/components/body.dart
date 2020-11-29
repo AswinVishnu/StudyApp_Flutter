@@ -12,6 +12,8 @@ import 'package:flutter_auth/Screens/Home/components/expansiontile.dart';
 import 'package:flutter_auth/models/contents.dart';
 import 'package:flutter_auth/Screens/Video/video_screen.dart';
 import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
+import 'package:flutter_auth/Screens/Documents/document_screen.dart';
+import 'package:flutter_auth/models/category.dart';
 
 class Body extends StatefulWidget {
   List userList;
@@ -30,28 +32,31 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   List userList;
+  
   List categoryList;
   List<Contents> videosList = List();
   List<Contents> audiosList = List();
   var isLoading = false;
 
   _BodyState(this.userList, this.categoryList, this.isLoading);
-  var list = [
-    Contents(
-      category: 'General Knowledge',
-    ),
-    Contents(
-      category: 'Analytical Reasoning',
-    ),
-    Contents(
-      category: 'English',
-    ),
-    Contents(
-      category: 'Mathematics',
-    ),
-  ];
+  // var list = [
+  //   Contents(
+  //     category: 'General Knowledge',
+  //   ),
+  //   Contents(
+  //     category: 'Analytical Reasoning',
+  //   ),
+  //   Contents(
+  //     category: 'English',
+  //   ),
+  //   Contents(
+  //     category: 'Mathematics',
+  //   ),
+  // ];
+
   @override
   Widget build(BuildContext context) {
+
     return Background(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -64,7 +69,7 @@ class _BodyState extends State<Body> {
                     itemCount: categoryList.length,
                     itemBuilder: (BuildContext ctxt, int index) {
                       return InkWell(
-                          onTap: () {}, child: ListItem(list[index],context));
+                          onTap: () {}, child: ListItem(categoryList[index],context));
                     }),
               ),
             )
@@ -74,14 +79,18 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget ListItem(Contents listItem, BuildContext context) {
+  Widget ListItem(Category listItem, BuildContext context) {
     return ExpansionTile(
       title: Text(
-        listItem.category,
+        listItem.name,
         style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
       ),
       children: <Widget>[
         InkWell(
+
+          splashColor: Colors.blue,
+
+          highlightColor: Colors.blue.withOpacity(0.9),
           onTap: () async {
             setState(() {
               isLoading = true;
@@ -116,6 +125,9 @@ class _BodyState extends State<Body> {
           ),
         ),
         InkWell(
+          splashColor: Colors.blue,
+
+          highlightColor: Colors.blue.withOpacity(0.9),
           onTap: () async{
 
             setState(() {
@@ -146,6 +158,24 @@ class _BodyState extends State<Body> {
           },
           child: ListTile(
             title: Text('Audio'),
+          ),
+        ),
+        InkWell(
+          splashColor: Colors.blue,
+
+          highlightColor: Colors.blue.withOpacity(0.9),
+          onTap: (){
+
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DocumentScreen()),
+              );
+
+          },
+          child: ListTile(
+            title: Text('Documents'),
           ),
         ),
       ],
