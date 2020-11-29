@@ -10,6 +10,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_auth/Screens/Home/components/expansiontile.dart';
 import 'package:flutter_auth/models/contents.dart';
+import 'package:flutter_auth/Screens/Video/video_screen.dart';
+import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
 
 class Body extends StatefulWidget {
   List userList;
@@ -29,23 +31,25 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   List userList;
   List categoryList;
-  var isLoading;
+  List<Contents> videosList = List();
+  List<Contents> audiosList = List();
+  var isLoading = false;
 
   _BodyState(this.userList, this.categoryList, this.isLoading);
-  // var list = [
-  //   Contents(
-  //     category: 'General Knowledge',
-  //   ),
-  //   Contents(
-  //     category: 'Analytical Reasoning',
-  //   ),
-  //   Contents(
-  //     category: 'English',
-  //   ),
-  //   Contents(
-  //     category: 'Mathematics',
-  //   ),
-  // ];
+  var list = [
+    Contents(
+      category: 'General Knowledge',
+    ),
+    Contents(
+      category: 'Analytical Reasoning',
+    ),
+    Contents(
+      category: 'English',
+    ),
+    Contents(
+      category: 'Mathematics',
+    ),
+  ];
   @override
   Widget build(BuildContext context) {
     return Background(
@@ -60,7 +64,7 @@ class _BodyState extends State<Body> {
                     itemCount: categoryList.length,
                     itemBuilder: (BuildContext ctxt, int index) {
                       return InkWell(
-                          onTap: () {}, child: ListItem(categoryList[index]));
+                          onTap: () {}, child: ListItem(list[index],context));
                     }),
               ),
             )
@@ -70,29 +74,83 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget ListItem(Contents listItem) {
+  Widget ListItem(Contents listItem, BuildContext context) {
     return ExpansionTile(
-        title: Text(
-          listItem.category,
-          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+      title: Text(
+        listItem.category,
+        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+      ),
+      children: <Widget>[
+        InkWell(
+          onTap: () async {
+            setState(() {
+              isLoading = true;
+            });
+
+            Map data = {"type": "video"};
+
+            final response = await http.post(
+                "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
+                body: data);
+            if (response.statusCode == 200) {
+              videosList = (json.decode(response.body) as List)
+                  .map((data1) => new Contents.fromJson(data1))
+                  .toList();
+              setState(() {
+                isLoading = false;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => VideoScreen(
+                        userList: userList,
+                        videosList: videosList,
+                        isLoading: isLoading)),
+              );
+            } else {
+              throw Exception('Failed to load videos');
+            }
+          },
+          child: ListTile(
+            title: Text('Videos'),
+          ),
         ),
-        children: getContents());
+        InkWell(
+          onTap: () async{
+
+            setState(() {
+              isLoading = true;
+            });
+
+            Map data = {"type": "audio"};
+
+            final response = await http.post(
+                "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
+                body: data);
+            if (response.statusCode == 200) {
+              audiosList = (json.decode(response.body) as List)
+                  .map((data1) => new Contents.fromJson(data1))
+                  .toList();
+              setState(() {
+                isLoading = false;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AudioScreen(
+                        userList: userList,
+                        audiosList: audiosList,
+                        isLoading: isLoading)),
+              );
+            }
+          },
+          child: ListTile(
+            title: Text('Audio'),
+          ),
+        ),
+      ],
+    );
   }
 
-  List<Widget> getContents() {
-    return <Widget>[
-      ListTile(
-        title: Text('Videos'),
-      ),
-      ListTile(
-        title: Text('Audio'),
-      ),
-      ListTile(
-        title: Text('Notes'),
-      ),
-      ListTile(
-        title: Text('Documents'),
-      )
-    ];
-  }
+
 }
