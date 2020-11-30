@@ -10,6 +10,7 @@ class Exam {
   final String description;
   final List<Question> questions;
   final bool status;
+  final String duration;
 
   Exam._(
       {this.name,
@@ -20,7 +21,8 @@ class Exam {
       this.status,
       this.id,
       this.questions,
-      this.description});
+      this.description,
+      this.duration});
 
   factory Exam.fromJson(Map<String, dynamic> json) {
     return Exam._(
@@ -34,6 +36,7 @@ class Exam {
             .map((data) => new Question.fromJson(data))
             .toList(),
         status: json['status'],
-        description: json['description']);
+        description: json['description'],
+        duration: json['duration']);
   }
 }

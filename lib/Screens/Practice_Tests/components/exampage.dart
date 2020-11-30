@@ -8,6 +8,7 @@ import 'package:flutter_auth/Models/option.dart';
 import 'package:flutter_auth/Models/question.dart';
 import 'package:flutter_auth/Models/_question.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/components/resultpage.dart';
+import 'package:flutter_auth/Screens/Login/components/background.dart';
 
 class ExamSetup extends StatelessWidget {
   // accept the langname as a parameter
@@ -63,7 +64,10 @@ class ExamSetup extends StatelessWidget {
           print(questions);
 
           return quizpage(
-              examName: examName, data: questions, examList: examList);
+              examName: examName,
+              data: questions,
+              examList: examList,
+              exam: exam);
         }
       },
     );
@@ -76,6 +80,7 @@ class quizpage extends StatefulWidget {
   final List<Exam> examList;
   final List userList;
   bool isLoading;
+  final Exam exam;
 
   quizpage(
       {Key key,
@@ -83,11 +88,12 @@ class quizpage extends StatefulWidget {
       @required this.data,
       @required this.examList,
       @required this.isLoading,
-      @required this.userList})
+      @required this.userList,
+      @required this.exam})
       : super(key: key);
   @override
   _quizpageState createState() =>
-      _quizpageState(examName, data, examList, isLoading, userList);
+      _quizpageState(examName, data, examList, isLoading, userList, exam);
 }
 
 class _quizpageState extends State<quizpage> {
@@ -96,8 +102,9 @@ class _quizpageState extends State<quizpage> {
   final List<Exam> examList;
   final List userList;
   bool isLoading;
-  _quizpageState(
-      this.examName, this.data, this.examList, this.isLoading, this.userList);
+  final Exam exam;
+  _quizpageState(this.examName, this.data, this.examList, this.isLoading,
+      this.userList, this.exam);
 
   Color colortoshow = Colors.indigoAccent;
   Color answered = Colors.deepPurpleAccent;
@@ -105,9 +112,10 @@ class _quizpageState extends State<quizpage> {
   int i = 0;
   bool disableAnswer = false;
   int j = 0;
-  int timer = 30;
-  String showtimer = "30";
-  var random_array;
+  int timer;
+  String showtimer;
+  // int timer = exam.duration;
+  // String showtimer = "30";
 
   Map<String, Color> btncolor = {
     "0": Colors.indigoAccent,
@@ -120,6 +128,8 @@ class _quizpageState extends State<quizpage> {
 
   @override
   void initState() {
+    timer = (int.parse(exam.duration)) * 60;
+    showtimer = "00:00";
     starttimer();
     super.initState();
   }
@@ -133,25 +143,63 @@ class _quizpageState extends State<quizpage> {
   }
 
   void starttimer() async {
+    // String showtimer = exam.duration;
+    // int timer = int.parse(showtimer);
     const onesec = Duration(seconds: 1);
     Timer.periodic(onesec, (Timer t) {
       setState(() {
         if (timer < 1) {
           t.cancel();
           //nextquestion();
+        } else if (timer < 60) {
+          String initShowtimer = timer.toString();
+          if (initShowtimer.length == 1) {
+            showtimer = "0" + showtimer;
+          }
+          timer = timer - 1;
+        } else if (timer < 3600) {
+          int m = timer ~/ 60;
+          int s = timer - (60 * m);
+          String mString = m.toString();
+          String sString = s.toString();
+          if (mString.length == 1) {
+            mString = "0" + mString;
+          }
+          if (sString.length == 1) {
+            sString = "0" + sString;
+          }
+          showtimer = mString + ":" + sString;
+          timer = timer - 1;
+        } else if (timer > 3600) {
+          int h = timer ~/ 60;
+          int t = timer - (3600 * h);
+          int m = t ~/ 60;
+          int s = t - (60 * m);
+          String hString = h.toString();
+          String mString = m.toString();
+          String sString = s.toString();
+          if (mString.length == 1) {
+            mString = "0" + mString;
+          }
+          if (sString.length == 1) {
+            sString = "0" + sString;
+          }
+          if (hString.length == 1) {
+            hString = "0" + hString;
+          }
+          showtimer = hString + ":" + mString + ":" + sString;
+          timer = timer - 1;
         } else if (canceltimer == true) {
           t.cancel();
         } else {
           timer = timer - 1;
         }
-        showtimer = timer.toString();
       });
     });
   }
 
   void nextquestion() {
     canceltimer = false;
-    timer = 30;
     setState(() {
       if (i < (data.length - 1)) {
         i = i + 1;
@@ -174,7 +222,6 @@ class _quizpageState extends State<quizpage> {
       btncolor["3"] = Colors.indigoAccent;
       disableAnswer = false;
     });
-    starttimer();
   }
 
   void checkanswer(String k) {
@@ -252,58 +299,63 @@ class _quizpageState extends State<quizpage> {
                 ));
       },
       child: Scaffold(
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 3,
-              child: Container(
-                padding: EdgeInsets.all(15.0),
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  data[i].question,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontFamily: "Quando",
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 6,
-              child: AbsorbPointer(
-                absorbing: disableAnswer,
-                child: Container(
+          body: (isLoading == true)
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Background(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      choicebutton('0'),
-                      choicebutton('1'),
-                      choicebutton('2'),
-                      choicebutton('3'),
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          padding: EdgeInsets.all(15.0),
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            data[i].question,
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: "Quando",
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: AbsorbPointer(
+                          absorbing: disableAnswer,
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                choicebutton('0'),
+                                choicebutton('1'),
+                                choicebutton('2'),
+                                choicebutton('3'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          alignment: Alignment.topCenter,
+                          child: Center(
+                            child: Text(
+                              showtimer,
+                              style: TextStyle(
+                                fontSize: 35.0,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Times New Roman',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                alignment: Alignment.topCenter,
-                child: Center(
-                  child: Text(
-                    showtimer,
-                    style: TextStyle(
-                      fontSize: 35.0,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Times New Roman',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+                )),
     );
   }
 }
