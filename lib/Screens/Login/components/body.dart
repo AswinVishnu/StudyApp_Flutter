@@ -23,6 +23,13 @@ class _LoginPageState extends State<Body> {
   var password;
 
   bool _isLoading = false;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -30,8 +37,10 @@ class _LoginPageState extends State<Body> {
     signIn(var email, pass) async {
       // SharedPreferences sharedPreferences =
       //     await SharedPreferences.getInstance();
+
       Map data = {'email': email, 'password': pass, 'role': 'student'};
       var jsonResponse;
+
       var response = await http.post(
           "https://oxystech-study-app-nodejs.herokuapp.com/user/login",
           body: data);
@@ -96,6 +105,7 @@ class _LoginPageState extends State<Body> {
                   RoundedButton(
                     text: "LOGIN",
                     press: () {
+
                       signIn(email, password);
                     },
                   ),

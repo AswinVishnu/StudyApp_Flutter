@@ -14,6 +14,7 @@ import 'package:flutter_auth/Screens/Video/video_screen.dart';
 import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
 import 'package:flutter_auth/Screens/Documents/document_screen.dart';
 import 'package:flutter_auth/models/category.dart';
+import 'package:flutter_auth/Screens/Notes/notes_screen.dart';
 
 class Body extends StatefulWidget {
   List userList;
@@ -36,6 +37,7 @@ class _BodyState extends State<Body> {
   List categoryList;
   List<Contents> videosList = List();
   List<Contents> audiosList = List();
+  List<Contents> notesList = List();
   var isLoading = false;
 
   _BodyState(this.userList, this.categoryList, this.isLoading);
@@ -176,6 +178,44 @@ class _BodyState extends State<Body> {
           },
           child: ListTile(
             title: Text('Documents'),
+          ),
+        ),
+        InkWell(
+          splashColor: Colors.blue,
+
+          highlightColor: Colors.blue.withOpacity(0.9),
+          onTap: () async{
+
+            setState(() {
+              isLoading = true;
+            });
+
+            Map data = {"type": "note"};
+
+            final response = await http.post(
+                "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
+                body: data);
+            if (response.statusCode == 200) {
+              notesList = (json.decode(response.body) as List)
+                  .map((data1) => new Contents.fromJson(data1))
+                  .toList();
+              setState(() {
+                isLoading = false;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NotesScreen(
+                        userList: userList,
+                        notesList: notesList,
+                        isLoading: isLoading)),
+              );
+            } else {
+              throw Exception('Failed to load Notes');
+            }
+          },
+          child: ListTile(
+            title: Text('Notes'),
           ),
         ),
       ],

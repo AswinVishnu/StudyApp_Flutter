@@ -45,33 +45,37 @@ class _NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
         child: new Column(children: <Widget>[
-      new UserAccountsDrawerHeader(
-        accountName: new Text(userList[1],
-            style: new TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 15.0)),
-        accountEmail: new Text(
-          userList[3],
-          style: new TextStyle(color: Colors.blueGrey[50]),
+
+         new UserAccountsDrawerHeader(
+          accountName: new Text(userList[1],
+              style: new TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0)),
+          accountEmail: new Text(
+            userList[3],
+            style: new TextStyle(color: Colors.blueGrey[50]),
+          ),
+          currentAccountPicture: new CircleAvatar(
+              backgroundColor: Colors.brown, child: new Text("FL")),
         ),
-        currentAccountPicture: new CircleAvatar(
-            backgroundColor: Colors.brown, child: new Text("FL")),
-      ),
-      new ListTile(
-        title: new Text('Home'),
-        leading: Icon(
-          Icons.home,
-          color: Color(0xFF6F35A5),
+
+
+        new ListTile(
+          title: new Text('Home'),
+          leading: Icon(
+            Icons.home,
+            color: Color(0xFF6F35A5),
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomeScreen(userList: userList)),
+            );
+          },
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomeScreen(userList: userList)),
-          );
-        },
-      ),
+
       new ListTile(
         title: new Text('Current Affairs'),
         leading: Icon(
@@ -228,42 +232,7 @@ class _NavDrawerState extends State<NavDrawer> {
       ),
 
 
-      new ListTile(
-        title: new Text('Notes'),
-        leading: Icon(
-          Icons.backpack,
-          color: Color(0xFF6F35A5),
-        ),
-        onTap: () async {
-          setState(() {
-            isLoading = true;
-          });
 
-          Map data = {"type": "note"};
-
-          final response = await http.post(
-              "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
-              body: data);
-          if (response.statusCode == 200) {
-            notesList = (json.decode(response.body) as List)
-                .map((data1) => new Contents.fromJson(data1))
-                .toList();
-            setState(() {
-              isLoading = false;
-            });
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => NotesScreen(
-                      userList: userList,
-                      notesList: notesList,
-                      isLoading: isLoading)),
-            );
-          } else {
-            throw Exception('Failed to load Notes');
-          }
-        },
-      ),
       new Divider(),
       new ListTile(
         title: new Text('SignOut'),
@@ -278,7 +247,6 @@ class _NavDrawerState extends State<NavDrawer> {
           );
         },
       ),
-
 
     ]));
   }

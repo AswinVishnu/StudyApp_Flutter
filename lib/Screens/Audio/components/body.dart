@@ -53,10 +53,11 @@ class AudioScreenState extends State<Body> {
           color: Colors.white,
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Image.network(
-                  audioList[index].image,
-                  width: 100,
+                  'https://www.frostfireaudio.com.au/wp-content/uploads/2018/02/headphone_audio.jpg',
+
                 ),
                 SizedBox(height: 20),
                 slider(),

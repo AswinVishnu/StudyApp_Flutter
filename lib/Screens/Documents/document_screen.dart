@@ -85,10 +85,24 @@ class DocumentScreenState extends State<DocumentScreen> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 40.0),
-          Text(
-            listItem.title,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          Text.rich(
+            TextSpan(
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              children: [
+
+                WidgetSpan(
+                  child: Icon(Icons.text_snippet),
+                ),
+                TextSpan(
+                  text: '  ',
+                ),
+                TextSpan(
+                  text: listItem.title,
+                )
+              ],
+            ),
           ),
+
         ],
       ),
     );

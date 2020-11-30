@@ -38,6 +38,9 @@ class _AudioState extends State<AudioScreen> {
             itemCount: audiosList.length,
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
+                  splashColor: Colors.blue,
+
+                  highlightColor: Colors.blue.withOpacity(0.9),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -57,10 +60,24 @@ class _AudioState extends State<AudioScreen> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 40.0),
-          Text(
-            listItem.title,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          Text.rich(
+            TextSpan(
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              children: [
+
+                WidgetSpan(
+                  child: Icon(Icons.play_circle_filled),
+                ),
+                TextSpan(
+                  text: '  ',
+                ),
+                TextSpan(
+                  text: listItem.title,
+                )
+              ],
+            ),
           ),
+
         ],
       ),
     );
