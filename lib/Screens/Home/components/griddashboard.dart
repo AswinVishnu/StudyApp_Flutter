@@ -73,10 +73,13 @@ class _GridDashboardState extends State<GridDashboard> {
                         width: 190,
                       ),
                       onPressed: () async {
+                        final snackBar = new SnackBar(content: new Text('Loading...'));
+                        Scaffold.of(context).showSnackBar(snackBar);
                         if (data.img == "assets/images/CurrentAffairs.png") {
                           setState(() {
                             isLoading = true;
                           });
+
                           final response = await http.get(
                               "https://oxystech-study-app-nodejs.herokuapp.com/admin/current_affairs");
                           if (response.statusCode == 200) {

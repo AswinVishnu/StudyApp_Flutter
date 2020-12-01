@@ -99,7 +99,8 @@ class _BodyState extends State<Body> {
             });
 
             Map data = {"type": "video"};
-
+            final snackBar = new SnackBar(content: new Text('Loading...'));
+            Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(
                 "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
                 body: data);
@@ -137,7 +138,8 @@ class _BodyState extends State<Body> {
             });
 
             Map data = {"type": "audio"};
-
+            final snackBar = new SnackBar(content: new Text('Loading...'));
+            Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(
                 "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
                 body: data);
@@ -168,7 +170,8 @@ class _BodyState extends State<Body> {
           highlightColor: Colors.blue.withOpacity(0.9),
           onTap: (){
 
-
+            final snackBar = new SnackBar(content: new Text('Loading...'));
+            Scaffold.of(context).showSnackBar(snackBar);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -191,7 +194,8 @@ class _BodyState extends State<Body> {
             });
 
             Map data = {"type": "note"};
-
+            final snackBar = new SnackBar(content: new Text('Loading...'));
+            Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(
                 "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
                 body: data);

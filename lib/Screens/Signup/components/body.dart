@@ -54,6 +54,8 @@ class _SignUpPageState extends State<Body> {
         "role":"student"
       };
       var jsonResponse = null;
+      final snackBar = new SnackBar(content: new Text('Loading...'));
+      Scaffold.of(context).showSnackBar(snackBar);
       var response = await http.post("https://oxystech-study-app-nodejs.herokuapp.com/user/account", body: data);
       if(response.statusCode == 200) {
         jsonResponse = json.decode(response.body);

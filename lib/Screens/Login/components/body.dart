@@ -38,9 +38,10 @@ class _LoginPageState extends State<Body> {
       // SharedPreferences sharedPreferences =
       //     await SharedPreferences.getInstance();
 
-      Map data = {'email': email, 'password': pass, 'role': 'student'};
+          Map data = {'email': email, 'password': pass, 'role': 'student'};
       var jsonResponse;
-
+          final snackBar = new SnackBar(content: new Text('Loading...'));
+      Scaffold.of(context).showSnackBar(snackBar);
       var response = await http.post(
           "https://oxystech-study-app-nodejs.herokuapp.com/user/login",
           body: data);
