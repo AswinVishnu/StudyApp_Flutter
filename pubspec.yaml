@@ -17,6 +17,7 @@ dependencies:
   audioplayers: ^0.15.0
   assets_audio_player: ^1.4.7+4
   advance_pdf_viewer: any
+  font_awesome_flutter:
 dev_dependencies:
   flutter_test:
     sdk: flutter

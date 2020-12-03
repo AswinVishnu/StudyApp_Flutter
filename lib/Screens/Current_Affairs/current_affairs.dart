@@ -43,6 +43,7 @@ class _CurrentAffairsState extends State<CurrentAffairsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
+        backgroundColor: Colors.lightBlue[900],
         title: new Text('Current Affairs'),
       ),
       drawer: NavDrawer(userList: userList),

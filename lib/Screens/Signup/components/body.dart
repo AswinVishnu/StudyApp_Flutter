@@ -86,10 +86,11 @@ class _SignUpPageState extends State<Body> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/signup.svg",
+            Image.asset(
+              "assets/images/signup.jpg",
               height: size.height * 0.35,
             ),
+
             RoundedInputField(
               hintText: "Full Name",
               onChanged: (value) {
@@ -122,7 +123,8 @@ class _SignUpPageState extends State<Body> {
 
               ),
               child: DropdownButton(
-                hint:  Text("Select item"),
+                hint:  Text("Select Institute"),
+
                 value: selectedUser,
                 onChanged: (Item Value) {
                   setState(() {
@@ -152,6 +154,7 @@ class _SignUpPageState extends State<Body> {
 
             RoundedButton(
               text: "SIGNUP",
+                color: Colors.lightBlue[900],
               press: () {
                    signUp(fullname, mobile,email,selectedUser.name,password);
               },
@@ -170,24 +173,7 @@ class _SignUpPageState extends State<Body> {
                 );
               },
             ),
-            OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocalIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
-              ],
-            )
+
           ],
         ),
       ),

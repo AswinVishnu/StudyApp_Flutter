@@ -59,7 +59,7 @@ class _GridDashboardState extends State<GridDashboard> {
               return Card(
                 elevation: 4,
                 color: Colors.white,
-                shadowColor: Colors.deepPurpleAccent,
+                shadowColor: Colors.lightBlue[900],
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 child: Column(

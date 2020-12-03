@@ -87,6 +87,7 @@ class _PracticeTestsState extends State<PracticeTestsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
+        backgroundColor: Colors.lightBlue[900],
         title: new Text('Practice Test'),
       ),
       drawer: NavDrawer(userList: userList),

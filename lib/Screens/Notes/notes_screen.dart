@@ -30,6 +30,7 @@ class _NotesState extends State<NotesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
+        backgroundColor: Colors.lightBlue[900],
         title: new Text('Notes'),
       ),
       drawer: NavDrawer(userList: userList),

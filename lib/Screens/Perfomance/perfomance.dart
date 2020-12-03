@@ -19,6 +19,7 @@ class _PerfomanceState extends State<PerfomanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
+          backgroundColor: Colors.lightBlue[900],
           title: new Text('Perfomance Page'),
         ),
         drawer: NavDrawer(userList: userList),

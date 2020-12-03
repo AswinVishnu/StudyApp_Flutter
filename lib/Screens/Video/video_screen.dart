@@ -36,6 +36,7 @@ class VideoScreenState extends State<VideoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.lightBlue[900],
         title: Text("Video"),
       ),
       body: Padding(

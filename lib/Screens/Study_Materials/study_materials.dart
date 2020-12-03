@@ -27,6 +27,7 @@ class _StudyMaterialsState extends State<StudyMaterialsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
+        backgroundColor: Colors.lightBlue[900],
         title: new Text('Study Materials'),
       ),
       drawer: NavDrawer(userList: userList),
