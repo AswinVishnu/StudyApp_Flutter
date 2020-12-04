@@ -106,8 +106,8 @@ class _quizpageState extends State<quizpage> {
   _quizpageState(this.examName, this.data, this.examList, this.isLoading,
       this.userList, this.exam);
 
-  Color colortoshow = Colors.indigoAccent;
-  Color answered = Colors.deepPurpleAccent;
+  Color colortoshow = Colors.lightBlue[800];
+  Color answered = Colors.lightBlue[900];
   int marks = 0;
   int i = 0;
   bool disableAnswer = false;
@@ -118,10 +118,10 @@ class _quizpageState extends State<quizpage> {
   // String showtimer = "30";
 
   Map<String, Color> btncolor = {
-    "0": Colors.indigoAccent,
-    "1": Colors.indigoAccent,
-    "2": Colors.indigoAccent,
-    "3": Colors.indigoAccent,
+    "0": Colors.lightBlue[800],
+    "1": Colors.lightBlue[800],
+    "2": Colors.lightBlue[800],
+    "3": Colors.lightBlue[800],
   };
 
   bool canceltimer = false;
@@ -216,10 +216,10 @@ class _quizpageState extends State<quizpage> {
               userList: userList),
         ));
       }
-      btncolor["0"] = Colors.indigoAccent;
-      btncolor["1"] = Colors.indigoAccent;
-      btncolor["2"] = Colors.indigoAccent;
-      btncolor["3"] = Colors.indigoAccent;
+      btncolor["0"] = Colors.lightBlue[800];
+      btncolor["1"] = Colors.lightBlue[800];
+      btncolor["2"] = Colors.lightBlue[800];
+      btncolor["3"] = Colors.lightBlue[800];
       disableAnswer = false;
     });
   }
@@ -258,17 +258,17 @@ class _quizpageState extends State<quizpage> {
           style: TextStyle(
             color: Colors.white,
             fontFamily: "Alike",
-            fontSize: 16.0,
+            fontSize: 18.0,
           ),
           maxLines: 1,
         ),
         color: btncolor[k],
-        splashColor: Colors.indigo[700],
-        highlightColor: Colors.indigo[700],
-        minWidth: 200.0,
-        height: 45.0,
+        splashColor: Colors.lightBlue[900],
+        highlightColor: Colors.lightBlue[1000],
+        minWidth: 180.0,
+        height: 42.0,
         shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       ),
     );
   }
@@ -307,21 +307,39 @@ class _quizpageState extends State<quizpage> {
                   child: Column(
                     children: <Widget>[
                       Expanded(
-                        flex: 3,
+                        flex: 1,
                         child: Container(
                           padding: EdgeInsets.all(15.0),
-                          alignment: Alignment.bottomLeft,
+                          alignment: Alignment.bottomCenter,
                           child: Text(
-                            data[i].question,
+                            (i + 1).toString() +
+                                " out of " +
+                                data.length.toString(),
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24.0,
                               fontFamily: "Quando",
                             ),
                           ),
                         ),
                       ),
                       Expanded(
-                        flex: 6,
+                        flex: 2,
+                        child: Container(
+                          padding: EdgeInsets.all(18.0),
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            "Q.  " + data[i].question,
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "Quando",
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 5,
                         child: AbsorbPointer(
                           absorbing: disableAnswer,
                           child: Container(

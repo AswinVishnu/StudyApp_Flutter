@@ -36,9 +36,9 @@ class _resultpageState extends State<resultpage> {
   final List userList;
   bool isLoading;
   List<String> images = [
-    "assets/images/success.png",
-    "assets/images/good.png",
-    "assets/images/bad.png",
+    "assets/images/success.gif",
+    "assets/images/good.gif",
+    "assets/images/bad.gif",
   ];
 
   String message;
@@ -104,14 +104,13 @@ class _resultpageState extends State<resultpage> {
                     Expanded(
                       flex: 8,
                       child: Material(
-                        elevation: 10.0,
                         child: Container(
                           child: Column(
                             children: <Widget>[
                               Material(
                                 child: Container(
-                                  width: 300.0,
-                                  height: 300.0,
+                                  width: 350.0,
+                                  height: 350.0,
                                   child: ClipRect(
                                     child: Image(
                                       image: AssetImage(
