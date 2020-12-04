@@ -4,6 +4,7 @@ import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_auth/models/notifications.dart';
+import 'package:flutter_auth/Screens/Notifications/notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final List userList;
@@ -15,18 +16,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeState extends State<HomeScreen> {
   List userList;
-
-  _HomeState(this.userList);
   List<Notifications> NotificationList = List();
+  _HomeState(this.userList);
+
   int counter=0;
 
 
     @override
   Widget build(BuildContext context) {
-      print("1");
+
    getAPI();
-      print("Counter=$counter");
-      print("3");
+
     return Scaffold(
       appBar: new AppBar(
         backgroundColor: Colors.lightBlue[900],
@@ -38,7 +38,13 @@ class _HomeState extends State<HomeScreen> {
               new IconButton(
                   icon: Icon(Icons.notifications),
                   onPressed: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationScreen(
+                              userList: userList,
+                              notificationList: NotificationList)),
+                    );
                   }),
 
 
@@ -86,9 +92,9 @@ class _HomeState extends State<HomeScreen> {
        NotificationList = (json.decode(notResponse.body) as List)
           .map((data) => new Notifications.fromJson(data))
           .toList();
-       print("2");
-    }
 
+    }
+        
         counter= NotificationList.length;
 
 

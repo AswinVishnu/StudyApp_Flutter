@@ -3,6 +3,7 @@ import 'package:flutter_auth/Screens/Login/login_screen.dart';
 import 'package:flutter_auth/Screens/Signup/signup_screen.dart';
 import 'package:flutter_auth/Screens/Welcome/components/background.dart';
 import 'package:flutter_auth/components/rounded_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_auth/constants.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -17,8 +18,8 @@ class Body extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "STUDY APP",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, color: Colors.lightBlue[900],fontFamily: 'Noto Sans CJK SC'),
+              "LET'S LEARN",
+              style: GoogleFonts.abrilFatface(textStyle: TextStyle(color: Colors.lightBlue[900], fontSize: 30, letterSpacing: .9)),
             ),
 
             Image.asset(
@@ -34,6 +35,7 @@ class Body extends StatelessWidget {
               text: "LOGIN",
               color: Colors.lightBlue[900],
               textColor: Colors.white,
+
               press: () {
                 Navigator.push(
                   context,
