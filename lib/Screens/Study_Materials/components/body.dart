@@ -10,6 +10,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_auth/Screens/Home/components/expansiontile.dart';
 import 'package:flutter_auth/models/contents.dart';
+import 'package:flutter_auth/models/video.dart';
+import 'package:flutter_auth/models/audio.dart';
+import 'package:flutter_auth/models/notes.dart';
 import 'package:flutter_auth/Screens/Video/video_screen.dart';
 import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
 import 'package:flutter_auth/Screens/Documents/document_screen.dart';
@@ -35,9 +38,9 @@ class _BodyState extends State<Body> {
   List userList;
   
   List categoryList;
-  List<Contents> videosList = List();
-  List<Contents> audiosList = List();
-  List<Contents> notesList = List();
+  List<Videos> videosList = List();
+  List<Audio> audiosList = List();
+  List<Notes> notesList = List();
   var isLoading = false;
 
   _BodyState(this.userList, this.categoryList, this.isLoading);
@@ -103,10 +106,10 @@ class _BodyState extends State<Body> {
             Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(
                 "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
-                body: data);
+                body: data,headers: { 'Authorization': 'Bearer '+userList[5]});
             if (response.statusCode == 200) {
               videosList = (json.decode(response.body) as List)
-                  .map((data1) => new Contents.fromJson(data1))
+                  .map((data1) => new Videos.fromJson(data1))
                   .toList();
               setState(() {
                 isLoading = false;
@@ -142,10 +145,10 @@ class _BodyState extends State<Body> {
             Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(
                 "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
-                body: data);
+                body: data, headers: { 'Authorization': 'Bearer '+userList[5]});
             if (response.statusCode == 200) {
               audiosList = (json.decode(response.body) as List)
-                  .map((data1) => new Contents.fromJson(data1))
+                  .map((data1) => new Audio.fromJson(data1))
                   .toList();
               setState(() {
                 isLoading = false;
@@ -198,11 +201,12 @@ class _BodyState extends State<Body> {
             Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(
                 "https://oxystech-study-app-nodejs.herokuapp.com/admin/content/type",
-                body: data);
+                body: data, headers: { 'Authorization': 'Bearer '+userList[5]});
             if (response.statusCode == 200) {
               notesList = (json.decode(response.body) as List)
-                  .map((data1) => new Contents.fromJson(data1))
+                  .map((data1) => new Notes.fromJson(data1))
                   .toList();
+              
               setState(() {
                 isLoading = false;
               });

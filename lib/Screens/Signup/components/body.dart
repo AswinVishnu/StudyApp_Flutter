@@ -13,11 +13,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class Body extends StatefulWidget {
-  const Body({
+  List InstituteList;
+   Body({
     Key key,
+    @required this.InstituteList,
   }) : super(key: key);
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _SignUpPageState createState() => _SignUpPageState(InstituteList);
 }
 class Item {
   const Item(this.name,this.icon);
@@ -30,7 +32,13 @@ class _SignUpPageState extends State<Body> {
   String mobile;
   String email;
   String password;
-  Item selectedUser;
+  String selectedValue;
+
+  String select;
+  int male=0;
+  int female=0;
+  String selectedGender;
+  //List<String> InstituteList =  ['Hai','Hello'];
 
   List<Item> users = <Item>[
     const Item('Scholars Academy, Mundakkayam',Icon(Icons.android,color:  Color(0xFF6F35A5),)),
@@ -38,12 +46,18 @@ class _SignUpPageState extends State<Body> {
     const Item('PC Thomas Insititute, Thrissur',Icon(Icons.format_indent_decrease,color:  Color(0xFF6F35A5),)),
     const Item('Study Internationals, Kollam',Icon(Icons.mobile_screen_share,color:  Color(0xFF6F35A5),)),
   ];
+  List gender=["Male","Female"];
 
   bool _isLoading = false;
+  List InstituteList;
+
+
+  _SignUpPageState(this.InstituteList);
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
-    signUp(String fullname, mobile,email,institute,password) async {
+    signUp(String fullname, mobile,email,institute,password,selectedGender) async {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       Map data = {
         "fullname":fullname,
@@ -112,43 +126,54 @@ class _SignUpPageState extends State<Body> {
              },
             ),
 
-            SizedBox(height: size.height * 0.01),
+
             Container(
 
-              padding: EdgeInsets.symmetric(horizontal: 25.0,vertical: 7.0),
-
+                margin: EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                width: size.width * 0.8,
               decoration: BoxDecoration(
                 color: Color(0xFFF1E6FF),
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(29.0),
 
               ),
-              child: DropdownButton(
-                hint:  Text("Select Institute"),
+              child: DropdownButton<String>(
 
-                value: selectedUser,
-                onChanged: (Item Value) {
-                  setState(() {
-                    selectedUser = Value;
-                  });
-                },
-                items: users.map((Item user) {
-                  return  DropdownMenuItem<Item>(
-                  value: user,
-                  child: Row(
+                  hint:  Text("Select Institute                                          "),
+                  value: selectedValue,
+                  items: List.generate(
+                      InstituteList.length,
+                          (index) => DropdownMenuItem(
+                          value: InstituteList[index], child: Text(InstituteList[index]))),
+                  onChanged: (newValue) {
+                    selectedValue = newValue;
+                    setState(() {});
+                  })
+            ),
+
+
+            Container(
+
+              margin: EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              width: size.width * 0.8,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF1E6FF),
+                  borderRadius: BorderRadius.circular(29.0),
+
+                ),
+                child: Row(
+
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                  user.icon,
-                  SizedBox(width: 10,),
-                  Text(
-                  user.name,
-                  style:  TextStyle(color: Colors.black54),
-                  ),
+                    Text('Gender      ',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    addRadioButton(0, 'Male'),
+                    addRadioButton(1, 'Female')
                   ],
-                  ),
-                  );
-                  }).toList(),
-                )),
-
-
+                ),
+            ),
             SizedBox(height: size.height * 0.01),
 
 
@@ -156,10 +181,19 @@ class _SignUpPageState extends State<Body> {
               text: "SIGNUP",
                 color: Colors.lightBlue[900],
               press: () {
-                   signUp(fullname, mobile,email,selectedUser.name,password);
+                    if(male==1)
+                      {
+                        selectedGender='Male';
+                      }
+                    else if(female==1)
+                      {
+                        selectedGender='Female';
+                      }
+                   signUp(fullname, mobile,email,selectedValue,password,selectedGender);
               },
             ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: size.height * 0.01),
+
             AlreadyHaveAnAccountCheck(
               login: false,
               press: () {
@@ -173,10 +207,39 @@ class _SignUpPageState extends State<Body> {
                 );
               },
             ),
+            SizedBox(height: size.height * 0.01),
 
           ],
         ),
       ),
+    );
+  }
+  Row addRadioButton(int btnValue, String title) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Radio(
+          activeColor: Theme.of(context).primaryColor,
+          value: gender[btnValue],
+          groupValue: select,
+          onChanged: (value){
+            setState(() {
+              print(value);
+              select=value;
+              if(value=="Male")
+                {
+                  male=1;
+                  female=0;
+                }
+              else{
+                male=0;
+                female=1;
+              }
+            });
+          },
+        ),
+        Text(title)
+      ],
     );
   }
 }

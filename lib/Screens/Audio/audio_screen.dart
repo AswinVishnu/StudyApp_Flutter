@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Audio/components/body.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
-//import 'package:flutter_auth/components/audio.dart';
+import 'package:flutter_auth/models/audio.dart';
 import 'package:flutter_auth/models/contents.dart';
+import 'package:flutter_auth/constants.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
+import 'package:flutter_auth/components/bottom_navigation.dart';
 
 class AudioScreen extends StatefulWidget {
   final List userList;
@@ -53,10 +55,11 @@ class _AudioState extends State<AudioScreen> {
                   child: ListItem(audiosList[index]));
             }),
       ),
+      bottomNavigationBar: BottomNavigation(userList: userList),
     );
   }
 
-  Widget ListItem(Contents listItem) {
+  Widget ListItem(Audio listItem) {
     return Container(
       child: Column(
         children: <Widget>[

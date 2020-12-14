@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/constants.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/components/expandable.dart';
-//import 'package:flutter_auth/components/Notes.dart';
+import 'package:flutter_auth/models/notes.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
 import 'package:flutter_auth/models/contents.dart';
+import 'package:flutter_auth/components/bottom_navigation.dart';
 
 class NotesScreen extends StatefulWidget {
   final List userList;
@@ -48,11 +50,12 @@ class _NotesState extends State<NotesScreen> {
               }),
         ),
       ),
+      bottomNavigationBar: BottomNavigation(userList: userList),
     );
   }
 }
 
-Widget ListItem(Contents list, BuildContext context) {
+Widget ListItem(Notes list, BuildContext context) {
   return ExpandableNotifier(
       child: Padding(
     padding: const EdgeInsets.all(10),
@@ -65,7 +68,7 @@ Widget ListItem(Contents list, BuildContext context) {
             child: Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(list.image), fit: BoxFit.cover)),
+                      image: NetworkImage(baseURL+list.image), fit: BoxFit.cover)),
             ),
           ),
           ScrollOnExpand(

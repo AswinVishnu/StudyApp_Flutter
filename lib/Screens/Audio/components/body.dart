@@ -1,6 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_auth/constants.dart';
+import 'package:flutter_auth/models/audio.dart';
 
 import 'package:audioplayers/audioplayers.dart';
 
@@ -111,7 +112,7 @@ class AudioScreenState extends State<Body> {
         });
       }
     }else{
-        var res=await audioPlayer.play(audioList[index].url);
+        var res=await audioPlayer.play(baseURL+audioList[index].file);
         if(res==1){
           setState(() {
             playing=true;

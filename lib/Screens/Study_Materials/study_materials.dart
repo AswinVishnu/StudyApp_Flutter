@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Study_Materials/components/body.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
+import 'package:flutter_auth/components/bottom_navigation.dart';
 
 class StudyMaterialsScreen extends StatefulWidget {
   List userList;
@@ -33,6 +34,7 @@ class _StudyMaterialsState extends State<StudyMaterialsScreen> {
       drawer: NavDrawer(userList: userList),
       body: Body(
           userList: userList, categoryList: categoryList, isLoading: isLoading),
+      bottomNavigationBar: BottomNavigation(userList: userList),
     );
   }
 }

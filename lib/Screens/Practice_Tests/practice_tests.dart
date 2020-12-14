@@ -4,6 +4,7 @@ import 'package:flutter_auth/Models/question.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/components/exampage.dart';
+import 'package:flutter_auth/components/bottom_navigation.dart';
 
 class PracticeTestsScreen extends StatefulWidget {
   final List userList;
@@ -107,6 +108,7 @@ class _PracticeTestsState extends State<PracticeTestsScreen> {
                 ),
               ),
             ),
+      bottomNavigationBar: BottomNavigation(userList: userList),
     );
   }
 }

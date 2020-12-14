@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_auth/models/notifications.dart';
 import 'package:flutter_auth/Screens/Notifications/notification_screen.dart';
+import 'package:flutter_auth/components/bottom_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
   final List userList;
@@ -79,6 +80,7 @@ class _HomeState extends State<HomeScreen> {
       ),
       drawer: NavDrawer(userList: userList),
       body: Body(userList: userList),
+      bottomNavigationBar: BottomNavigation(userList: userList),
     );
   }
 
@@ -94,9 +96,8 @@ class _HomeState extends State<HomeScreen> {
           .toList();
 
     }
-        
-        counter= NotificationList.length;
 
+        counter= NotificationList.length;
 
 
   }

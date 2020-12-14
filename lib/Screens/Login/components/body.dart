@@ -55,10 +55,12 @@ class _LoginPageState extends State<Body> {
           List<String> userList = [];
 
           userList.add(jsonResponse['_id']);
+
           userList.add(jsonResponse['fullname']);
           userList.add(jsonResponse['mobile'].toString());
           userList.add(jsonResponse['email']);
           userList.add(jsonResponse['password']);
+          userList.add(jsonResponse['institute']);
 
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(

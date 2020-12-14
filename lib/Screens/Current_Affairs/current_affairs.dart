@@ -4,6 +4,7 @@ import 'package:flutter_auth/components/expandable.dart';
 //import 'package:flutter_auth/components/currentaffairs.dart';
 import 'package:flutter_auth/models/contents.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
+import 'package:flutter_auth/components/bottom_navigation.dart';
 
 class CurrentAffairsScreen extends StatefulWidget {
   final List userList;
@@ -62,6 +63,7 @@ class _CurrentAffairsState extends State<CurrentAffairsScreen> {
               }),
         ),
       ),
+      bottomNavigationBar: BottomNavigation(userList: userList),
     );
   }
 }

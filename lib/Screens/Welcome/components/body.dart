@@ -6,8 +6,11 @@ import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_auth/constants.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Body extends StatelessWidget {
+  List InstituteList;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -51,15 +54,20 @@ class Body extends StatelessWidget {
               text: "SIGN UP",
               color: Colors.blueGrey,
               textColor: Colors.white,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return SignUpScreen();
-                    },
-                  ),
-                );
+              press: () async{
+
+                var notResponse = await http.get(
+                "https://oxystech-study-app-nodejs.herokuapp.com/user/list/admin");
+                if (notResponse.statusCode == 200) {
+                  InstituteList = (json.decode(notResponse.body) as List);
+                  print(InstituteList);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SignUpScreen(
+                            InstituteList: InstituteList)),
+                  );
+                }
               },
             ),
           ],

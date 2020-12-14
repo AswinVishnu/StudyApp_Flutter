@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_auth/Screens/Study_Materials/study_materials.dart';
 import 'package:flutter_auth/Screens/Question_Bank/question_bank.dart';
+import 'package:flutter_auth/Screens/Question_Bank/question_category.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
 import 'package:flutter_auth/Screens/Current_Affairs/current_affairs.dart';
 import 'package:flutter_auth/Screens/Video/video_screen.dart';
@@ -108,7 +109,7 @@ class _GridDashboardState extends State<GridDashboard> {
                             isLoading = true;
                           });
                           final response = await http.get(
-                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/category");
+                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",headers: { 'Authorization': 'Bearer '+userList[5]});
                           if (response.statusCode == 200) {
                             categoryList = (json.decode(response.body) as List)
                                 .map((data) => new Category.fromJson(data))
@@ -142,22 +143,43 @@ class _GridDashboardState extends State<GridDashboard> {
                           setState(() {
                             isLoading = true;
                           });
-                          final response = await http.get(
-                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/question");
+                           final response = await http.get(
+                               "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",headers: { 'Authorization': 'Bearer '+userList[5]});
+
+                           // final response = await http.get(
+                          //     "https://oxystech-study-app-nodejs.herokuapp.com/admin/question");
                           if (response.statusCode == 200) {
-                            list = (json.decode(response.body) as List)
-                                .map((data) => new Question.fromJson(data))
+                            // list = (json.decode(response.body) as List)
+                            //     .map((data) => new Question.fromJson(data))
+                            //     .toList();
+                            categoryList = (json.decode(response.body) as List)
+                                .map((data) => new Category.fromJson(data))
                                 .toList();
+
 
                             setState(() {
                               isLoading = false;
                             });
+                          // categoryList = [
+                          //   Category(
+                          //   name: 'General Knowledge',
+                          // ),
+                          //   Category(
+                          //     name: 'Analytical Reasoning',
+                          // ),
+                          //   Category(
+                          //     name: 'English',
+                          // ),
+                          //   Category(
+                          //     name: 'Mathematics',
+                          // ),
+                          // ];
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => QuestionBankScreen(
+                                  builder: (context) => QuestionCategory(
                                       userList: userList,
-                                      questionList: list,
+                                      categoryList: categoryList,
                                       isLoading: isLoading)),
                             );
                           } else {
