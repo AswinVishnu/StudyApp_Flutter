@@ -128,7 +128,8 @@ class _quizpageState extends State<quizpage> {
 
   @override
   void initState() {
-    timer = (int.parse(exam.duration)) * 60;
+    //timer = (int.parse(exam.duration)) * 60;
+    timer = 30 * 60;
     showtimer = "00:00";
     starttimer();
     super.initState();
@@ -343,16 +344,30 @@ class _quizpageState extends State<quizpage> {
                         child: AbsorbPointer(
                           absorbing: disableAnswer,
                           child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                choicebutton('0'),
-                                choicebutton('1'),
-                                choicebutton('2'),
-                                choicebutton('3'),
-                              ],
-                            ),
-                          ),
+                              child: Column(
+                            children: <Widget>[
+                              RadioListTile(
+                                title: const Text('Lafayette'),
+                                value: data[i].options[0],
+                                groupValue: 'Lafayette',
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                  });
+                                },
+                              ),
+                              RadioListTile(
+                                title: const Text('Thomas Jefferson'),
+                                value: 'Thomas Jefferson',
+                                groupValue: 'Thomas Jefferson',
+                                onChanged: (value) {
+                                  setState(() {
+                                    print(value);
+                                  });
+                                },
+                              ),
+                            ],
+                          )),
                         ),
                       ),
                       Expanded(
