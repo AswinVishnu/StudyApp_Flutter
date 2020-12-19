@@ -64,23 +64,11 @@ class _AudioState extends State<AudioScreen> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 40.0),
-          Text.rich(
-            TextSpan(
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              children: [
-
-                WidgetSpan(
-                  child: Icon(Icons.play_circle_filled),
-                ),
-                TextSpan(
-                  text: '  ',
-                ),
-                TextSpan(
-                  text: listItem.title,
-                )
-              ],
-            ),
+          ListTile(
+            leading: Icon(Icons.play_circle_filled,size: 50),
+            title: Text(listItem.title, style: TextStyle(fontSize: 20.0)),
           ),
+
 
         ],
       ),

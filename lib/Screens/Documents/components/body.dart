@@ -10,24 +10,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_auth/constants.dart';
 
 class Body extends StatefulWidget {
-  final List documentList;
+  final List documentsList;
   int index;
-  Body({Key key, @required this.documentList, @required this.index})
+  Body({Key key, @required this.documentsList, @required this.index})
       : super(key: key);
 
   @override
-  DocumentState createState() => DocumentState(documentList, index);
+  DocumentState createState() => DocumentState(documentsList, index);
 }
 
 class DocumentState extends State<Body> {
-  List documentList;
+  List documentsList;
   int index;
   bool _isLoading = true;
   PDFDocument doc;
 
-  DocumentState(this.documentList, this.index);
+  DocumentState(this.documentsList, this.index);
 
 
   @override
@@ -41,8 +42,7 @@ class DocumentState extends State<Body> {
 
   getURL() async
   {
-    doc = await PDFDocument.fromURL(
-        'http://www.pdf995.com/samples/pdf.pdf');
+    doc = await PDFDocument.fromURL(baseURL+documentsList[index].file);
     setState(() {
       _isLoading = false;
     });

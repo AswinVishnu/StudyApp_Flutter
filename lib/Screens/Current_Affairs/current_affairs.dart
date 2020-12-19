@@ -5,6 +5,8 @@ import 'package:flutter_auth/components/expandable.dart';
 import 'package:flutter_auth/models/contents.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
 import 'package:flutter_auth/components/bottom_navigation.dart';
+import 'package:flutter_auth/constants.dart';
+import 'package:flutter_auth/models/currentaffairs.dart';
 
 class CurrentAffairsScreen extends StatefulWidget {
   final List userList;
@@ -68,7 +70,7 @@ class _CurrentAffairsState extends State<CurrentAffairsScreen> {
   }
 }
 
-Widget ListItem(Contents currentAffairsList, BuildContext context) {
+Widget ListItem(CurrentAffairs currentAffairsList, BuildContext context) {
   return ExpandableNotifier(
       child: Padding(
     padding: const EdgeInsets.all(10),
@@ -81,8 +83,8 @@ Widget ListItem(Contents currentAffairsList, BuildContext context) {
             child: Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(currentAffairsList.image),
-                      fit: BoxFit.cover)),
+                      image: NetworkImage(baseURL+currentAffairsList.image),
+                      fit: BoxFit.fill)),
             ),
           ),
           ScrollOnExpand(
@@ -96,7 +98,7 @@ Widget ListItem(Contents currentAffairsList, BuildContext context) {
               header: Padding(
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    "Read more",
+                    currentAffairsList.date.substring(0,16)+"                                               Read more",
                     style: Theme.of(context).textTheme.body2,
                   )),
               collapsed: Text(

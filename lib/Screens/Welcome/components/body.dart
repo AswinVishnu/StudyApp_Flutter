@@ -8,9 +8,11 @@ import 'package:flutter_auth/constants.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_auth/models/institute.dart';
 
 class Body extends StatelessWidget {
-  List InstituteList;
+
+  List<Institute> InstituteList = List();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -58,9 +60,14 @@ class Body extends StatelessWidget {
 
                 var notResponse = await http.get(
                 "https://oxystech-study-app-nodejs.herokuapp.com/user/list/admin");
+
+
                 if (notResponse.statusCode == 200) {
-                  InstituteList = (json.decode(notResponse.body) as List);
-                  print(InstituteList);
+                  InstituteList = (json.decode(notResponse.body) as List)
+                      .map((data1) => new Institute.fromJson(data1))
+                      .toList();
+
+                  print(json.decode(notResponse.body));
                   Navigator.push(
                     context,
                     MaterialPageRoute(

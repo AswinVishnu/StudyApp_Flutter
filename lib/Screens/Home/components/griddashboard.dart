@@ -14,6 +14,7 @@ import 'dart:convert';
 //import 'package:flutter_auth/components/audio.dart';
 import 'package:flutter_auth/models/contents.dart';
 import 'package:flutter_auth/models/category.dart';
+import 'package:flutter_auth/models/currentaffairs.dart';
 
 class GridDashboard extends StatefulWidget {
   final List userList;
@@ -28,7 +29,7 @@ class _GridDashboardState extends State<GridDashboard> {
   var isLoading = false;
   List categoryList;
   List<Question> list = List();
-  List<Contents> currentAffairsList = List();
+  List<CurrentAffairs> currentAffairsList = List();
   Items item1 = new Items(
       title: "Current Affairs", img: "assets/images/CurrentAffairs.png");
 
@@ -82,12 +83,13 @@ class _GridDashboardState extends State<GridDashboard> {
                           });
 
                           final response = await http.get(
-                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/current_affairs");
+                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/current-affairs",headers: { 'Authorization': 'Bearer '+userList[5]});
                           if (response.statusCode == 200) {
                             currentAffairsList =
                                 (json.decode(response.body) as List)
-                                    .map((data) => new Contents.fromJson(data))
+                                    .map((data) => new CurrentAffairs.fromJson(data))
                                     .toList();
+                            print(json.decode(response.body) );
                             setState(() {
                               isLoading = false;
                             });

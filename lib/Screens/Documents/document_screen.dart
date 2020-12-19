@@ -2,45 +2,38 @@ import 'package:flutter/material.dart';
 
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_auth/models/document.dart';
 import 'package:flutter_auth/models/contents.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter_auth/Screens/Documents/components/body.dart';
 import 'package:flutter_auth/components/bottom_navigation.dart';
 
 class DocumentScreen extends StatefulWidget {
-  DocumentScreen();
+  final List userList;
+  final List documentsList;
+  var isLoading;
+  DocumentScreen({
+    Key key,
+    @required this.userList,
+    @required this.documentsList,
+    @required this.isLoading,
+  }) : super(key: key);
 
   @override
-  DocumentScreenState createState() => DocumentScreenState();
+  DocumentScreenState createState() => DocumentScreenState(userList, documentsList, isLoading);
 }
 
 class DocumentScreenState extends State<DocumentScreen> {
-  var list = [
-    Contents(
-        image: 'assets/images/exams.png',
-        title: 'Flutter tutorial',
-        url: 'https://www.youtube.com/watch?v=BE9ATY2Ygas',
-        type: 'pdf'),
-    Contents(
-        image: 'assets/images/studymaterials.jpg',
-        title: 'Apps from scratch travel UI tutorial',
-        url: 'https://www.youtube.com/watch?v=CSa6Ocyog4U',
-        type: 'pdf')
-  ];
+  List userList;
+  var isLoading;
+  List documentsList;
+  DocumentScreenState(this.userList, this.documentsList, this.isLoading);
+
 
   bool _isLoading = true;
-  PDFDocument doc;
-  Contents documentList;
-  void _loadFromUrl() async {
-    setState(() {
-      _isLoading = true;
-    });
-    doc = await PDFDocument.fromURL(
-        'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
-    setState(() {
-      _isLoading = false;
-    });
-  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +49,7 @@ class DocumentScreenState extends State<DocumentScreen> {
             Expanded(
               child: Container(
                 child: ListView.builder(
-                    itemCount: 2,
+                    itemCount: documentsList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                           splashColor: Colors.blue,
@@ -67,10 +60,10 @@ class DocumentScreenState extends State<DocumentScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      Body(documentList: list, index: index)),
+                                      Body(documentsList: documentsList, index: index)),
                             );
                           },
-                          child: ListItem(list[index]));
+                          child: ListItem(documentsList[index]));
 
                     }),
               ),
@@ -82,29 +75,18 @@ class DocumentScreenState extends State<DocumentScreen> {
     );
   }
 
-  Widget ListItem(Contents listItem) {
+  Widget ListItem(Documents listItem) {
 
     return Container(
       child: Column(
         children: <Widget>[
           SizedBox(height: 40.0),
-          Text.rich(
-            TextSpan(
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              children: [
-
-                WidgetSpan(
-                  child: Icon(Icons.text_snippet),
-                ),
-                TextSpan(
-                  text: '  ',
-                ),
-                TextSpan(
-                  text: listItem.title,
-                )
-              ],
-            ),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+            leading: Icon(Icons.text_snippet,size: 50),
+            title: Text(listItem.title, style: TextStyle(fontSize: 20.0)),
           ),
+
 
         ],
       ),
