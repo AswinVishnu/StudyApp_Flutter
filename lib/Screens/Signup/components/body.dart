@@ -33,11 +33,12 @@ class _SignUpPageState extends State<Body> {
   String email;
   String password;
   String selectedValue;
-
+  String instituteid;
   String select;
   int male=0;
   int female=0;
   String selectedGender;
+  int instituteLength;
   //List<String> InstituteList =  ['Hai','Hello'];
 
   List<Item> users = <Item>[
@@ -57,6 +58,7 @@ class _SignUpPageState extends State<Body> {
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
+    print(InstituteList);
     signUp(String fullname, mobile,email,institute,password,selectedGender) async {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       Map data = {
@@ -65,7 +67,8 @@ class _SignUpPageState extends State<Body> {
         "email":email,
         "mobile":mobile,
         "password":password,
-        "role":"student"
+        "role":"student",
+        "gender": selectedGender
       };
       var jsonResponse = null;
       final snackBar = new SnackBar(content: new Text('Loading...'));
@@ -113,11 +116,13 @@ class _SignUpPageState extends State<Body> {
             ),
             RoundedInputField(
               hintText: "Mobile(+91)",
+              icon: Icons.mobile_friendly,
               onChanged: (value) {mobile=value ;
               },
             ),
             RoundedInputField(
               hintText: "Your Email",
+              icon: Icons.attach_email,
               onChanged: (value) {email=value ;
               },
             ),
@@ -125,7 +130,29 @@ class _SignUpPageState extends State<Body> {
               onChanged: (value) {password=value ;
              },
             ),
+          Container(
 
+            margin: EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            width: size.width * 0.8,
+            decoration: BoxDecoration(
+              color: Color(0xFFF1E6FF),
+              borderRadius: BorderRadius.circular(29.0),
+
+            ),
+            child: Row(
+
+
+              children: <Widget>[
+                Icon(Icons.account_circle_rounded,color: Color(0xff416d6d)),
+                Text('    Gender      ',
+                    textAlign: TextAlign.left,
+                    style: TextStyle( fontSize: 16)),
+                addRadioButton(0, 'Male'),
+                addRadioButton(1, 'Female')
+              ],
+            ),
+          ),
 
             Container(
 
@@ -139,41 +166,38 @@ class _SignUpPageState extends State<Body> {
               ),
               child: DropdownButton<String>(
 
-                  hint:  Text("Select Institute                                          "),
+                  iconSize: 0,
+
+                  hint: Row(
+                    children: [
+                      Container(
+                        child: Icon(Icons.school,color: Color(0xff416d6d)),
+
+                      ),
+                      Container(
+                        child: Text("   Select Institute                               "),
+                      ),
+                      Container(
+                        child: Icon(Icons.arrow_drop_down,size:40,color: Color(0xff416d6d)),
+                      ),
+                    ],
+                  ),
+
                   value: selectedValue,
+
                   items: List.generate(
                       InstituteList.length,
                           (index) => DropdownMenuItem(
-                          value: InstituteList[index], child: Text(InstituteList[index]))),
+                          value: InstituteList[index].accountName, child: Text(InstituteList[index].accountName))),
                   onChanged: (newValue) {
                     selectedValue = newValue;
+                    instituteLength = InstituteList.length;
                     setState(() {});
                   })
             ),
 
 
-            Container(
 
-              margin: EdgeInsets.symmetric(vertical: 10),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              width: size.width * 0.8,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF1E6FF),
-                  borderRadius: BorderRadius.circular(29.0),
-
-                ),
-                child: Row(
-
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Gender      ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                    addRadioButton(0, 'Male'),
-                    addRadioButton(1, 'Female')
-                  ],
-                ),
-            ),
             SizedBox(height: size.height * 0.01),
 
 
@@ -183,13 +207,14 @@ class _SignUpPageState extends State<Body> {
               press: () {
                     if(male==1)
                       {
-                        selectedGender='Male';
+                        selectedGender='male';
                       }
                     else if(female==1)
                       {
-                        selectedGender='Female';
+                        selectedGender='female';
                       }
-                   signUp(fullname, mobile,email,selectedValue,password,selectedGender);
+                    instituteid = getInstituteId(selectedValue);
+                   signUp(fullname, mobile,email,instituteid,password,selectedGender);
               },
             ),
             SizedBox(height: size.height * 0.01),
@@ -241,5 +266,15 @@ class _SignUpPageState extends State<Body> {
         Text(title)
       ],
     );
+  }
+  String getInstituteId(String Institutename){
+
+    for(int i=0; i<instituteLength; i++){
+
+      if(InstituteList[i].accountName==Institutename){
+        return InstituteList[i].id;
+      }
+    }
+    // return InstituteList[i].id;
   }
 }

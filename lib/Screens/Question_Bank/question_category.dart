@@ -18,7 +18,8 @@ import 'package:flutter_auth/models/category.dart';
 import 'package:flutter_auth/Screens/Notes/notes_screen.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/components/bottom_navigation.dart';
-
+import 'package:flutter_auth/components/question.dart';
+import 'package:flutter_auth/Screens/Question_Bank/question_bank.dart';
 
 class QuestionCategory extends StatefulWidget {
   List userList;
@@ -39,9 +40,8 @@ class _QuestionCategoryState extends State<QuestionCategory> {
   List userList;
 
   List categoryList;
-  List<Contents> videosList = List();
-  List<Contents> audiosList = List();
-  List<Contents> notesList = List();
+
+  List<Question> list = List();
   var isLoading = false;
 
   _QuestionCategoryState(this.userList, this.categoryList, this.isLoading);
@@ -80,8 +80,29 @@ class _QuestionCategoryState extends State<QuestionCategory> {
                     itemCount: categoryList.length,
                     itemBuilder: (BuildContext ctxt, int index) {
                       return InkWell(
-                          onTap: () {
+                          onTap: () async{
                             print(categoryList[index].name);
+                            Map data = {"category": categoryList[index].name};
+
+                            final response = await http.post(
+                            "https://oxystech-study-app-nodejs.herokuapp.com/admin/question/ui",body: data,headers: { 'Authorization': 'Bearer '+userList[5]});
+                            if (response.statusCode == 200) {
+                            list = (json.decode(response.body) as List)
+                                .map((data) => new Question.fromJson(data))
+                                .toList();
+                            print(json.decode(response.body));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => QuestionBankScreen(
+                                      userList: userList,
+                                      questionList: list,
+                                      isLoading: isLoading)),
+                            );
+                            }
+                            else {
+                              throw Exception('Failed to load questions');
+                            }
                           }, child: ListItem(categoryList[index],context));
                     }),
               ),

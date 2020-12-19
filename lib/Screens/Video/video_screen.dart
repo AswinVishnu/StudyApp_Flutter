@@ -76,21 +76,25 @@ class VideoScreenState extends State<VideoScreen> {
           SizedBox(
             height: 40,
           ),
-          Text(
-            listItem.title,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.openSans(
-                textStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700)),
-          ),
-          SizedBox(
-            height: 30,
-          ),
+
+
           YoutubePlayer(
             controller: _controller1,
             showVideoProgressIndicator: true,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Title:  ' + listItem.title,
+            textAlign: TextAlign.left,
+            style: GoogleFonts.openSans(
+                textStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18)),
+          ),
+          SizedBox(
+            height: 30,
           ),
         ],
       ),

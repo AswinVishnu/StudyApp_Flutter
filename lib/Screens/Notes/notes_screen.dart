@@ -68,7 +68,7 @@ Widget ListItem(Notes list, BuildContext context) {
             child: Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(baseURL+list.image), fit: BoxFit.cover)),
+                      image: NetworkImage(baseURL+list.image), fit: BoxFit.fill)),
             ),
           ),
           ScrollOnExpand(
