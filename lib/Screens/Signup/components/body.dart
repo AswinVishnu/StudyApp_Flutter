@@ -57,41 +57,42 @@ class _SignUpPageState extends State<Body> {
   @override
   Widget build(BuildContext context) {
 
-    Size size = MediaQuery.of(context).size;
-    print(InstituteList);
-    signUp(String fullname, mobile,email,institute,password,selectedGender) async {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      Map data = {
-        "fullname":fullname,
-        "institute":institute,
-        "email":email,
-        "mobile":mobile,
-        "password":password,
-        "role":"student",
-        "gender": selectedGender
-      };
-      var jsonResponse = null;
-      final snackBar = new SnackBar(content: new Text('Loading...'));
-      Scaffold.of(context).showSnackBar(snackBar);
-      var response = await http.post("https://oxystech-study-app-nodejs.herokuapp.com/user/account", body: data);
-      if(response.statusCode == 200) {
-        jsonResponse = json.decode(response.body);
-        if(jsonResponse != null) {
-          setState(() {
-            _isLoading = false;
-          });
-          //sharedPreferences.setString("token", jsonResponse['token']);
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen ()), (Route<dynamic> route) => false);
-          print("Added new account Successfully");
-        }
-      }
-      else {
-        setState(() {
-          _isLoading = false;
-        });
-        print(response.body);
+        Size size = MediaQuery.of(context).size;
+        print(InstituteList);
 
-      }
+    signUp(String fullname, mobile,email,institute,password,selectedGender) async {
+          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+          Map data = {
+            "fullname":fullname,
+            "institute":institute,
+            "email":email,
+            "mobile":mobile,
+            "password":password,
+            "role":"student",
+            "gender": selectedGender
+          };
+          var jsonResponse = null;
+          final snackBar = new SnackBar(content: new Text('Loading...'));
+          Scaffold.of(context).showSnackBar(snackBar);
+          var response = await http.post("https://oxystech-study-app-nodejs.herokuapp.com/user/account", body: data);
+          if(response.statusCode == 200) {
+            jsonResponse = json.decode(response.body);
+            if(jsonResponse != null) {
+              setState(() {
+                _isLoading = false;
+              });
+              //sharedPreferences.setString("token", jsonResponse['token']);
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen ()), (Route<dynamic> route) => false);
+              print("Added new account Successfully");
+            }
+          }
+          else {
+            setState(() {
+              _isLoading = false;
+            });
+            print(response.body);
+
+          }
     }
     return Background(
       child: SingleChildScrollView(
@@ -214,7 +215,15 @@ class _SignUpPageState extends State<Body> {
                         selectedGender='female';
                       }
                     instituteid = getInstituteId(selectedValue);
-                   signUp(fullname, mobile,email,instituteid,password,selectedGender);
+
+                    if(RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email)) {
+                      signUp(fullname, mobile,email,instituteid,password,selectedGender);
+                    }
+                    else{
+                      final snackBar1 = new SnackBar(content: new Text('Invalid Email'));
+                      Scaffold.of(context).showSnackBar(snackBar1);
+                    }
+
               },
             ),
             SizedBox(height: size.height * 0.01),

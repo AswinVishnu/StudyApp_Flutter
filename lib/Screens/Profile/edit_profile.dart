@@ -3,6 +3,8 @@ import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/Screens/Home/home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_auth/components/bottom_navigation.dart';
+import 'package:flutter_auth/Screens/Profile/change_password.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final List userList;
@@ -160,6 +162,44 @@ class _EditProfileState extends State<EditProfileScreen> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
+                                        'Gender',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Flexible(
+                                    child: new TextField(
+                                      onChanged: (value) {
+                                        mobile = value;
+                                      },
+                                      decoration: InputDecoration(
+                                          hintText: userList[6]),
+                                      enabled: false,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 10.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
                                         'Email ID',
                                         style: TextStyle(
                                             fontSize: 16.0,
@@ -187,46 +227,46 @@ class _EditProfileState extends State<EditProfileScreen> {
                                   ),
                                 ],
                               )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 10.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Password',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      onChanged: (value) {
-                                        password = value;
-                                      },
-                                      decoration: InputDecoration(
-                                          hintText: userList[4]),
-                                      obscureText: true,
-
-                                      //     enabled: !_status,
-                                    ),
-                                  ),
-                                ],
-                              )),
+                          // Padding(
+                          //     padding: EdgeInsets.only(
+                          //         left: 25.0, right: 25.0, top: 10.0),
+                          //     child: new Row(
+                          //       mainAxisSize: MainAxisSize.max,
+                          //       children: <Widget>[
+                          //         new Column(
+                          //           mainAxisAlignment: MainAxisAlignment.start,
+                          //           mainAxisSize: MainAxisSize.min,
+                          //           children: <Widget>[
+                          //             new Text(
+                          //               'Password',
+                          //               style: TextStyle(
+                          //                   fontSize: 16.0,
+                          //                   fontWeight: FontWeight.bold),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ],
+                          //     )),
+                          // Padding(
+                          //     padding: EdgeInsets.only(
+                          //         left: 25.0, right: 25.0, top: 2.0),
+                          //     child: new Row(
+                          //       mainAxisSize: MainAxisSize.max,
+                          //       children: <Widget>[
+                          //         new Flexible(
+                          //           child: new TextField(
+                          //             onChanged: (value) {
+                          //               password = value;
+                          //             },
+                          //             decoration: InputDecoration(
+                          //                 hintText: userList[4]),
+                          //             obscureText: true,
+                          //
+                          //             //     enabled: !_status,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     )),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 10.0),
@@ -260,6 +300,44 @@ class _EditProfileState extends State<EditProfileScreen> {
                                       },
                                       decoration: InputDecoration(
                                           hintText: userList[2]),
+                                      enabled: false,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 10.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
+                                        'Institute',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Flexible(
+                                    child: new TextField(
+                                      onChanged: (value) {
+                                        mobile = value;
+                                      },
+                                      decoration: InputDecoration(
+                                          hintText: userList[7]),
                                       enabled: false,
                                     ),
                                   ),
@@ -320,32 +398,35 @@ class _EditProfileState extends State<EditProfileScreen> {
                                   ),
                                   flex: 2,
                                 ),
+
                                 Expanded(
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 10.0),
                                     child: Container(
                                         child: new RaisedButton(
-                                      child: new Text("Cancel"),
-                                      textColor: Colors.white,
-                                      color: Colors.red,
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => HomeScreen(
-                                                  userList: userList)),
-                                        );
-                                      },
-                                      shape: new RoundedRectangleBorder(
-                                          borderRadius:
+                                          child: new Text("Change Password"),
+                                          textColor: Colors.white,
+                                          color: Colors.lightBlue[900],
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => ChangePasswordScreen(
+                                                      userList: userList)),
+                                            );
+                                          },
+                                          shape: new RoundedRectangleBorder(
+                                              borderRadius:
                                               new BorderRadius.circular(20.0)),
-                                    )),
+                                        )),
                                   ),
                                   flex: 2,
                                 ),
                               ],
                             ),
                           ),
+
+
                         ],
                       ),
                     ),
@@ -354,6 +435,8 @@ class _EditProfileState extends State<EditProfileScreen> {
               ),
             ],
           ),
-        ));
+        ),
+        bottomNavigationBar: BottomNavigation(userList: userList),
+    );
   }
 }
