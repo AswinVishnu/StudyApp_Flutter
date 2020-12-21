@@ -51,6 +51,7 @@ class _LoginPageState extends State<Body> {
           setState(() {
             _isLoading = false;
           });
+          print(json.decode(response.body));
           // sharedPreferences.setString("token", jsonResponse['token']);
           List<String> userList = [];
 
@@ -61,7 +62,8 @@ class _LoginPageState extends State<Body> {
           userList.add(jsonResponse['email']);
           userList.add(jsonResponse['password']);
           userList.add(jsonResponse['institute']);
-
+          userList.add(jsonResponse['gender']);
+          userList.add(jsonResponse['instituteName']);
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                   builder: (BuildContext context) =>
@@ -127,6 +129,25 @@ class _LoginPageState extends State<Body> {
                       );
                     },
                   ),
+                  SizedBox(height: size.height * 0.03),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+
+            GestureDetector(
+              onTap: () {
+                
+              },
+              child: Text(
+                "Forgot Password",
+                style: TextStyle(
+                  color: Color(0xff416d6d),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          ],
+        ),
                 ],
               ),
             ),

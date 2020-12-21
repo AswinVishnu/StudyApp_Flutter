@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Models/category.dart';
 import 'package:flutter_auth/Models/exam.dart';
 import 'package:flutter_auth/Screens/Study_Materials/study_materials.dart';
 import 'package:flutter_auth/Screens/Home/home.dart';
@@ -18,6 +19,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_auth/models/contents.dart';
 import 'package:flutter_auth/models/configuration.dart';
+import 'package:flutter_auth/models/performance.dart';
 
 class NavDrawer extends StatefulWidget {
   final List userList;
@@ -38,6 +40,8 @@ class _NavDrawerState extends State<NavDrawer> {
   List<Contents> notesList = List();
   var isLoading = false;
   List userList;
+  List categoryList;
+  List<Performance> performanceList = List();
 
   _NavDrawerState(this.userList);
 
@@ -142,13 +146,29 @@ class _NavDrawerState extends State<NavDrawer> {
                   title: new Text('Study Materials',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold)),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              StudyMaterialsScreen(userList: userList)),
-                    );
+                  onTap: () async {
+                    final response = await http.get(
+                        "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",
+                        headers: {'Authorization': 'Bearer ' + userList[5]});
+                    if (response.statusCode == 200) {
+                      categoryList = (json.decode(response.body) as List)
+                          .map((data) => new Category.fromJson(data))
+                          .toList();
+                      setState(() {
+                        isLoading = false;
+                      });
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StudyMaterialsScreen(
+                                userList: userList,
+                                categoryList: categoryList,
+                                isLoading: isLoading)),
+                      );
+                    } else {
+                      throw Exception('Failed to load quetions');
+                    }
                   },
                 ),
                 new ListTile(
@@ -232,12 +252,31 @@ class _NavDrawerState extends State<NavDrawer> {
                     Icons.backpack,
                     color: Colors.white,
                   ),
-                  onTap: () {
+                  onTap: () async {
+                    Map data = {"emailId": userList[3]};
+                    final snackBar =
+                        new SnackBar(content: new Text('Loading...'));
+                    Scaffold.of(context).showSnackBar(snackBar);
+                    final response = await http.post(
+                        "https://oxystech-study-app-nodejs.herokuapp.com/admin/exam/perfomance",
+                        body: data,
+                        headers: {'Authorization': 'Bearer ' + userList[5]});
+                    if (response.statusCode == 200) {
+                      print(json.decode(response.body));
+                      performanceList = (json.decode(response.body) as List)
+                          .map((data) => new Performance.fromJson(data))
+                          .toList();
+
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              PerfomanceScreen(userList: userList)),
+                          builder: (context) => PerfomanceScreen(
+                              userList: userList,
+                              performanceList: performanceList)),
                     );
                   },
                 ),

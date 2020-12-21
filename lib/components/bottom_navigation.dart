@@ -8,7 +8,9 @@ import 'package:flutter_auth/Screens/Notifications/notification_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_auth/Screens/Home/home.dart';
+import 'package:flutter_auth/Screens/Institute/institute_screen.dart';
 import 'package:flutter_auth/Screens/Profile/edit_profile.dart';
+import 'package:flutter_auth/models/institutedetails.dart';
 
 
 class BottomNavigation extends StatefulWidget {
@@ -24,14 +26,14 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
 
   _BottomNavigationState(this.userList);
-
+  List<InstituteDetails> list = List();
   int counter = 0;
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
 
-  void _onItemTapped(int index) {
+  void _onItemTapped (int index) async{
     setState(() {
       _selectedIndex = index;
     });
@@ -46,7 +48,38 @@ class _BottomNavigationState extends State<BottomNavigation> {
       }
     else if(_selectedIndex==1)
     {
+      var jsonResponse;
 
+
+      print("https://oxystech-study-app-nodejs.herokuapp.com/user/adminDetails/"+ userList[5]);
+      final response = await http.get(
+          "https://oxystech-study-app-nodejs.herokuapp.com/user/adminDetails/"+userList[5]);
+
+      if (response.statusCode == 200) {
+            jsonResponse = json.decode(response.body);
+
+            List<String> instituteDetails = [];
+
+            instituteDetails.add(jsonResponse['accountName']);
+
+            instituteDetails.add(jsonResponse['email']);
+            instituteDetails.add(jsonResponse['mobile'].toString());
+            instituteDetails.add(jsonResponse['address']);
+            instituteDetails.add(jsonResponse['image']);
+
+            print(json.decode(response.body));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => InstituteScreen(
+                      userList: userList,
+                      instituteDetails: instituteDetails
+                  )),
+            );
+      }
+      else {
+        throw Exception('Failed to load institute details');
+      }
     }
     else if(_selectedIndex==2)
     {

@@ -153,8 +153,10 @@ class _resultpageState extends State<resultpage> {
                             onPressed: () {
                               Navigator.of(context)
                                   .pushReplacement(MaterialPageRoute(
-                                builder: (context) =>
-                                    PracticeTestsScreen(examList: examList),
+                                builder: (context) => PracticeTestsScreen(
+                                    examList: examList,
+                                    userList: userList,
+                                    isLoading: isLoading),
                               ));
                             },
                             child: Text(
