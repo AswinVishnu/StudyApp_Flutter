@@ -9,6 +9,7 @@ import 'package:flutter_auth/components/bottom_navigation.dart';
 class PracticeTestsScreen extends StatefulWidget {
   final List userList;
   bool isLoading;
+
   final List<Exam> examList;
   PracticeTestsScreen({
     Key key,
@@ -28,63 +29,6 @@ class _PracticeTestsState extends State<PracticeTestsScreen> {
 
   _PracticeTestsState(this.userList, this.examList, this.isLoading);
   @override
-  Widget customcard(String examName, String des, Exam exam) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 20.0,
-        horizontal: 30.0,
-      ),
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) =>
-                ExamSetup(examName, exam, examList, isLoading, userList),
-          ));
-        },
-        child: Material(
-          color: Color(0xFF6F35A5),
-          //color: Colors.deepPurple[400],
-          elevation: 10.0,
-          borderRadius: BorderRadius.circular(25.0),
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    examName,
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.white,
-                      fontFamily: "Quando",
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Text(
-                    des,
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                        fontFamily: "Alike"),
-                    maxLines: 5,
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
@@ -97,18 +41,42 @@ class _PracticeTestsState extends State<PracticeTestsScreen> {
               child: CircularProgressIndicator(),
             )
           : Background(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    for (var item in examList)
-                      customcard(
-                          item.name ?? "", item.description ?? "", item ?? "")
-                  ],
-                ),
-              ),
+              child: ListView.builder(
+                  itemCount: examList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return InkWell(
+                        splashColor: Colors.blue,
+                        highlightColor: Colors.blue.withOpacity(0.9),
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (context) => ExamSetup(
+                                examList[index].name,
+                                examList[index],
+                                examList,
+                                isLoading,
+                                userList),
+                          ));
+                        },
+                        child: ListItem(examList[index]));
+                  }),
             ),
       bottomNavigationBar: BottomNavigation(userList: userList),
+    );
+  }
+
+  Widget ListItem(Exam listItem) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 20.0),
+          ListTile(
+            leading: Icon(Icons.access_alarm_sharp, size: 30),
+            title: Text(listItem.name, style: TextStyle(fontSize: 20.0)),
+            trailing: Icon(Icons.arrow_right_outlined, size: 30),
+          ),
+        ],
+      ),
     );
   }
 }

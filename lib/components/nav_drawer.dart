@@ -165,13 +165,8 @@ class _NavDrawerState extends State<NavDrawer> {
                     });
 
                     final response = await http.get(
-                        // "https://oxystech-study-app-nodejs.herokuapp.com/admin/exam",
-                        // headers: {'Authorization': 'Bearer ' + userList[5]});
                         "https://oxystech-study-app-nodejs.herokuapp.com/admin/exam",
-                        headers: {
-                          'Authorization': 'Bearer 5fcfa72b12f0260024297630'
-                        });
-
+                        headers: {'Authorization': 'Bearer ' + userList[5]});
                     if (response.statusCode == 200) {
                       print(userList[5]);
                       Map<String, dynamic> map = json.decode(response.body);
@@ -181,6 +176,7 @@ class _NavDrawerState extends State<NavDrawer> {
                       setState(() {
                         isLoading = false;
                       });
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
