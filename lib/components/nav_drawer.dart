@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Models/category.dart';
 import 'package:flutter_auth/Models/exam.dart';
 import 'package:flutter_auth/Screens/Study_Materials/study_materials.dart';
 import 'package:flutter_auth/Screens/Home/home.dart';
@@ -39,6 +40,7 @@ class _NavDrawerState extends State<NavDrawer> {
   List<Contents> notesList = List();
   var isLoading = false;
   List userList;
+  List categoryList;
   List<Performance> performanceList = List();
 
   _NavDrawerState(this.userList);
@@ -63,11 +65,9 @@ class _NavDrawerState extends State<NavDrawer> {
                     child: CircleAvatar(
                         backgroundColor: primaryGreen,
                         radius: 30,
-                        backgroundImage: new ExactAssetImage(
-                            'assets/images/profile.jpg')
-                    ),
-                    onTap: () => print("Current User")
-                ),
+                        backgroundImage:
+                            new ExactAssetImage('assets/images/profile.jpg')),
+                    onTap: () => print("Current User")),
                 decoration: BoxDecoration(
                   color: Colors.lightBlue[900],
                 ),
@@ -80,21 +80,18 @@ class _NavDrawerState extends State<NavDrawer> {
                 ),
               ),
             ], */
-
-
               ),
             ],
           ),
         ),
-    
         Expanded(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 new ListTile(
                   title: new Text('Home',
-                      style:
-                          TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
                   leading: Icon(
                     Icons.home,
                     color: Colors.white,
@@ -107,187 +104,205 @@ class _NavDrawerState extends State<NavDrawer> {
                     );
                   },
                 ),
+                new ListTile(
+                  title: new Text('Current Affairs',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.pages,
+                    color: Colors.white,
+                  ),
+                  onTap: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    final response = await http.get(
+                        "https://oxystech-study-app-nodejs.herokuapp.com/admin/current_affairs");
+                    if (response.statusCode == 200) {
+                      currentAffairsList = (json.decode(response.body) as List)
+                          .map((data) => new Contents.fromJson(data))
+                          .toList();
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CurrentAffairsScreen(
+                                userList: userList,
+                                currentAffairsList: currentAffairsList,
+                                isLoading: isLoading)),
+                      );
+                    } else {
+                      throw Exception('Failed to load quetions');
+                    }
+                  },
+                ),
+                new ListTile(
+                  leading: Icon(
+                    Icons.book,
+                    color: Colors.white,
+                  ),
+                  title: new Text('Study Materials',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                  onTap: () async {
+                    final response = await http.get(
+                        "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",
+                        headers: {'Authorization': 'Bearer ' + userList[5]});
+                    if (response.statusCode == 200) {
+                      categoryList = (json.decode(response.body) as List)
+                          .map((data) => new Category.fromJson(data))
+                          .toList();
+                      setState(() {
+                        isLoading = false;
+                      });
 
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StudyMaterialsScreen(
+                                userList: userList,
+                                categoryList: categoryList,
+                                isLoading: isLoading)),
+                      );
+                    } else {
+                      throw Exception('Failed to load quetions');
+                    }
+                  },
+                ),
+                new ListTile(
+                  title: new Text('Practice Tests',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.accessibility_new,
+                    color: Colors.white,
+                  ),
+                  onTap: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
 
-            new ListTile(
-              title: new Text('Current Affairs',
-                  style:
-                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              leading: Icon(
-                Icons.pages,
-                color: Colors.white,
-              ),
-              onTap: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                final response = await http.get(
-                    "https://oxystech-study-app-nodejs.herokuapp.com/admin/current_affairs");
-                if (response.statusCode == 200) {
-                  currentAffairsList = (json.decode(response.body) as List)
-                      .map((data) => new Contents.fromJson(data))
-                      .toList();
-                  setState(() {
-                    isLoading = false;
-                  });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CurrentAffairsScreen(
-                            userList: userList,
-                            currentAffairsList: currentAffairsList,
-                            isLoading: isLoading)),
-                  );
-                } else {
-                  throw Exception('Failed to load quetions');
-                }
-              },
-            ),
-            new ListTile(
-              leading: Icon(
-                Icons.book,
-                color: Colors.white,
-              ),
-              title: new Text('Study Materials',
-                  style:
-                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          StudyMaterialsScreen(userList: userList)),
-                );
-              },
-            ),
-            new ListTile(
-              title: new Text('Practice Tests',
-                  style:
-                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              leading: Icon(
-                Icons.accessibility_new,
-                color: Colors.white,
-              ),
-              onTap: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                final response = await http.get(
-                    "https://oxystech-study-app-nodejs.herokuapp.com/admin/exam");
-                if (response.statusCode == 200) {
-                  Map<String, dynamic> map = json.decode(response.body);
-                  examResponse = (map["result"] as List)
-                      .map((data) => new Exam.fromJson(data))
-                      .toList();
-                  setState(() {
-                    isLoading = false;
-                  });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PracticeTestsScreen(
-                            userList: userList,
-                            examList: examResponse,
-                            isLoading: isLoading)),
-                  );
-                } else {
-                  throw Exception('Failed to load photos');
-                }
-              },
-            ),
-            new ListTile(
-              title: new Text('Question Bank',
-                  style:
-                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              leading: Icon(
-                Icons.flag,
-                color: Colors.white,
-              ),
-              onTap: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                final response = await http.get(
-                    "https://oxystech-study-app-nodejs.herokuapp.com/admin/question");
-                if (response.statusCode == 200) {
-                  questionsList = (json.decode(response.body) as List)
-                      .map((data) => new Question.fromJson(data))
-                      .toList();
-                  setState(() {
-                    isLoading = false;
-                  });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QuestionBankScreen(
-                            userList: userList,
-                            questionList: questionsList,
-                            isLoading: isLoading)),
-                  );
-                } else {
-                  throw Exception('Failed to load quetions');
-                }
-              },
-            ),
-            new ListTile(
-              title: new Text('Performance',
-                  style:
-                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              leading: Icon(
-                Icons.backpack,
-                color: Colors.white,
-              ),
-              onTap: () async{
+                    final response = await http.get(
+                        "https://oxystech-study-app-nodejs.herokuapp.com/admin/exam",
+                        headers: {'Authorization': 'Bearer ' + userList[5]});
+                    if (response.statusCode == 200) {
+                      print(userList[5]);
+                      Map<String, dynamic> map = json.decode(response.body);
+                      examResponse = (map["result"] as List)
+                          .map((data) => new Exam.fromJson(data))
+                          .toList();
+                      setState(() {
+                        isLoading = false;
+                      });
 
-                Map data = {"emailId": userList[3]};
-                final snackBar = new SnackBar(content: new Text('Loading...'));
-                Scaffold.of(context).showSnackBar(snackBar);
-                final response = await http.post(
-                    "https://oxystech-study-app-nodejs.herokuapp.com/admin/exam/perfomance",
-                    body: data,headers: { 'Authorization': 'Bearer '+userList[5]});
-                if (response.statusCode == 200) {
-                  print(json.decode(response.body));
-                  performanceList = (json.decode(response.body) as List)
-                      .map((data) => new Performance.fromJson(data))
-                      .toList();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PracticeTestsScreen(
+                                userList: userList,
+                                examList: examResponse,
+                                isLoading: isLoading)),
+                      );
+                    } else {
+                      throw Exception('Failed to load photos');
+                    }
+                  },
+                ),
+                new ListTile(
+                  title: new Text('Question Bank',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.flag,
+                    color: Colors.white,
+                  ),
+                  onTap: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    final response = await http.get(
+                        "https://oxystech-study-app-nodejs.herokuapp.com/admin/question");
+                    if (response.statusCode == 200) {
+                      questionsList = (json.decode(response.body) as List)
+                          .map((data) => new Question.fromJson(data))
+                          .toList();
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => QuestionBankScreen(
+                                userList: userList,
+                                questionList: questionsList,
+                                isLoading: isLoading)),
+                      );
+                    } else {
+                      throw Exception('Failed to load quetions');
+                    }
+                  },
+                ),
+                new ListTile(
+                  title: new Text('Performance',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.backpack,
+                    color: Colors.white,
+                  ),
+                  onTap: () async {
+                    Map data = {"emailId": userList[3]};
+                    final snackBar =
+                        new SnackBar(content: new Text('Loading...'));
+                    Scaffold.of(context).showSnackBar(snackBar);
+                    final response = await http.post(
+                        "https://oxystech-study-app-nodejs.herokuapp.com/admin/exam/perfomance",
+                        body: data,
+                        headers: {'Authorization': 'Bearer ' + userList[5]});
+                    if (response.statusCode == 200) {
+                      print(json.decode(response.body));
+                      performanceList = (json.decode(response.body) as List)
+                          .map((data) => new Performance.fromJson(data))
+                          .toList();
 
-
-                  setState(() {
-                    isLoading = false;
-                  });
-                }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PerfomanceScreen(userList: userList, performanceList: performanceList)),
-                );
-              },
-            ),
-
-            SizedBox(
-              height: 40,
-            ),
-            new ListTile(
-              title: new Text('SignOut',
-                  style:
-                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              leading: Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => WelcomeScreen()),
-                );
-              },
-            ),
-      ],
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PerfomanceScreen(
+                              userList: userList,
+                              performanceList: performanceList)),
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                new ListTile(
+                  title: new Text('SignOut',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                  leading: Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
-      ]
-      ),
+      ]),
     ));
   }
 }

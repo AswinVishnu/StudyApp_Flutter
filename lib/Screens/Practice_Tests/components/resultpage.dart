@@ -33,7 +33,7 @@ class _resultpageState extends State<resultpage> {
   int totalMarks;
   String examName;
   List<Exam> examList;
-  final List userList;
+  List userList;
   bool isLoading;
   List<String> images = [
     "assets/images/success.gif",
@@ -46,6 +46,7 @@ class _resultpageState extends State<resultpage> {
 
   @override
   void initState() {
+    print("exam^^^^^page" + userList[1]);
     super.initState();
     initializeDateFormatting();
     int percentage = ((marks / totalMarks) * 100).round();
@@ -67,20 +68,24 @@ class _resultpageState extends State<resultpage> {
   }
 
   void sendResult() async {
-    print("came send");
     print(userList);
-
     Map data = {
       'userId': userList[0],
       'examName': examName,
-      'score': marks,
-      'examDate': DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(DateTime.now()),
-      'maxMark': totalMarks
+      'score': marks.toString() + "/" + totalMarks.toString(),
+      'attendedBy': userList[3],
+      'attendedOn': DateFormat("dd-MM-yyyy").format(DateTime.now()),
+      'instituteId': userList[5],
     };
-
-    await http.post(
+    print(data);
+    final response = await http.post(
         "https://oxystech-study-app-nodejs.herokuapp.com/user/exam/submit",
         body: data);
+    if (response.statusCode == 200) {
+      print("Result send");
+    } else {
+      throw Exception("Failed to send result");
+    }
   }
 
   _resultpageState(this.marks, this.totalMarks, this.examName, this.examList,
@@ -148,8 +153,10 @@ class _resultpageState extends State<resultpage> {
                             onPressed: () {
                               Navigator.of(context)
                                   .pushReplacement(MaterialPageRoute(
-                                builder: (context) =>
-                                    PracticeTestsScreen(examList: examList),
+                                builder: (context) => PracticeTestsScreen(
+                                    examList: examList,
+                                    userList: userList,
+                                    isLoading: isLoading),
                               ));
                             },
                             child: Text(

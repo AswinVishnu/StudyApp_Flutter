@@ -17,6 +17,7 @@ class ExamSetup extends StatelessWidget {
   String examName;
   Exam exam;
   List<Exam> examList;
+
   ExamSetup(
       this.examName, this.exam, this.examList, this.isLoading, this.userList);
 
@@ -67,6 +68,8 @@ class ExamSetup extends StatelessWidget {
               examName: examName,
               data: questions,
               examList: examList,
+              isLoading: isLoading,
+              userList: userList,
               exam: exam);
         }
       },
@@ -100,7 +103,7 @@ class _quizpageState extends State<quizpage> {
   final String examName;
   final List<Questions> data;
   final List<Exam> examList;
-  final List userList;
+  List userList;
   bool isLoading;
   final Exam exam;
   _quizpageState(this.examName, this.data, this.examList, this.isLoading,
@@ -114,21 +117,17 @@ class _quizpageState extends State<quizpage> {
   int j = 0;
   int timer;
   String showtimer;
+  String selected;
+
   // int timer = exam.duration;
   // String showtimer = "30";
-
-  Map<String, Color> btncolor = {
-    "0": Colors.lightBlue[800],
-    "1": Colors.lightBlue[800],
-    "2": Colors.lightBlue[800],
-    "3": Colors.lightBlue[800],
-  };
 
   bool canceltimer = false;
 
   @override
   void initState() {
-    timer = (int.parse(exam.duration)) * 60;
+    timer = (int.parse(exam.duration_ui)) * 60;
+    //timer = 10 * 60;
     showtimer = "00:00";
     starttimer();
     super.initState();
@@ -150,7 +149,38 @@ class _quizpageState extends State<quizpage> {
       setState(() {
         if (timer < 1) {
           t.cancel();
-          //nextquestion();
+          Widget okButton = FlatButton(
+            child: Text("Ok"),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => resultpage(
+                    marks: marks,
+                    totalMarks: data.length,
+                    examName: examName,
+                    examList: examList,
+                    isLoading: isLoading,
+                    userList: userList),
+              ));
+            },
+          );
+
+          // set up the AlertDialog
+          AlertDialog alert = AlertDialog(
+            title: Text("Time is up!!!"),
+            content: Text("Time is over please click on OK to proceed"),
+            actions: [
+              okButton,
+            ],
+          );
+
+          // show the dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return alert;
+            },
+          );
         } else if (timer < 60) {
           String initShowtimer = timer.toString();
           if (initShowtimer.length == 1) {
@@ -198,14 +228,18 @@ class _quizpageState extends State<quizpage> {
     });
   }
 
-  void nextquestion() {
-    canceltimer = false;
-    setState(() {
-      if (i < (data.length - 1)) {
-        i = i + 1;
-        print('incremented i=' + i.toString());
-      } else {
-        print('marks: ' + marks.toString());
+  showAlertDialog() {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Submit"),
+      onPressed: () {
+        Navigator.of(context).pop();
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => resultpage(
               marks: marks,
@@ -215,11 +249,51 @@ class _quizpageState extends State<quizpage> {
               isLoading: isLoading,
               userList: userList),
         ));
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm"),
+      content: Text(
+          "You have answered all the questions, please click on submit to proceed."),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void nextquestion() {
+    canceltimer = false;
+    setState(() {
+      if (i < (data.length - 1)) {
+        i = i + 1;
+        print('incremented i=' + i.toString());
+      } else {
+        print('marks: ' + marks.toString());
+        showAlertDialog();
       }
-      btncolor["0"] = Colors.lightBlue[800];
-      btncolor["1"] = Colors.lightBlue[800];
-      btncolor["2"] = Colors.lightBlue[800];
-      btncolor["3"] = Colors.lightBlue[800];
+      disableAnswer = false;
+    });
+  }
+
+  void prevquestion() {
+    canceltimer = false;
+    setState(() {
+      if (i != 0) {
+        i = i - 1;
+        print('descrese i=' + i.toString());
+      }
+
       disableAnswer = false;
     });
   }
@@ -236,7 +310,30 @@ class _quizpageState extends State<quizpage> {
       colortoshow = answered;
     }
     setState(() {
-      btncolor[k] = colortoshow;
+      canceltimer = true;
+      disableAnswer = true;
+    });
+    // nextquestion();
+    // changed timer duration to 1 second
+    Timer(Duration(seconds: 2), nextquestion);
+  }
+
+  void checkoption(String option) {
+    print('checking answer');
+    print(option);
+    if (data[i].previousSelected != option) {
+      if (data[i].answer == option) {
+        marks = marks + 1;
+        print('marks added: ' + marks.toString());
+      } else if (data[i].previousSelected == data[i].answer) {
+        marks = marks - 1;
+        print('marks minus: ' + marks.toString());
+      } else {
+        colortoshow = answered;
+      }
+    }
+    data[i].previousSelected = option;
+    setState(() {
       canceltimer = true;
       disableAnswer = true;
     });
@@ -262,7 +359,6 @@ class _quizpageState extends State<quizpage> {
           ),
           maxLines: 1,
         ),
-        color: btncolor[k],
         splashColor: Colors.lightBlue[900],
         highlightColor: Colors.lightBlue[1000],
         minWidth: 180.0,
@@ -343,15 +439,121 @@ class _quizpageState extends State<quizpage> {
                         child: AbsorbPointer(
                           absorbing: disableAnswer,
                           child: Container(
+                            padding: EdgeInsets.all(20.0),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                choicebutton('0'),
-                                choicebutton('1'),
-                                choicebutton('2'),
-                                choicebutton('3'),
+                                RadioListTile(
+                                  title: Text(data[i].options[0].answer),
+                                  value: data[i].options[0].answer,
+                                  groupValue: data[i].currentSelected,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      data[i].currentSelected = value;
+                                    });
+                                  },
+                                ),
+                                RadioListTile(
+                                  title: Text(data[i].options[1].answer),
+                                  value: data[i].options[1].answer,
+                                  groupValue: data[i].currentSelected,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      data[i].currentSelected = value;
+                                    });
+                                  },
+                                ),
+                                RadioListTile(
+                                  title: Text(data[i].options[2].answer),
+                                  value: data[i].options[2].answer,
+                                  groupValue: data[i].currentSelected,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      data[i].currentSelected = value;
+                                    });
+                                  },
+                                ),
+                                RadioListTile(
+                                  title: Text(data[i].options[3].answer),
+                                  value: data[i].options[3].answer,
+                                  groupValue: data[i].currentSelected,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      data[i].currentSelected = value;
+                                    });
+                                  },
+                                ),
                               ],
                             ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          padding: EdgeInsets.all(20.0),
+                          child: new Row(
+                            children: <Widget>[
+                              ButtonTheme(
+                                minWidth: 100.0,
+                                height: 50.0,
+                                child: RaisedButton(
+                                  child: new Row(
+                                    children: <Widget>[
+                                      Icon(Icons.arrow_back_rounded,
+                                          color: Colors.white, size: 25),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "Prev",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "Alike",
+                                          fontSize: 20.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    Timer(Duration(seconds: 2), prevquestion);
+                                  },
+                                  color: Colors.lightBlue[800],
+                                  splashColor: Colors.lightBlue[900],
+                                  highlightColor: Colors.lightBlue[1000],
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(24.0)),
+                                ),
+                              ),
+                              Spacer(),
+                              ButtonTheme(
+                                minWidth: 100.0,
+                                height: 50.0,
+                                child: RaisedButton(
+                                  child: new Row(
+                                    children: <Widget>[
+                                      Text(
+                                        "Next",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "Alike",
+                                          fontSize: 20.0,
+                                        ),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Icon(Icons.arrow_forward_rounded,
+                                          color: Colors.white, size: 25),
+                                    ],
+                                  ),
+                                  onPressed: () =>
+                                      checkoption(data[i].currentSelected),
+                                  color: Colors.lightBlue[800],
+                                  splashColor: Colors.lightBlue[900],
+                                  highlightColor: Colors.lightBlue[1000],
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(24.0)),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),

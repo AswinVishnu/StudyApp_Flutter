@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Models/exam.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_auth/Screens/Study_Materials/study_materials.dart';
 import 'package:flutter_auth/Screens/Question_Bank/question_bank.dart';
@@ -30,6 +31,7 @@ class _GridDashboardState extends State<GridDashboard> {
   List categoryList;
   List<Question> list = List();
   List<CurrentAffairs> currentAffairsList = List();
+  List<Exam> examResponse = List();
   Items item1 = new Items(
       title: "Current Affairs", img: "assets/images/CurrentAffairs.png");
 
@@ -75,7 +77,8 @@ class _GridDashboardState extends State<GridDashboard> {
                         width: 190,
                       ),
                       onPressed: () async {
-                        final snackBar = new SnackBar(content: new Text('Loading...'));
+                        final snackBar =
+                            new SnackBar(content: new Text('Loading...'));
                         Scaffold.of(context).showSnackBar(snackBar);
                         if (data.img == "assets/images/CurrentAffairs.png") {
                           setState(() {
@@ -83,13 +86,17 @@ class _GridDashboardState extends State<GridDashboard> {
                           });
 
                           final response = await http.get(
-                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/current-affairs",headers: { 'Authorization': 'Bearer '+userList[5]});
+                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/current-affairs",
+                              headers: {
+                                'Authorization': 'Bearer ' + userList[5]
+                              });
                           if (response.statusCode == 200) {
-                            currentAffairsList =
-                                (json.decode(response.body) as List)
-                                    .map((data) => new CurrentAffairs.fromJson(data))
-                                    .toList();
-                            print(json.decode(response.body) );
+                            currentAffairsList = (json.decode(response.body)
+                                    as List)
+                                .map(
+                                    (data) => new CurrentAffairs.fromJson(data))
+                                .toList();
+                            print(json.decode(response.body));
                             setState(() {
                               isLoading = false;
                             });
@@ -111,7 +118,10 @@ class _GridDashboardState extends State<GridDashboard> {
                             isLoading = true;
                           });
                           final response = await http.get(
-                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",headers: { 'Authorization': 'Bearer '+userList[5]});
+                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",
+                              headers: {
+                                'Authorization': 'Bearer ' + userList[5]
+                              });
                           if (response.statusCode == 200) {
                             categoryList = (json.decode(response.body) as List)
                                 .map((data) => new Category.fromJson(data))
@@ -132,23 +142,49 @@ class _GridDashboardState extends State<GridDashboard> {
                             throw Exception('Failed to load quetions');
                           }
                         } else if (data.img == "assets/images/exams.png") {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return PracticeTestsScreen(userList: userList);
-                              },
-                            ),
-                          );
+                          setState(() {
+                            isLoading = true;
+                          });
+
+                          final response = await http.get(
+                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/exam",
+                              headers: {
+                                'Authorization': 'Bearer ' + userList[5]
+                              });
+                          if (response.statusCode == 200) {
+                            print(userList[5]);
+                            Map<String, dynamic> map =
+                                json.decode(response.body);
+                            examResponse = (map["result"] as List)
+                                .map((data) => new Exam.fromJson(data))
+                                .toList();
+                            setState(() {
+                              isLoading = false;
+                            });
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PracticeTestsScreen(
+                                      userList: userList,
+                                      examList: examResponse,
+                                      isLoading: isLoading)),
+                            );
+                          } else {
+                            throw Exception('Failed to load photos');
+                          }
                         } else if (data.img ==
                             "assets/images/QuestionBank.jpg") {
                           setState(() {
                             isLoading = true;
                           });
-                           final response = await http.get(
-                               "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",headers: { 'Authorization': 'Bearer '+userList[5]});
+                          final response = await http.get(
+                              "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",
+                              headers: {
+                                'Authorization': 'Bearer ' + userList[5]
+                              });
 
-                           // final response = await http.get(
+                          // final response = await http.get(
                           //     "https://oxystech-study-app-nodejs.herokuapp.com/admin/question");
                           if (response.statusCode == 200) {
                             // list = (json.decode(response.body) as List)
@@ -158,24 +194,23 @@ class _GridDashboardState extends State<GridDashboard> {
                                 .map((data) => new Category.fromJson(data))
                                 .toList();
 
-
                             setState(() {
                               isLoading = false;
                             });
-                          // categoryList = [
-                          //   Category(
-                          //   name: 'General Knowledge',
-                          // ),
-                          //   Category(
-                          //     name: 'Analytical Reasoning',
-                          // ),
-                          //   Category(
-                          //     name: 'English',
-                          // ),
-                          //   Category(
-                          //     name: 'Mathematics',
-                          // ),
-                          // ];
+                            // categoryList = [
+                            //   Category(
+                            //   name: 'General Knowledge',
+                            // ),
+                            //   Category(
+                            //     name: 'Analytical Reasoning',
+                            // ),
+                            //   Category(
+                            //     name: 'English',
+                            // ),
+                            //   Category(
+                            //     name: 'Mathematics',
+                            // ),
+                            // ];
                             Navigator.push(
                               context,
                               MaterialPageRoute(
