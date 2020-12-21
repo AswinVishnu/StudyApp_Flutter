@@ -9,6 +9,7 @@ import 'package:flutter_auth/Models/question.dart';
 import 'package:flutter_auth/Models/_question.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/components/resultpage.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
+import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
 
 class ExamSetup extends StatelessWidget {
   // accept the langname as a parameter
@@ -228,6 +229,45 @@ class _quizpageState extends State<quizpage> {
     });
   }
 
+  showExitDialog() {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Exit"),
+      onPressed: () {
+        Navigator.of(context).pop();
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => PracticeTestsScreen(
+              examList: examList, userList: userList, isLoading: isLoading),
+        ));
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Exit"),
+      content: Text(
+          "Are you sure, do you want to quit the exam? All your progress will lost!"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   showAlertDialog() {
     // set up the buttons
     Widget cancelButton = FlatButton(
@@ -402,7 +442,39 @@ class _quizpageState extends State<quizpage> {
               : Background(
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 20.0),
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          alignment: Alignment.topRight,
+                          padding: EdgeInsets.all(30.0),
+                          child: ButtonTheme(
+                            minWidth: 10,
+                            height: 0.5,
+                            child: RaisedButton(
+                              child: new Column(
+                                children: <Widget>[
+                                  Text("Exit",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: "Alike",
+                                        fontSize: 20.0,
+                                      ),
+                                      textAlign: TextAlign.center),
+                                ],
+                              ),
+                              onPressed: () {
+                                showExitDialog();
+                              },
+                              color: Colors.red[300],
+                              splashColor: Colors.red[400],
+                              highlightColor: Colors.red[800],
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // SizedBox(height: 20.0),
                       Expanded(
                         flex: 1,
                         child: Container(
