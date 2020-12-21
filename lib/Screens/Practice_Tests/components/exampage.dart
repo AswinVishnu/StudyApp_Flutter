@@ -128,7 +128,7 @@ class _quizpageState extends State<quizpage> {
   @override
   void initState() {
     timer = (int.parse(exam.duration_ui)) * 60;
-    //timer = 10 * 60;
+    // timer = 1 * 60;
     showtimer = "00:00";
     starttimer();
     super.initState();
@@ -182,12 +182,12 @@ class _quizpageState extends State<quizpage> {
               return alert;
             },
           );
-        } else if (timer < 60) {
-          String initShowtimer = timer.toString();
-          if (initShowtimer.length == 1) {
-            showtimer = "0" + showtimer;
-          }
+        } else if (timer <= 60) {
           timer = timer - 1;
+          if (timer.toString().length == 1) {
+            showtimer = "0" + timer.toString();
+          } else
+            showtimer = timer.toString();
         } else if (timer < 3600) {
           int m = timer ~/ 60;
           int s = timer - (60 * m);
@@ -442,38 +442,40 @@ class _quizpageState extends State<quizpage> {
               : Background(
                   child: Column(
                     children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          alignment: Alignment.topRight,
-                          padding: EdgeInsets.all(30.0),
-                          child: ButtonTheme(
-                            minWidth: 10,
-                            height: 0.5,
-                            child: RaisedButton(
-                              child: new Column(
-                                children: <Widget>[
-                                  Text("Exit",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: "Alike",
-                                        fontSize: 20.0,
-                                      ),
-                                      textAlign: TextAlign.center),
-                                ],
-                              ),
-                              onPressed: () {
-                                showExitDialog();
-                              },
-                              color: Colors.red[300],
-                              splashColor: Colors.red[400],
-                              highlightColor: Colors.red[800],
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
+                      Container(
+                        alignment: Alignment.topRight,
+                        padding: EdgeInsets.all(20.0),
+                        child: ButtonTheme(
+                          minWidth: 6,
+                          height: 30,
+                          child: RaisedButton(
+                            child: new Wrap(
+                              children: <Widget>[
+                                Text(
+                                  "Exit",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Alike",
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                                SizedBox(width: 2),
+                                Icon(Icons.exit_to_app,
+                                    color: Colors.white, size: 20)
+                              ],
                             ),
+                            onPressed: () {
+                              showExitDialog();
+                            },
+                            color: Colors.red[300],
+                            splashColor: Colors.red[400],
+                            highlightColor: Colors.red[800],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
                           ),
                         ),
                       ),
+
                       // SizedBox(height: 20.0),
                       Expanded(
                         flex: 1,
