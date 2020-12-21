@@ -4,7 +4,7 @@ import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/components/expandable.dart';
 import 'package:flutter_auth/models/notes.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
-import 'package:flutter_auth/models/contents.dart';
+
 import 'package:flutter_auth/components/bottom_navigation.dart';
 
 class NotesScreen extends StatefulWidget {

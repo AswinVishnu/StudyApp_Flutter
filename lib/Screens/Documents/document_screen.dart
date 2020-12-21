@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_auth/models/document.dart';
-import 'package:flutter_auth/models/contents.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter_auth/Screens/Documents/components/body.dart';
 import 'package:flutter_auth/components/bottom_navigation.dart';

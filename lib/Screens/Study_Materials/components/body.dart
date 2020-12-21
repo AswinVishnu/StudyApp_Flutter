@@ -3,13 +3,10 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_auth/Screens/Login/components/background.dart';
-import 'package:flutter_auth/components/rounded_button.dart';
-import 'package:flutter_auth/constants.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_auth/Screens/Home/components/expansiontile.dart';
-import 'package:flutter_auth/models/contents.dart';
+
 import 'package:flutter_auth/models/video.dart';
 import 'package:flutter_auth/models/audio.dart';
 import 'package:flutter_auth/models/notes.dart';
@@ -21,8 +18,8 @@ import 'package:flutter_auth/models/document.dart';
 import 'package:flutter_auth/Screens/Notes/notes_screen.dart';
 
 class Body extends StatefulWidget {
-  List userList;
-  List categoryList;
+  final List userList;
+  final List categoryList;
   var isLoading;
 
   Body({
@@ -37,7 +34,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   List userList;
-  
+
   List categoryList;
   List<Videos> videosList = List();
   List<Audio> audiosList = List();
@@ -46,20 +43,7 @@ class _BodyState extends State<Body> {
   var isLoading = false;
 
   _BodyState(this.userList, this.categoryList, this.isLoading);
-  // var list = [
-  //   Contents(
-  //     category: 'General Knowledge',
-  //   ),
-  //   Contents(
-  //     category: 'Analytical Reasoning',
-  //   ),
-  //   Contents(
-  //     category: 'English',
-  //   ),
-  //   Contents(
-  //     category: 'Mathematics',
-  //   ),
-  // ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +60,7 @@ class _BodyState extends State<Body> {
                     itemCount: categoryList.length,
                     itemBuilder: (BuildContext ctxt, int index) {
                       return InkWell(
-                          onTap: () {}, child: ListItem(categoryList[index],context));
+                          onTap: () {}, child: ListItem(categoryList[index].name,context));
                     }),
               ),
             )
@@ -86,10 +70,10 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Widget ListItem(Category listItem, BuildContext context) {
+  Widget ListItem(String listItem, BuildContext context) {
     return ExpansionTile(
       title: Text(
-        listItem.name,
+        listItem,
         style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
       ),
       children: <Widget>[
@@ -103,7 +87,7 @@ class _BodyState extends State<Body> {
               isLoading = true;
             });
 
-            Map data = {"type": "video","category": listItem.name};
+            Map data = {"type": "video","category": listItem};
             final snackBar = new SnackBar(content: new Text('Loading...'));
             Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(
@@ -142,7 +126,7 @@ class _BodyState extends State<Body> {
               isLoading = true;
             });
 
-            Map data = {"type": "audio","category": listItem.name};
+            Map data = {"type": "audio","category": listItem};
             final snackBar = new SnackBar(content: new Text('Loading...'));
             Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(
@@ -175,7 +159,7 @@ class _BodyState extends State<Body> {
           highlightColor: Colors.blue.withOpacity(0.9),
           onTap: () async{
 
-            Map data = {"type": "document","category": listItem.name};
+            Map data = {"type": "document","category": listItem};
             final snackBar = new SnackBar(content: new Text('Loading...'));
             Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(
@@ -215,7 +199,7 @@ class _BodyState extends State<Body> {
               isLoading = true;
             });
 
-            Map data = {"type": "note","category": listItem.name};
+            Map data = {"type": "note","category": listItem};
             final snackBar = new SnackBar(content: new Text('Loading...'));
             Scaffold.of(context).showSnackBar(snackBar);
             final response = await http.post(

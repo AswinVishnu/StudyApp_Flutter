@@ -402,6 +402,7 @@ class _quizpageState extends State<quizpage> {
               : Background(
                   child: Column(
                     children: <Widget>[
+                      SizedBox(height: 20.0),
                       Expanded(
                         flex: 1,
                         child: Container(
@@ -419,17 +420,20 @@ class _quizpageState extends State<quizpage> {
                           ),
                         ),
                       ),
+
                       Expanded(
                         flex: 2,
-                        child: Container(
-                          padding: EdgeInsets.all(18.0),
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            "Q.  " + data[i].question,
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Quando",
+                        child: SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.all(18.0),
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              "Q.  " + data[i].question,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: "Quando",
+                              ),
                             ),
                           ),
                         ),
@@ -440,49 +444,51 @@ class _quizpageState extends State<quizpage> {
                           absorbing: disableAnswer,
                           child: Container(
                             padding: EdgeInsets.all(20.0),
-                            child: Column(
-                              children: <Widget>[
-                                RadioListTile(
-                                  title: Text(data[i].options[0].answer),
-                                  value: data[i].options[0].answer,
-                                  groupValue: data[i].currentSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      data[i].currentSelected = value;
-                                    });
-                                  },
-                                ),
-                                RadioListTile(
-                                  title: Text(data[i].options[1].answer),
-                                  value: data[i].options[1].answer,
-                                  groupValue: data[i].currentSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      data[i].currentSelected = value;
-                                    });
-                                  },
-                                ),
-                                RadioListTile(
-                                  title: Text(data[i].options[2].answer),
-                                  value: data[i].options[2].answer,
-                                  groupValue: data[i].currentSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      data[i].currentSelected = value;
-                                    });
-                                  },
-                                ),
-                                RadioListTile(
-                                  title: Text(data[i].options[3].answer),
-                                  value: data[i].options[3].answer,
-                                  groupValue: data[i].currentSelected,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      data[i].currentSelected = value;
-                                    });
-                                  },
-                                ),
-                              ],
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: <Widget>[
+                                  RadioListTile(
+                                    title: Text(data[i].options[0].answer),
+                                    value: data[i].options[0].answer,
+                                    groupValue: data[i].currentSelected,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        data[i].currentSelected = value;
+                                      });
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    title: Text(data[i].options[1].answer),
+                                    value: data[i].options[1].answer,
+                                    groupValue: data[i].currentSelected,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        data[i].currentSelected = value;
+                                      });
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    title: Text(data[i].options[2].answer),
+                                    value: data[i].options[2].answer,
+                                    groupValue: data[i].currentSelected,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        data[i].currentSelected = value;
+                                      });
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    title: Text(data[i].options[3].answer),
+                                    value: data[i].options[3].answer,
+                                    groupValue: data[i].currentSelected,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        data[i].currentSelected = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

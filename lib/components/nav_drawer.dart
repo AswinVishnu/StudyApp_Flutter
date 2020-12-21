@@ -17,33 +17,36 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_auth/components/question.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:flutter_auth/models/contents.dart';
+
 import 'package:flutter_auth/models/configuration.dart';
 import 'package:flutter_auth/models/performance.dart';
+import 'package:flutter_auth/models/currentaffairs.dart';
+import 'package:flutter_auth/Screens/Question_Bank/question_category.dart';
 
 class NavDrawer extends StatefulWidget {
   final List userList;
 
-  NavDrawer({Key key, @required this.userList}) : super(key: key);
+  const NavDrawer({Key key, @required this.userList}) : super(key: key);
 
   @override
   _NavDrawerState createState() => _NavDrawerState(userList);
 }
 
 class _NavDrawerState extends State<NavDrawer> {
+
+
+
+  List userList;
+
+  _NavDrawerState(this.userList);
+
+  var isLoading = false;
+  List<Category> categoryList = List();
+  List<Performance> performanceList = List();
   List<Question> list = List();
   List<Exam> examResponse = List();
   List<Question> questionsList = List();
-  List<Contents> currentAffairsList = List();
-  List<Contents> videosList = List();
-  List<Contents> audiosList = List();
-  List<Contents> notesList = List();
-  var isLoading = false;
-  List userList;
-  List categoryList;
-  List<Performance> performanceList = List();
-
-  _NavDrawerState(this.userList);
+  List<CurrentAffairs> currentAffairsList = List();
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +123,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         "https://oxystech-study-app-nodejs.herokuapp.com/admin/current_affairs");
                     if (response.statusCode == 200) {
                       currentAffairsList = (json.decode(response.body) as List)
-                          .map((data) => new Contents.fromJson(data))
+                          .map((data) => new CurrentAffairs.fromJson(data))
                           .toList();
                       setState(() {
                         isLoading = false;
@@ -149,7 +152,10 @@ class _NavDrawerState extends State<NavDrawer> {
                   onTap: () async {
                     final response = await http.get(
                         "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",
-                        headers: {'Authorization': 'Bearer ' + userList[5]});
+                        headers: {
+                          'Authorization': 'Bearer ' + userList[5]
+                        });
+                    print(json.decode(response.body) );
                     if (response.statusCode == 200) {
                       categoryList = (json.decode(response.body) as List)
                           .map((data) => new Category.fromJson(data))
@@ -223,10 +229,13 @@ class _NavDrawerState extends State<NavDrawer> {
                       isLoading = true;
                     });
                     final response = await http.get(
-                        "https://oxystech-study-app-nodejs.herokuapp.com/admin/question");
+                        "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",
+                        headers: {
+                          'Authorization': 'Bearer ' + userList[5]
+                        });
                     if (response.statusCode == 200) {
-                      questionsList = (json.decode(response.body) as List)
-                          .map((data) => new Question.fromJson(data))
+                      categoryList = (json.decode(response.body) as List)
+                          .map((data) => new Category.fromJson(data))
                           .toList();
                       setState(() {
                         isLoading = false;
@@ -234,9 +243,9 @@ class _NavDrawerState extends State<NavDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => QuestionBankScreen(
+                            builder: (context) => QuestionCategory(
                                 userList: userList,
-                                questionList: questionsList,
+                                categoryList: categoryList,
                                 isLoading: isLoading)),
                       );
                     } else {

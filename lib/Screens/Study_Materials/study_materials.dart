@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Study_Materials/components/body.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
 import 'package:flutter_auth/components/bottom_navigation.dart';
+import 'package:flutter_auth/Models/category.dart';
 
 class StudyMaterialsScreen extends StatefulWidget {
-  List userList;
-  List categoryList;
+  final List userList;
+  final  List categoryList;
   var isLoading;
   StudyMaterialsScreen({
     Key key,
@@ -13,6 +14,7 @@ class StudyMaterialsScreen extends StatefulWidget {
     @required this.categoryList,
     @required this.isLoading,
   }) : super(key: key);
+
   @override
   _StudyMaterialsState createState() =>
       _StudyMaterialsState(userList, categoryList, isLoading);
@@ -26,6 +28,7 @@ class _StudyMaterialsState extends State<StudyMaterialsScreen> {
   _StudyMaterialsState(this.userList, this.categoryList, this.isLoading);
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: new AppBar(
         backgroundColor: Colors.lightBlue[900],

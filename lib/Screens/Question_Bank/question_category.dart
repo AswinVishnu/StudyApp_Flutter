@@ -4,16 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_auth/Screens/Login/components/background.dart';
-import 'package:flutter_auth/components/rounded_button.dart';
-import 'package:flutter_auth/constants.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_auth/Screens/Home/components/expansiontile.dart';
-import 'package:flutter_auth/models/contents.dart';
-import 'package:flutter_auth/Screens/Video/video_screen.dart';
-import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
-import 'package:flutter_auth/Screens/Documents/document_screen.dart';
+
 import 'package:flutter_auth/models/category.dart';
 import 'package:flutter_auth/Screens/Notes/notes_screen.dart';
 import 'package:flutter_auth/components/nav_drawer.dart';
@@ -103,7 +97,7 @@ class _QuestionCategoryState extends State<QuestionCategory> {
                             else {
                               throw Exception('Failed to load questions');
                             }
-                          }, child: ListItem(categoryList[index],context));
+                          }, child: ListItem(categoryList[index].name,context));
                     }),
               ),
             )
@@ -115,14 +109,14 @@ class _QuestionCategoryState extends State<QuestionCategory> {
     );
   }
 
-  Widget ListItem(Category listItem, BuildContext context) {
+  Widget ListItem(String listItem, BuildContext context) {
     return Container(
       child: Column(
         children: <Widget>[
 
           ListTile(
             leading: Icon(Icons.assignment),
-            title: Text(listItem.name),
+            title: Text(listItem),
           ),
 
 

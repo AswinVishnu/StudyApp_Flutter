@@ -6,32 +6,35 @@ import 'package:flutter_auth/Screens/Question_Bank/question_bank.dart';
 import 'package:flutter_auth/Screens/Question_Bank/question_category.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
 import 'package:flutter_auth/Screens/Current_Affairs/current_affairs.dart';
-import 'package:flutter_auth/Screens/Video/video_screen.dart';
-import 'package:flutter_auth/Screens/Audio/audio_screen.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter_auth/components/question.dart';
 //import 'package:flutter_auth/components/currentaffairs.dart';
 import 'dart:convert';
-//import 'package:flutter_auth/components/audio.dart';
-import 'package:flutter_auth/models/contents.dart';
+
 import 'package:flutter_auth/models/category.dart';
 import 'package:flutter_auth/models/currentaffairs.dart';
 
 class GridDashboard extends StatefulWidget {
   final List userList;
   const GridDashboard({Key key, @required this.userList}) : super(key: key);
+
   @override
   _GridDashboardState createState() => _GridDashboardState(userList);
 }
 
 class _GridDashboardState extends State<GridDashboard> {
+
   List userList;
+
   _GridDashboardState(this.userList);
+
   var isLoading = false;
-  List categoryList;
+  List<Category> categoryList = List();
   List<Question> list = List();
   List<CurrentAffairs> currentAffairsList = List();
   List<Exam> examResponse = List();
+
   Items item1 = new Items(
       title: "Current Affairs", img: "assets/images/CurrentAffairs.png");
 
@@ -197,20 +200,7 @@ class _GridDashboardState extends State<GridDashboard> {
                             setState(() {
                               isLoading = false;
                             });
-                            // categoryList = [
-                            //   Category(
-                            //   name: 'General Knowledge',
-                            // ),
-                            //   Category(
-                            //     name: 'Analytical Reasoning',
-                            // ),
-                            //   Category(
-                            //     name: 'English',
-                            // ),
-                            //   Category(
-                            //     name: 'Mathematics',
-                            // ),
-                            // ];
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
