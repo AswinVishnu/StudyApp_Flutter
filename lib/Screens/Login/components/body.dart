@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_auth/Screens/Home/home.dart';
+import 'package:flutter_auth/Screens/Login/forgot_password.dart';
 
 class Body extends StatefulWidget {
   const Body({
@@ -75,7 +76,25 @@ class _LoginPageState extends State<Body> {
         setState(() {
           _isLoading = false;
         });
-        print(response.body);
+        Widget okButton = FlatButton(
+          child: Text("OK"),
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          },
+        );
+        AlertDialog alert =  AlertDialog(
+          title: Text("Login failed"),
+          content: Text("Username and Password does not match"),
+          actions: [
+            okButton,
+          ],
+        );
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return alert;
+          },
+        );
       }
     }
 
@@ -136,7 +155,16 @@ class _LoginPageState extends State<Body> {
 
             GestureDetector(
               onTap: () {
-                
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ForgotPasswordScreen();
+                    },
+                  ),
+                );
+
               },
               child: Text(
                 "Forgot Password",
