@@ -9,6 +9,7 @@ import 'package:flutter_auth/Models/question.dart';
 import 'package:flutter_auth/Models/_question.dart';
 import 'package:flutter_auth/Screens/Practice_Tests/components/resultpage.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
+import 'package:flutter_auth/Screens/Practice_Tests/practice_tests.dart';
 
 class ExamSetup extends StatelessWidget {
   // accept the langname as a parameter
@@ -127,7 +128,7 @@ class _quizpageState extends State<quizpage> {
   @override
   void initState() {
     timer = (int.parse(exam.duration_ui)) * 60;
-    //timer = 10 * 60;
+    // timer = 1 * 60;
     showtimer = "00:00";
     starttimer();
     super.initState();
@@ -182,11 +183,12 @@ class _quizpageState extends State<quizpage> {
             },
           );
         } else if (timer < 60) {
-          String initShowtimer = timer.toString();
-          if (initShowtimer.length == 1) {
-            showtimer = "0" + showtimer;
-          }
           timer = timer - 1;
+          if (timer.toString().length == 1) {
+            showtimer = "0" + timer.toString();
+          } else {
+            showtimer = timer.toString();
+          }
         } else if (timer < 3600) {
           int m = timer ~/ 60;
           int s = timer - (60 * m);
@@ -226,6 +228,45 @@ class _quizpageState extends State<quizpage> {
         }
       });
     });
+  }
+
+  showExitDialog() {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Exit"),
+      onPressed: () {
+        Navigator.of(context).pop();
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => PracticeTestsScreen(
+              examList: examList, userList: userList, isLoading: isLoading),
+        ));
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Exit"),
+      content: Text(
+          "Are you sure, do you want to quit the exam? All your progress will lost!"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   showAlertDialog() {
@@ -402,7 +443,41 @@ class _quizpageState extends State<quizpage> {
               : Background(
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 20.0),
+                      Container(
+                        alignment: Alignment.topRight,
+                        padding: EdgeInsets.all(20.0),
+                        child: ButtonTheme(
+                          minWidth: 6,
+                          height: 30,
+                          child: RaisedButton(
+                            child: new Wrap(
+                              children: <Widget>[
+                                Text(
+                                  "Exit",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Alike",
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                                SizedBox(width: 2),
+                                Icon(Icons.exit_to_app,
+                                    color: Colors.white, size: 20)
+                              ],
+                            ),
+                            onPressed: () {
+                              showExitDialog();
+                            },
+                            color: Colors.red[300],
+                            splashColor: Colors.red[400],
+                            highlightColor: Colors.red[800],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                          ),
+                        ),
+                      ),
+
+                      // SizedBox(height: 20.0),
                       Expanded(
                         flex: 1,
                         child: Container(
