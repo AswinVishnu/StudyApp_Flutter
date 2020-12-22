@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_auth/Screens/Home/home.dart';
 import 'package:flutter_auth/Screens/Login/forgot_password.dart';
+import 'package:flutter_auth/models/institute.dart';
 
 class Body extends StatefulWidget {
   const Body({
@@ -24,7 +25,7 @@ class _LoginPageState extends State<Body> {
   var password;
 
   bool _isLoading = false;
-
+  List<Institute> InstituteList = List();
   @override
   void dispose() {
     // TODO: implement dispose
@@ -137,15 +138,24 @@ class _LoginPageState extends State<Body> {
                   ),
                   SizedBox(height: size.height * 0.03),
                   AlreadyHaveAnAccountCheck(
-                    press: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return SignUpScreen();
-                          },
-                        ),
-                      );
+                    press: () async{
+                      var notResponse = await http.get(
+                          "https://oxystech-study-app-nodejs.herokuapp.com/user/list/admin");
+
+
+                      if (notResponse.statusCode == 200) {
+                        InstituteList = (json.decode(notResponse.body) as List)
+                            .map((data1) => new Institute.fromJson(data1))
+                            .toList();
+
+                        print(json.decode(notResponse.body));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignUpScreen(
+                                  InstituteList: InstituteList)),
+                        );
+                      }
                     },
                   ),
                   SizedBox(height: size.height * 0.03),

@@ -186,11 +186,50 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                           var jsonResponse;
                                           if (currentpassword == userList[4]) {
 
-                                            if(newpassword==confirmpassword){
-                                              print("Password updated successfully");
-                                            }
+                                               if(newpassword==confirmpassword){
+                                                    print("Password updated successfully");
+
+                                                    Map data = {
+                                                      "currentPassword":currentpassword,
+                                                      "newPassword":newpassword,
+                                                      "confirmPassword":confirmpassword
+                                                    };
+                                                    // final snackBar =
+                                                    // new SnackBar(content: new Text('Loading...'));
+                                                    // Scaffold.of(context).showSnackBar(snackBar);
+                                                    final response = await http.post(
+                                                        "https://oxystech-study-app-nodejs.herokuapp.com/changepassword/"+userList[0],
+                                                        body: data);
+                                                    if (response.statusCode == 200) {
+                                                      print(json.decode(response.body));
+                                                      Widget okButton = FlatButton(
+                                                        child: Text("OK"),
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop(false);
+                                                        },
+                                                      );
+                                                      AlertDialog alert =  AlertDialog(
+                                                        title: Text("Confirmation"),
+                                                        content: Text("Password updated successfully"),
+                                                        actions: [
+                                                          okButton,
+                                                        ],
+                                                      );
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return alert;
+                                                        },
+                                                      );
+                                                    }
+                                                    else{
+
+                                                      throw Exception('Failed to update');
+                                                    }
+
+                                                }
                                             else{
-                                              print("New Password and Confirm Password does not match");
+
                                               Widget okButton = FlatButton(
                                                 child: Text("OK"),
                                                 onPressed: () {

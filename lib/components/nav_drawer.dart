@@ -48,6 +48,7 @@ class _NavDrawerState extends State<NavDrawer> {
   List<Question> questionsList = List();
   List<CurrentAffairs> currentAffairsList = List();
 
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -69,7 +70,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         backgroundColor: primaryGreen,
                         radius: 30,
                         backgroundImage:
-                            new ExactAssetImage('assets/images/profile.jpg')),
+                            new ExactAssetImage('assets/images/'+userList[6]+'.jpg')),
                     onTap: () => print("Current User")),
                 decoration: BoxDecoration(
                   color: Colors.lightBlue[900],
@@ -279,14 +280,15 @@ class _NavDrawerState extends State<NavDrawer> {
                       setState(() {
                         isLoading = false;
                       });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PerfomanceScreen(
+                                userList: userList,
+                                performanceList: performanceList)),
+                      );
                     }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PerfomanceScreen(
-                              userList: userList,
-                              performanceList: performanceList)),
-                    );
+
                   },
                 ),
                 SizedBox(

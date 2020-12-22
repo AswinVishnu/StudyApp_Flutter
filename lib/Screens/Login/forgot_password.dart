@@ -53,34 +53,77 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               RoundedButton(
                 color: Colors.lightBlue[900],
                 text: "Verify",
-                press: () {
+                press: () async{
 
-                  Widget okButton = FlatButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return LoginScreen();
-                          },
-                        ),
-                      );
-                    },
-                  );
-                  AlertDialog alert =  AlertDialog(
-                    title: Text("Verified"),
-                    content: Text("Your email id is verified. New password is sent to your email."),
-                    actions: [
-                      okButton,
-                    ],
-                  );
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alert;
-                    },
-                  );
+                  Map data = {
+                    "email":emailId
+                  };
+                  // final snackBar =
+                  // new SnackBar(content: new Text('Loading...'));
+                  // Scaffold.of(context).showSnackBar(snackBar);
+                  final response = await http.post(
+                      "https://oxystech-study-app-nodejs.herokuapp.com/forgotpassword",
+                      body: data);
+                  print(json.decode(response.body));
+                  if (response.statusCode == 200) {
+
+                    Widget okButton = FlatButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return LoginScreen();
+                            },
+                          ),
+                        );
+                      },
+                    );
+                    AlertDialog alert =  AlertDialog(
+                      title: Text("Verified"),
+                      content: Text("Your email id is verified. New password is sent to your email."),
+                      actions: [
+                        okButton,
+                      ],
+                    );
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return alert;
+                      },
+                    );
+                  }
+                  else{
+
+                    Widget okButton = FlatButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return LoginScreen();
+                            },
+                          ),
+                        );
+                      },
+                    );
+                    AlertDialog alert =  AlertDialog(
+                      title: Text("Error"),
+                      content: Text("Your account does not exist. Please enter valid email id"),
+                      actions: [
+                        okButton,
+                      ],
+                    );
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return alert;
+                      },
+                    );
+                  }
+
                 },
               ),
 

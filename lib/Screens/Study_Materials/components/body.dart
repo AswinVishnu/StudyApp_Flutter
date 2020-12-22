@@ -54,6 +54,16 @@ class _BodyState extends State<Body> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Study Materials',
+              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Expanded(
               child: Container(
                 child: ListView.builder(
@@ -72,9 +82,10 @@ class _BodyState extends State<Body> {
 
   Widget ListItem(String listItem, BuildContext context) {
     return ExpansionTile(
+
       title: Text(
         listItem,
-        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 18.0),
       ),
       children: <Widget>[
         InkWell(
