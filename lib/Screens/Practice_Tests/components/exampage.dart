@@ -182,12 +182,13 @@ class _quizpageState extends State<quizpage> {
               return alert;
             },
           );
-        } else if (timer <= 60) {
+        } else if (timer < 60) {
           timer = timer - 1;
           if (timer.toString().length == 1) {
             showtimer = "0" + timer.toString();
-          } else
+          } else {
             showtimer = timer.toString();
+          }
         } else if (timer < 3600) {
           int m = timer ~/ 60;
           int s = timer - (60 * m);
