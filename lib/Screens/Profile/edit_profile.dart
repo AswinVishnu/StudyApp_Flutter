@@ -25,6 +25,7 @@ class _EditProfileState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
+          backgroundColor: Colors.blue,
           title: new Text('Edit Profile'),
         ),
         drawer: NavDrawer(userList: userList),
@@ -357,7 +358,7 @@ class _EditProfileState extends State<EditProfileScreen> {
                                         child: new RaisedButton(
                                       child: new Text("Save"),
                                       textColor: Colors.white,
-                                      color: Colors.green,
+                                      color: Colors.blue,
                                       onPressed: () async {
                                         var jsonResponse;
                                         if (password == null) {
@@ -406,7 +407,7 @@ class _EditProfileState extends State<EditProfileScreen> {
                                         child: new RaisedButton(
                                           child: new Text("Change Password"),
                                           textColor: Colors.white,
-                                          color: Colors.lightBlue[900],
+                                          color: Colors.blue,
                                           onPressed: () {
                                             Navigator.push(
                                               context,

@@ -58,7 +58,7 @@ class _QuestionCategoryState extends State<QuestionCategory> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
-          backgroundColor: Colors.lightBlue[900],
+          backgroundColor: Colors.blue,
           title: new Text('Question Bank'),
         ),
         drawer: NavDrawer(userList: userList),

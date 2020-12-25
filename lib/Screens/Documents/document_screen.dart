@@ -38,7 +38,7 @@ class DocumentScreenState extends State<DocumentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue[900],
+        backgroundColor: Colors.blue,
         title: Text("Documents"),
       ),
       body: Padding(

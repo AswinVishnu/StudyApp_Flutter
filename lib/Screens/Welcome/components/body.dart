@@ -57,7 +57,8 @@ class Body extends StatelessWidget {
               color: Colors.blueGrey,
               textColor: Colors.white,
               press: () async{
-
+                final snackBar = new SnackBar(content: new Text('Loading...'));
+                Scaffold.of(context).showSnackBar(snackBar);
                 var notResponse = await http.get(
                 "https://oxystech-study-app-nodejs.herokuapp.com/user/list/admin");
 
@@ -67,7 +68,7 @@ class Body extends StatelessWidget {
                       .map((data1) => new Institute.fromJson(data1))
                       .toList();
 
-                  print(json.decode(notResponse.body));
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(

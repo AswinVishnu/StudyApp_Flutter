@@ -28,7 +28,7 @@ class _QuestionBankState extends State<QuestionBankScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
-          backgroundColor: Colors.lightBlue[900],
+          backgroundColor: Colors.blue,
           title: new Text('Question bank'),
         ),
         drawer: NavDrawer(userList: userList),

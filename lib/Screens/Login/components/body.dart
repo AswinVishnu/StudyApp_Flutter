@@ -85,7 +85,7 @@ class _LoginPageState extends State<Body> {
         );
         AlertDialog alert =  AlertDialog(
           title: Text("Login failed"),
-          content: Text("Username and Password does not match"),
+          content: Text("Invalid username or password"),
           actions: [
             okButton,
           ],
@@ -129,7 +129,7 @@ class _LoginPageState extends State<Body> {
                     },
                   ),
                   RoundedButton(
-                    color: Colors.lightBlue[900],
+                    color: Colors.blue,
                     text: "LOGIN",
                     press: () {
 
@@ -139,6 +139,8 @@ class _LoginPageState extends State<Body> {
                   SizedBox(height: size.height * 0.03),
                   AlreadyHaveAnAccountCheck(
                     press: () async{
+                      final snackBar = new SnackBar(content: new Text('Loading...'));
+                      Scaffold.of(context).showSnackBar(snackBar);
                       var notResponse = await http.get(
                           "https://oxystech-study-app-nodejs.herokuapp.com/user/list/admin");
 
@@ -148,7 +150,7 @@ class _LoginPageState extends State<Body> {
                             .map((data1) => new Institute.fromJson(data1))
                             .toList();
 
-                        print(json.decode(notResponse.body));
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -165,7 +167,8 @@ class _LoginPageState extends State<Body> {
 
             GestureDetector(
               onTap: () {
-
+                final snackBar = new SnackBar(content: new Text('Loading...'));
+                Scaffold.of(context).showSnackBar(snackBar);
                 Navigator.push(
                   context,
                   MaterialPageRoute(

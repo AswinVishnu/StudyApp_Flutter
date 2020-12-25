@@ -24,7 +24,7 @@ class _HomePageState extends State<Body> {
       child: Column(
         children: <Widget>[
           SizedBox(
-            height: 40,
+            height: 150,
           ),
           GridDashboard(userList: userList),
 

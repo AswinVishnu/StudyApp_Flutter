@@ -46,7 +46,7 @@ class _InstituteState extends State<InstituteScreen> {
 
     return Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.lightBlue[900],
+        backgroundColor: Colors.blue,
         title: new Text('Institute'),
       ),
       drawer: NavDrawer(userList: userList),

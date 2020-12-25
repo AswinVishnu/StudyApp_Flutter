@@ -31,7 +31,7 @@ class _StudyMaterialsState extends State<StudyMaterialsScreen> {
 
     return Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.lightBlue[900],
+        backgroundColor: Colors.blue,
         title: new Text(userList[7]),
       ),
       drawer: NavDrawer(userList: userList),

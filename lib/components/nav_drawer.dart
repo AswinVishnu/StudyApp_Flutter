@@ -53,39 +53,43 @@ class _NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
         child: Container(
-      color: Colors.lightBlue[900],
+      color: Colors.white,
       child: new Column(children: <Widget>[
         Container(
-          color: Colors.lightBlue[900],
-          child: Column(
-            children: [
-              SizedBox(
-                height: 80,
-              ),
-              UserAccountsDrawerHeader(
-                accountName: Text(userList[1]),
-                accountEmail: Text(userList[3]),
-                currentAccountPicture: GestureDetector(
-                    child: CircleAvatar(
-                        backgroundColor: primaryGreen,
-                        radius: 30,
-                        backgroundImage:
-                            new ExactAssetImage('assets/images/'+userList[6]+'.jpg')),
-                    onTap: () => print("Current User")),
-                decoration: BoxDecoration(
-                  color: Colors.lightBlue[900],
+          color: Colors.blue,
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 40,
                 ),
-                //.. This line of code provides the usage of multiple accounts
-                /* otherAccountsPictures: <Widget>[
-              GestureDetector(
-                onTap: ()=> switchUser(),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(otherProfilePic)
+                UserAccountsDrawerHeader(
+
+                  accountName: Text(userList[1]),
+                  accountEmail: Text(userList[3]),
+                  currentAccountPicture: GestureDetector(
+                      child: CircleAvatar(
+                          backgroundColor: primaryGreen,
+                          radius: 30,
+                          backgroundImage:
+                              new ExactAssetImage('assets/images/'+userList[6]+'.jpg')),
+                      onTap: () => print("Current User")),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue,
+                  ),
+                  //.. This line of code provides the usage of multiple accounts
+                  /* otherAccountsPictures: <Widget>[
+                GestureDetector(
+                  onTap: ()=> switchUser(),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(otherProfilePic)
+                  ),
                 ),
-              ),
-            ], */
-              ),
-            ],
+              ], */
+                ),
+              ],
+            ),
           ),
         ),
         Expanded(
@@ -95,11 +99,17 @@ class _NavDrawerState extends State<NavDrawer> {
                 new ListTile(
                   title: new Text('Home',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
+                          color: Colors.black, fontWeight: FontWeight.bold)),
                   leading: Icon(
                     Icons.home,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
+                  trailing: Icon(
+                    Icons.arrow_right_sharp,
+                    color: Colors.black,
+                  ),
+                  selectedTileColor: Colors.blue,
+
                   onTap: () {
                     Navigator.push(
                       context,
@@ -111,10 +121,14 @@ class _NavDrawerState extends State<NavDrawer> {
                 new ListTile(
                   title: new Text('Current Affairs',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
+                          color: Colors.black, fontWeight: FontWeight.bold)),
                   leading: Icon(
                     Icons.pages,
-                    color: Colors.white,
+                    color: Colors.black,
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_right_sharp,
+                    color: Colors.black,
                   ),
                   onTap: () async {
                     setState(() {
@@ -145,11 +159,15 @@ class _NavDrawerState extends State<NavDrawer> {
                 new ListTile(
                   leading: Icon(
                     Icons.book,
-                    color: Colors.white,
+                    color: Colors.black,
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_right_sharp,
+                    color: Colors.black,
                   ),
                   title: new Text('Study Materials',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
+                          color: Colors.black, fontWeight: FontWeight.bold)),
                   onTap: () async {
                     final response = await http.get(
                         "https://oxystech-study-app-nodejs.herokuapp.com/admin/category",
@@ -181,10 +199,14 @@ class _NavDrawerState extends State<NavDrawer> {
                 new ListTile(
                   title: new Text('Practice Tests',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
+                          color: Colors.black, fontWeight: FontWeight.bold)),
                   leading: Icon(
                     Icons.accessibility_new,
-                    color: Colors.white,
+                    color: Colors.black,
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_right_sharp,
+                    color: Colors.black,
                   ),
                   onTap: () async {
                     setState(() {
@@ -220,10 +242,14 @@ class _NavDrawerState extends State<NavDrawer> {
                 new ListTile(
                   title: new Text('Question Bank',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
+                          color: Colors.black, fontWeight: FontWeight.bold)),
                   leading: Icon(
                     Icons.flag,
-                    color: Colors.white,
+                    color: Colors.black,
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_right_sharp,
+                    color: Colors.black,
                   ),
                   onTap: () async {
                     setState(() {
@@ -257,10 +283,14 @@ class _NavDrawerState extends State<NavDrawer> {
                 new ListTile(
                   title: new Text('Performance',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
+                          color: Colors.black, fontWeight: FontWeight.bold)),
                   leading: Icon(
                     Icons.backpack,
-                    color: Colors.white,
+                    color: Colors.black,
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_right_sharp,
+                    color: Colors.black,
                   ),
                   onTap: () async {
                     Map data = {"emailId": userList[3]};
@@ -297,10 +327,14 @@ class _NavDrawerState extends State<NavDrawer> {
                 new ListTile(
                   title: new Text('SignOut',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
+                          color: Colors.black, fontWeight: FontWeight.bold)),
                   leading: Icon(
                     Icons.logout,
-                    color: Colors.white,
+                    color: Colors.black,
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_right_sharp,
+                    color: Colors.black,
                   ),
                   onTap: () {
                     Navigator.push(

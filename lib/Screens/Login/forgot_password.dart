@@ -31,7 +31,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.lightBlue[900],
+        backgroundColor: Colors.blue,
         title: new Text('Forget Password'),
       ),
 
@@ -51,7 +51,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
 
               RoundedButton(
-                color: Colors.lightBlue[900],
+                color: Colors.blue,
                 text: "Verify",
                 press: () async{
 

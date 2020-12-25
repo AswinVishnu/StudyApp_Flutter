@@ -31,7 +31,7 @@ class _AudioState extends State<AudioScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.lightBlue[900],
+        backgroundColor: Colors.blue,
         title: new Text('Audio'),
       ),
       drawer: NavDrawer(userList: userList),

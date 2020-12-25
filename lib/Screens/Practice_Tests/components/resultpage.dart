@@ -95,6 +95,7 @@ class _resultpageState extends State<resultpage> {
     sendResult();
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blue,
           title: Text(
             "Result",
           ),

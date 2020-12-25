@@ -30,7 +30,7 @@ class _HomeState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.lightBlue[900],
+        backgroundColor: Colors.blue,
         title: new Text('Home Page'),
         actions: <Widget>[
           // Using Stack to show Notification Badge

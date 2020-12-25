@@ -7,10 +7,12 @@ import 'package:flutter_auth/Screens/Signup/components/social_icon.dart';
 import 'package:flutter_auth/components/already_have_an_account_acheck.dart';
 import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/components/rounded_input_field.dart';
+import 'package:flutter_auth/components/mbile_number_field.dart';
 import 'package:flutter_auth/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 
 class Body extends StatefulWidget {
   List InstituteList;
@@ -41,12 +43,7 @@ class _SignUpPageState extends State<Body> {
   int instituteLength;
   //List<String> InstituteList =  ['Hai','Hello'];
 
-  List<Item> users = <Item>[
-    const Item('Scholars Academy, Mundakkayam',Icon(Icons.android,color:  Color(0xFF6F35A5),)),
-    const Item('Brillaince Accademy, Pala',Icon(Icons.flag,color:  Color(0xFF6F35A5),)),
-    const Item('PC Thomas Insititute, Thrissur',Icon(Icons.format_indent_decrease,color:  Color(0xFF6F35A5),)),
-    const Item('Study Internationals, Kollam',Icon(Icons.mobile_screen_share,color:  Color(0xFF6F35A5),)),
-  ];
+
   List gender=["Male","Female"];
 
   bool _isLoading = false;
@@ -82,8 +79,8 @@ class _SignUpPageState extends State<Body> {
                 _isLoading = false;
               });
               //sharedPreferences.setString("token", jsonResponse['token']);
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen ()), (Route<dynamic> route) => false);
-              print("Added new account Successfully");
+              displaysuccessPopUp("Account created","Your account has been created");
+
             }
           }
           else {
@@ -99,11 +96,8 @@ class _SignUpPageState extends State<Body> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              "SIGNUP",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: size.height * 0.03),
+
+            SizedBox(height: size.height * 0.02),
             Image.asset(
               "assets/images/signup.jpg",
               height: size.height * 0.35,
@@ -115,11 +109,12 @@ class _SignUpPageState extends State<Body> {
                 fullname=value;
                 },
             ),
-            RoundedInputField(
+            RoundedMobileInputField(
               hintText: "Mobile(+91)",
               icon: Icons.mobile_friendly,
               onChanged: (value) {mobile=value ;
               },
+
             ),
             RoundedInputField(
               hintText: "Your Email",
@@ -133,9 +128,9 @@ class _SignUpPageState extends State<Body> {
             ),
           Container(
 
-            margin: EdgeInsets.symmetric(vertical: 10),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            width: size.width * 0.8,
+            margin: EdgeInsets.symmetric(vertical: 7),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+            width: size.width * 0.7,
             decoration: BoxDecoration(
               color: Color(0xFFF1E6FF),
               borderRadius: BorderRadius.circular(29.0),
@@ -146,7 +141,7 @@ class _SignUpPageState extends State<Body> {
 
               children: <Widget>[
                 Icon(Icons.account_circle_rounded,color: Color(0xff416d6d)),
-                Text('    Gender      ',
+                Text('    Gender',
                     textAlign: TextAlign.left,
                     style: TextStyle( fontSize: 16)),
                 addRadioButton(0, 'Male'),
@@ -157,9 +152,9 @@ class _SignUpPageState extends State<Body> {
 
             Container(
 
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                width: size.width * 0.8,
+                margin: EdgeInsets.symmetric(vertical: 7),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                width: size.width * 0.7,
               decoration: BoxDecoration(
                 color: Color(0xFFF1E6FF),
                 borderRadius: BorderRadius.circular(29.0),
@@ -176,7 +171,7 @@ class _SignUpPageState extends State<Body> {
 
                       ),
                       Container(
-                        child: Text("   Select Institute                               "),
+                        child: Text("   Select Institute               "),
                       ),
                       Container(
                         child: Icon(Icons.arrow_drop_down,size:40,color: Color(0xff416d6d)),
@@ -204,7 +199,7 @@ class _SignUpPageState extends State<Body> {
 
             RoundedButton(
               text: "SIGNUP",
-                color: Colors.lightBlue[900],
+                color: Colors.blue,
               press: () {
                     if(male==1)
                       {
@@ -215,13 +210,15 @@ class _SignUpPageState extends State<Body> {
                         selectedGender='female';
                       }
                     instituteid = getInstituteId(selectedValue);
-
-                    if(RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email)) {
-                      signUp(fullname, mobile,email,instituteid,password,selectedGender);
+                    if(password.length<8){
+                      displayErrorPopUp("Weak Password","Password should have more than 8 characters");
                     }
+                    else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email)) {
+                      displayErrorPopUp("Invalid email address","Please enter valid email address");
+                    }
+
                     else{
-                      final snackBar1 = new SnackBar(content: new Text('Invalid Email'));
-                      Scaffold.of(context).showSnackBar(snackBar1);
+                      signUp(fullname, mobile,email,instituteid,password,selectedGender);
                     }
 
               },
@@ -285,5 +282,47 @@ class _SignUpPageState extends State<Body> {
       }
     }
     // return InstituteList[i].id;
+  }
+  displayErrorPopUp(String title,message){
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop(false);
+      },
+    );
+    AlertDialog alert =  AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  displaysuccessPopUp(String title,message){
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen ()), (Route<dynamic> route) => false);
+      },
+    );
+    AlertDialog alert =  AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
